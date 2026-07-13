@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
@@ -98,6 +99,15 @@ export function LeadForm() {
 
   const onSubmit = async (data: LeadFormData) => {
     setStatus("submitting");
+
+    // Mode démo (export statique / maquette) : pas de backend,
+    // on simule l'envoi pour rendre la maquette pleinement cliquable.
+    if (process.env.NEXT_PUBLIC_FORM_MODE === "demo") {
+      await new Promise((r) => setTimeout(r, 700));
+      setStatus("success");
+      return;
+    }
+
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
@@ -347,13 +357,13 @@ export function LeadForm() {
                               <span>
                                 J'accepte d'être recontacté(e) au sujet de ma demande et
                                 que mes données soient traitées conformément à la{" "}
-                                <a
+                                <Link
                                   href="/politique-confidentialite"
                                   target="_blank"
                                   className="font-semibold text-energy underline"
                                 >
                                   politique de confidentialité
-                                </a>
+                                </Link>
                                 .
                               </span>
                             </label>

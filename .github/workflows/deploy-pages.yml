@@ -1,0 +1,72 @@
+name: Déploiement GitHub Pages (maquette)
+
+on:
+  push:
+    branches:
+      - "claude/normarénov-lead-gen-site-dotrs7"
+  workflow_dispatch:
+
+# Autorisations nécessaires au déploiement Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Export statique (voir next.config.ts)
+      STATIC_EXPORT: "true"
+      # Le site est servi sous /<nom-du-repo> sur les Pages de projet
+      PAGES_BASE_PATH: "/${{ github.event.repository.name }}"
+      # Formulaire en mode démo : aucun backend, écran de succès simulé
+      NEXT_PUBLIC_FORM_MODE: "demo"
+      NEXT_PUBLIC_SITE_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Retirer la route API (incompatible export statique)
+        run: rm -rf src/app/api
+
+      - name: Build (export statique)
+        run: npm run build
+
+      - name: Désactiver Jekyll (sert le dossier _next)
+        run: touch out/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

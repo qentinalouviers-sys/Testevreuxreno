@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { company } from "@/config/company";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
 
@@ -64,12 +65,12 @@ export default function MentionsLegalesPage() {
         <p>
           Le traitement des données personnelles collectées via ce site est détaillé
           dans notre{" "}
-          <a
+          <Link
             href="/politique-confidentialite"
             className="font-semibold text-energy underline"
           >
             politique de confidentialité
-          </a>
+          </Link>
           .
         </p>
       </LegalSection>

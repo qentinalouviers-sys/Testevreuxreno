@@ -135,6 +135,23 @@ src/
 
 ---
 
+## 🔗 Maquette partageable — GitHub Pages
+
+Un workflow ([`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml))
+publie automatiquement une **maquette statique** sur GitHub Pages à chaque push
+sur la branche du projet.
+
+- **Export statique** (`output: 'export'`) activé via `STATIC_EXPORT=true`.
+- Le **formulaire est en mode démo** (`NEXT_PUBLIC_FORM_MODE=demo`) : il affiche
+  l'écran de succès **sans envoyer de lead** — idéal pour présenter le rendu.
+- La route API `/api/lead` (incompatible avec l'hébergement statique) est
+  retirée du build Pages uniquement ; elle reste intacte dans le dépôt pour un
+  déploiement Vercel complet.
+
+> URL de la maquette : `https://<owner>.github.io/<repo>/`
+> GitHub Pages sur un dépôt **privé** nécessite un plan payant (Pro/Team) ou de
+> rendre le dépôt public.
+
 ## 📈 Brancher un vrai flux de leads
 
 - **Email** : créez un compte Resend, vérifiez votre domaine, renseignez
