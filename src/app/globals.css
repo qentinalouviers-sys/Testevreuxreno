@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   Design tokens — Rénovation Énergétique Évreux
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  /* Palette */
+  --color-forest: #1b4332; /* vert profond */
+  --color-forest-700: #163a2a;
+  --color-energy: #2d6a4f; /* vert énergie */
+  --color-energy-400: #40916c;
+  --color-amber: #f4a261; /* accent solaire */
+  --color-amber-600: #e08a45;
+  --color-cream: #fefae0; /* fond crème */
+  --color-cream-200: #f7f2d3;
+  --color-ink: #1a2e25; /* texte foncé chaud */
+
+  /* Typographies (variables injectées par next/font) */
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Rayons */
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* compense le header sticky sur les ancres */
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Titres en serif display par défaut */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* ── Focus accessible visible partout ──────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-energy);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Respect de prefers-reduced-motion ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── Utilitaire : dégradé de texte solaire ─────────────────── */
+.text-gradient-amber {
+  background: linear-gradient(120deg, var(--color-amber), #f6b880);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Scrollbar fine pour le carousel d'avis ────────────────── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
