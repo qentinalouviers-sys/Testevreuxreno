@@ -25,6 +25,8 @@ jobs:
       STATIC_EXPORT: "true"
       # Le site est servi sous /<nom-du-repo> sur les Pages de projet
       PAGES_BASE_PATH: "/${{ github.event.repository.name }}"
+      # Exposé au client pour préfixer les assets locaux (ex. vidéo du hero)
+      NEXT_PUBLIC_BASE_PATH: "/${{ github.event.repository.name }}"
       # Formulaire en mode démo : aucun backend, écran de succès simulé
       NEXT_PUBLIC_FORM_MODE: "demo"
       NEXT_PUBLIC_SITE_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"

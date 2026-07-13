@@ -86,6 +86,7 @@ Aucune modification de composant nécessaire :
 | Fichier | Contenu |
 | --- | --- |
 | `src/config/company.ts` | **Nom, téléphone, adresse, email, horaires, certifications, note.** |
+| `src/config/hero.ts` | Média du hero — photo et **vidéo cinématique optionnelle** (voir `public/hero/`). |
 | `src/data/services.ts` | Cartes de services |
 | `src/data/aids.ts` | Dispositifs d'aides & barème par revenus |
 | `src/data/process.ts` | Les 4 étapes de la méthode |
