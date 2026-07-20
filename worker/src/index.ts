@@ -1,29 +1,43 @@
 /**
- * Le Rat — proxy Anthropic sur Cloudflare Workers.
+ * Le Rat — proxy Google Gemini sur Cloudflare Workers.
  *
- * Le front (SPA) ne peut pas appeler directement l'API Anthropic :
- *  - la clé API ne doit jamais être exposée dans le navigateur ;
- *  - l'API n'autorise pas les requêtes cross-origin (CORS) du navigateur.
+ * Le front (SPA) envoie ses requêtes au format "messages" (héritage Anthropic) :
+ *   { model, max_tokens, messages: [{ role, content }] }
+ * où `content` est une chaîne OU un tableau de blocs { type:"text" | "image" }.
  *
- * Ce Worker sert d'intermédiaire : il reçoit le corps de requête envoyé par
- * l'app, injecte l'en-tête d'authentification, appelle Anthropic, puis renvoie
- * la réponse avec les en-têtes CORS. Colle l'URL du Worker déployé dans le
- * champ « endpoint » de l'app.
+ * Ce Worker :
+ *   1. reçoit cette requête (la clé API n'est jamais dans le navigateur) ;
+ *   2. la traduit vers l'API Gemini (generateContent) ;
+ *   3. retraduit la réponse au format attendu par le front :
+ *        { content: [{ type: "text", text: "..." }] }
+ *      (ou { error: { message } } en cas d'échec) ;
+ *   4. ajoute les en-têtes CORS.
+ *
+ * Colle l'URL du Worker déployé dans le champ « ENDPOINT IA » de l'app.
  *
  * Secrets / variables (voir wrangler.toml + `wrangler secret`) :
- *  - ANTHROPIC_API_KEY  (secret, requis)
- *  - MODEL              (var, optionnel) : force le modèle, sinon celui du front.
- *  - ALLOW_ORIGIN       (var, optionnel) : origine autorisée (défaut "*").
+ *   - GEMINI_API_KEY  (secret, requis)
+ *   - MODEL           (var, optionnel) : modèle Gemini (défaut gemini-2.0-flash).
+ *   - ALLOW_ORIGIN    (var, optionnel) : origine autorisée (défaut "*").
  */
 
 export interface Env {
-  ANTHROPIC_API_KEY: string;
+  GEMINI_API_KEY: string;
   MODEL?: string;
   ALLOW_ORIGIN?: string;
 }
 
-const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
-const ANTHROPIC_VERSION = "2023-06-01";
+const DEFAULT_MODEL = "gemini-2.0-flash";
+const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+
+type Block =
+  | { type: "text"; text: string }
+  | { type: "image"; source: { type: string; media_type: string; data: string } };
+
+interface InMessage {
+  role?: string;
+  content: string | Block[];
+}
 
 function corsHeaders(env: Env): Record<string, string> {
   return {
@@ -41,6 +55,17 @@ function json(body: unknown, status: number, env: Env): Response {
   });
 }
 
+// Un bloc de contenu "messages" -> une part Gemini.
+function toParts(content: string | Block[]): unknown[] {
+  if (typeof content === "string") return [{ text: content }];
+  return content.map((b) => {
+    if (b.type === "image") {
+      return { inline_data: { mime_type: b.source.media_type, data: b.source.data } };
+    }
+    return { text: b.text };
+  });
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (request.method === "OPTIONS") {
@@ -49,50 +74,82 @@ export default {
     if (request.method !== "POST") {
       return json({ error: { message: "Méthode non autorisée." } }, 405, env);
     }
-    if (!env.ANTHROPIC_API_KEY) {
+    if (!env.GEMINI_API_KEY) {
       return json(
-        { error: { message: "ANTHROPIC_API_KEY non configurée sur le Worker." } },
+        { error: { message: "GEMINI_API_KEY non configurée sur le Worker." } },
         500,
         env
       );
     }
 
-    let payload: Record<string, unknown>;
+    let payload: { messages?: InMessage[]; max_tokens?: number };
     try {
       payload = await request.json();
     } catch {
       return json({ error: { message: "Corps JSON invalide." } }, 400, env);
     }
 
-    // Le modèle du Worker (s'il est défini) prime sur celui envoyé par le front.
-    if (env.MODEL) payload.model = env.MODEL;
+    const messages = payload.messages || [];
+    if (!messages.length) {
+      return json({ error: { message: "Aucun message fourni." } }, 400, env);
+    }
+
+    const contents = messages.map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: toParts(m.content),
+    }));
+
+    const model = env.MODEL || DEFAULT_MODEL;
+    const body = {
+      contents,
+      generationConfig: { maxOutputTokens: payload.max_tokens ?? 1024 },
+    };
 
     let upstream: Response;
     try {
-      upstream = await fetch(ANTHROPIC_URL, {
+      upstream = await fetch(`${GEMINI_BASE}/${model}:generateContent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": env.ANTHROPIC_API_KEY,
-          "anthropic-version": ANTHROPIC_VERSION,
+          "x-goog-api-key": env.GEMINI_API_KEY,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(body),
       });
     } catch (e) {
       return json(
-        { error: { message: "Appel Anthropic impossible : " + (e as Error).message } },
+        { error: { message: "Appel Gemini impossible : " + (e as Error).message } },
         502,
         env
       );
     }
 
-    const text = await upstream.text();
-    return new Response(text, {
-      status: upstream.status,
-      headers: {
-        "Content-Type": upstream.headers.get("Content-Type") || "application/json",
-        ...corsHeaders(env),
-      },
-    });
+    const raw = await upstream.text();
+    let data: any;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      return json({ error: { message: "Réponse Gemini illisible." } }, 502, env);
+    }
+
+    if (!upstream.ok || data.error) {
+      const msg = data.error?.message || "Erreur Gemini (HTTP " + upstream.status + ").";
+      return json({ error: { message: msg } }, upstream.status || 502, env);
+    }
+
+    const cand = data.candidates?.[0];
+    const parts: Array<{ text?: string }> = cand?.content?.parts || [];
+    const text = parts.map((p) => p.text || "").join("");
+
+    if (!text.trim()) {
+      const reason = cand?.finishReason || data.promptFeedback?.blockReason || "réponse vide";
+      return json(
+        { error: { message: "Gemini n'a rien renvoyé (" + reason + ")." } },
+        502,
+        env
+      );
+    }
+
+    // Format attendu par le front.
+    return json({ content: [{ type: "text", text }] }, 200, env);
   },
 };

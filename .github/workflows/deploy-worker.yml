@@ -6,7 +6,7 @@ name: Deploy Worker (proxy IA)
 #   (Settings → Secrets and variables → Actions → New repository secret) :
 #     - CLOUDFLARE_API_TOKEN : token API Cloudflare avec la permission
 #                              "Edit Cloudflare Workers".
-#     - ANTHROPIC_API_KEY    : ta clé API Anthropic (injectée comme secret
+#     - GEMINI_API_KEY       : ta clé API Google Gemini (injectée comme secret
 #                              du Worker, jamais exposée au navigateur).
 #
 # Déclenchement : à chaque push touchant worker/ sur la branche du projet,
@@ -44,7 +44,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
 
-      - name: Set Anthropic API key secret
+      - name: Set Gemini API key secret
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: printf '%s' "${{ secrets.ANTHROPIC_API_KEY }}" | npx wrangler secret put ANTHROPIC_API_KEY
+        run: printf '%s' "${{ secrets.GEMINI_API_KEY }}" | npx wrangler secret put GEMINI_API_KEY

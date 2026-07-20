@@ -5,7 +5,7 @@ Marketplace). Tu composes ton équipe d'**opérateurs** — des personas façon
 cartes de foot (Le Fouineur, Le Casseur, Le Parrain…) — et ils rédigent tes
 messages au vendeur, analysent l'avancement du deal via une **jauge**, et
 notent chaque négociateur en fin de match. Le tout propulsé par l'IA (API
-Anthropic).
+Google Gemini via un proxy).
 
 > Application **100 % front** (React + Vite). Aucune donnée n'est stockée côté
 > serveur : les appels à l'IA passent par **ton propre proxy** Cloudflare
@@ -36,8 +36,8 @@ Anthropic).
 | **React 18** | UI (une seule vue, dans `src/App.tsx`) |
 | **Vite 6** | Dev server + build statique |
 | **TypeScript** | Outillage (typage volontairement souple) |
-| **API Anthropic** | Rédaction des messages, analyse, extraction d'annonce |
-| **Cloudflare Workers** | Proxy pour l'API (clé secrète + CORS) — dans `worker/` |
+| **API Google Gemini** | Rédaction des messages, analyse, extraction d'annonce |
+| **Cloudflare Workers** | Proxy pour l'API (clé secrète + CORS + traduction) — dans `worker/` |
 
 ---
 
@@ -64,9 +64,11 @@ endpoint IA** : renseigne l'URL de ton Worker dans le champ en haut de l'app
 
 ## 🛰️ Le proxy IA (obligatoire pour les appels)
 
-Le navigateur ne peut pas appeler directement l'API Anthropic (la clé serait
+Le navigateur ne peut pas appeler directement l'API Gemini (la clé serait
 exposée et l'API bloque le CORS). Le dossier [`worker/`](./worker) contient un
-**Cloudflare Worker** minimal qui fait l'intermédiaire.
+**Cloudflare Worker** qui fait l'intermédiaire : il reçoit les requêtes de
+l'app, les traduit vers l'API Gemini, puis retraduit la réponse au format
+attendu par le front.
 
 ### Option A — déploiement automatique (GitHub Actions)
 
@@ -77,7 +79,7 @@ le Worker sans aucune commande à taper. Ajoute deux secrets dans le dépôt
 | Secret | Valeur |
 | --- | --- |
 | `CLOUDFLARE_API_TOKEN` | Token API Cloudflare avec la permission **Edit Cloudflare Workers** ([créer un token](https://dash.cloudflare.com/profile/api-tokens)). |
-| `ANTHROPIC_API_KEY` | Ta clé API Anthropic. |
+| `GEMINI_API_KEY` | Ta clé API Google Gemini ([Google AI Studio](https://aistudio.google.com/app/apikey)). |
 
 Puis lance le workflow (onglet **Actions → Deploy Worker → Run workflow**), ou
 pousse un changement dans `worker/`. L'URL du Worker apparaît dans les logs du
@@ -89,7 +91,7 @@ job (`https://lerat-worker.<sous-domaine>.workers.dev`).
 cd worker
 npm install
 npx wrangler login
-npx wrangler secret put ANTHROPIC_API_KEY   # colle ta clé API Anthropic
+npx wrangler secret put GEMINI_API_KEY   # colle ta clé API Google Gemini
 npm run deploy
 ```
 
@@ -101,14 +103,14 @@ champ « ENDPOINT IA » de l'app.**
 
 Dans [`worker/wrangler.toml`](./worker/wrangler.toml) :
 
-- **`MODEL`** — modèle forcé côté serveur. Par défaut `claude-sonnet-4-5`.
-  Le front envoie son propre identifiant de modèle, mais celui du Worker prime
-  (pratique pour corriger un id obsolète sans toucher au build). Mets ici le
-  modèle auquel **ton compte Anthropic** a accès.
+- **`MODEL`** — modèle Gemini utilisé. Par défaut `gemini-2.0-flash` (rapide,
+  multimodal, palier gratuit). Le Worker ignore l'identifiant de modèle envoyé
+  par le front et utilise celui-ci. Tu peux mettre `gemini-2.5-flash`,
+  `gemini-1.5-pro`, etc. selon ton accès.
 - **`ALLOW_ORIGIN`** — restreins l'origine autorisée (ex.
   `https://<owner>.github.io`) au lieu de `*` en production.
 
-`ANTHROPIC_API_KEY` est un **secret** : ne le mets jamais dans `wrangler.toml`
+`GEMINI_API_KEY` est un **secret** : ne le mets jamais dans `wrangler.toml`
 ni dans le dépôt — utilise `wrangler secret put`.
 
 ---
@@ -121,7 +123,7 @@ ni dans le dépôt — utilise `wrangler secret put`.
 │   ├── App.tsx              # toute l'app (composants + prompts + styles inline)
 │   ├── main.tsx            # montage React
 │   └── index.css          # reset global léger
-├── worker/                 # proxy Anthropic (Cloudflare Workers)
+├── worker/                 # proxy Gemini (Cloudflare Workers)
 │   ├── src/index.ts
 │   └── wrangler.toml
 ├── vite.config.ts          # base "./" (compatible sous-chemin GitHub Pages)
