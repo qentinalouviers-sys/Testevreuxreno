@@ -49,8 +49,13 @@ jobs:
       # lerat-worker → Settings → Variables and Secrets), nom GEMINI_API_KEY ou
       # GOOGLE_API_KEY. Le déploiement du Worker n'échoue pas si elle manque ici.
       - name: Set Gemini API key secret (si fourni)
-        if: ${{ secrets.GEMINI_API_KEY != '' }}
         continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: printf '%s' "${{ secrets.GEMINI_API_KEY }}" | npx wrangler secret put GEMINI_API_KEY
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -n "$GEMINI_API_KEY" ]; then
+            printf '%s' "$GEMINI_API_KEY" | npx wrangler secret put GEMINI_API_KEY
+          else
+            echo "Aucun secret GEMINI_API_KEY sur GitHub — ajoute la clé côté Cloudflare (Worker → Settings → Variables and Secrets)."
+          fi
