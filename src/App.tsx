@@ -99,7 +99,7 @@ async function callClaude(system, userContent) {
   try {
     res = await fetch(API_ENDPOINT, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content }] }),
+      body: JSON.stringify({ model: "claude-sonnet-4-5", max_tokens: 1000, messages: [{ role: "user", content }] }),
     });
   } catch (e) {
     throw new Error("connexion à l'IA impossible (réseau/runtime) — " + e.message);
