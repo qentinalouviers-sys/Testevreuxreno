@@ -22,7 +22,8 @@
  */
 
 export interface Env {
-  GEMINI_API_KEY: string;
+  GEMINI_API_KEY?: string;
+  GOOGLE_API_KEY?: string;
   MODEL?: string;
   ALLOW_ORIGIN?: string;
 }
@@ -74,9 +75,10 @@ export default {
     if (request.method !== "POST") {
       return json({ error: { message: "Méthode non autorisée." } }, 405, env);
     }
-    if (!env.GEMINI_API_KEY) {
+    const apiKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
+    if (!apiKey) {
       return json(
-        { error: { message: "GEMINI_API_KEY non configurée sur le Worker." } },
+        { error: { message: "Clé API absente : configure GEMINI_API_KEY (ou GOOGLE_API_KEY) sur le Worker." } },
         500,
         env
       );
@@ -111,7 +113,7 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": env.GEMINI_API_KEY,
+          "x-goog-api-key": apiKey,
         },
         body: JSON.stringify(body),
       });
