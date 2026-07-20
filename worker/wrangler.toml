@@ -1,0 +1,12 @@
+name = "lerat-worker"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
+# Modèle forcé côté serveur (recommandé : le front envoie un id de modèle
+# qui peut être obsolète). Laisse commenté pour utiliser celui du front.
+[vars]
+MODEL = "claude-sonnet-4-5"
+# ALLOW_ORIGIN = "https://<owner>.github.io"
+
+# La clé API ne se met PAS ici. Utilise :
+#   wrangler secret put ANTHROPIC_API_KEY

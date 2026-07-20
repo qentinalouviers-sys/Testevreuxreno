@@ -1,0 +1,14 @@
+{
+  "name": "lerat-worker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Proxy Anthropic pour l'app Le Rat (Cloudflare Workers).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "wrangler": "^3.90.0"
+  }
+}

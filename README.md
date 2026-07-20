@@ -1,166 +1,136 @@
-# NormaRénov — Site vitrine lead-gen
+# 🐀 Le Rat — l'art de négocier
 
-Site vitrine one-page haute conversion pour une entreprise de **rénovation
-énergétique** basée à **Évreux (Eure, Normandie)**. Objectif unique : générer
-des **demandes de devis qualifiées** (leads).
+Assistant de **négociation d'annonces d'occasion** (Leboncoin, Facebook
+Marketplace). Tu composes ton équipe d'**opérateurs** — des personas façon
+cartes de foot (Le Fouineur, Le Casseur, Le Parrain…) — et ils rédigent tes
+messages au vendeur, analysent l'avancement du deal via une **jauge**, et
+notent chaque négociateur en fin de match. Le tout propulsé par l'IA (API
+Anthropic).
 
-> Le nom, les coordonnées et l'identité sont des **placeholders** centralisés,
-> conçus pour être remplacés en quelques minutes.
-
----
-
-## ✨ Fonctionnalités
-
-- **One-page funnel** : hero orienté bénéfice → réassurance → services → aides →
-  méthode → avis → **formulaire multi-étapes** → FAQ → zone d'intervention.
-- **Formulaire de devis multi-étapes** (type quiz) avec barre de progression,
-  validation `zod` par étape, transitions Framer Motion, écran de succès animé.
-- **API route** `/api/lead` : envoi email via **Resend**, **webhook** optionnel
-  (CRM / Make / n8n), **honeypot** anti-spam et **rate limiting** en mémoire.
-- **Animations maîtrisées** : scroll-reveal, compteurs animés, timeline dessinée,
-  carousel d'avis auto-scroll + drag. Respect de `prefers-reduced-motion`.
-- **SEO** : metadata complète, Open Graph (image générée), `sitemap.xml`,
-  `robots.txt`, JSON-LD `LocalBusiness` + `FAQPage`.
-- **Accessibilité** : sémantique HTML, focus visibles, navigation clavier,
-  contrastes AA.
-- **Contenu 100 % éditable** sans toucher aux composants (`src/config`,
-  `src/data`).
+> Application **100 % front** (React + Vite). Aucune donnée n'est stockée côté
+> serveur : les appels à l'IA passent par **ton propre proxy** Cloudflare
+> Worker (voir plus bas), qui garde la clé API secrète.
 
 ---
 
-## 🧱 Stack technique
+## ✨ Fonctionnement
+
+1. **Compose ton équipe** — choisis tes opérateurs et le marché (Leboncoin /
+   Facebook).
+2. **Décris l'annonce** — colle le texte ou une **capture d'écran** ; l'IA
+   extrait l'objet et le prix affiché. Fixe ton **objectif** et ton **max
+   absolu**.
+3. **Le match démarre** — un opérateur rédige un message prêt à copier-coller.
+   Tu l'envoies au vendeur.
+4. **Colle la réponse du vendeur** (texte ou capture) — l'IA met à jour la
+   jauge, estime le prix auquel le vendeur est prêt, et détecte l'accord.
+5. **Fin de partie** — à la conclusion (ou l'échec), chaque négociateur reçoit
+   une note et un titre ; le **MVP** est désigné.
+
+---
+
+## 🧱 Stack
 
 | Outil | Usage |
 | --- | --- |
-| **Next.js 15** (App Router) | Framework React, rendu serveur |
-| **TypeScript** (strict) | Typage statique, zéro `any` |
-| **Tailwind CSS v4** | Styles utilitaires + design tokens |
-| **Framer Motion** | Toutes les animations |
-| **react-hook-form** + **zod** | Formulaire & validation |
-| **lucide-react** | Icônes |
-| **Resend** | Envoi des emails de leads |
+| **React 18** | UI (une seule vue, dans `src/App.tsx`) |
+| **Vite 6** | Dev server + build statique |
+| **TypeScript** | Outillage (typage volontairement souple) |
+| **API Anthropic** | Rédaction des messages, analyse, extraction d'annonce |
+| **Cloudflare Workers** | Proxy pour l'API (clé secrète + CORS) — dans `worker/` |
 
 ---
 
 ## 🚀 Démarrage
 
 ```bash
-# 1. Installer les dépendances
 npm install
-
-# 2. Configurer l'environnement
-cp .env.example .env.local
-# puis renseignez vos variables (voir ci-dessous)
-
-# 3. Lancer en développement
-npm run dev
-# → http://localhost:3000
-
-# 4. Build de production
-npm run build && npm run start
+npm run dev        # → http://localhost:5173
 ```
 
-> En développement sans `RESEND_API_KEY`, les leads sont **loggués dans la
-> console** — aucun email n'est envoyé, le formulaire reste pleinement testable.
+Autres scripts :
+
+```bash
+npm run build      # build statique dans dist/
+npm run preview    # sert le build de production
+npm run typecheck  # vérification TypeScript (sans émettre)
+```
+
+L'app fonctionne dès le lancement, mais **la négociation nécessite un
+endpoint IA** : renseigne l'URL de ton Worker dans le champ en haut de l'app
+(voir ci-dessous).
 
 ---
 
-## 🔐 Variables d'environnement
+## 🛰️ Le proxy IA (obligatoire pour les appels)
 
-Toutes les variables sont documentées dans [`.env.example`](./.env.example).
+Le navigateur ne peut pas appeler directement l'API Anthropic (la clé serait
+exposée et l'API bloque le CORS). Le dossier [`worker/`](./worker) contient un
+**Cloudflare Worker** minimal qui fait l'intermédiaire.
 
-| Variable | Requis | Description |
-| --- | --- | --- |
-| `RESEND_API_KEY` | Recommandé | Clé API [Resend](https://resend.com). Absente → log console. |
-| `LEAD_FROM_EMAIL` | Recommandé | Expéditeur vérifié (ex. `NormaRénov <devis@mail.domaine.fr>`). |
-| `LEAD_TO_EMAIL` | Recommandé | Destinataire(s) des leads (séparés par des virgules). |
-| `LEAD_WEBHOOK_URL` | Optionnel | URL POST JSON pour brancher un CRM / Make / n8n. |
-| `NEXT_PUBLIC_SITE_URL` | Recommandé | URL publique (sitemap, OG). Sans slash final. |
+### Déploiement
 
----
+```bash
+cd worker
+npm install
+npx wrangler login
+npx wrangler secret put ANTHROPIC_API_KEY   # colle ta clé API Anthropic
+npm run deploy
+```
 
-## ✏️ Personnaliser le contenu
+Wrangler affiche alors l'URL du Worker
+(`https://lerat-worker.<sous-domaine>.workers.dev`). **Colle cette URL dans le
+champ « ENDPOINT IA » de l'app.**
 
-Aucune modification de composant nécessaire :
+### Configuration
 
-| Fichier | Contenu |
-| --- | --- |
-| `src/config/company.ts` | **Nom, téléphone, adresse, email, horaires, certifications, note.** |
-| `src/config/hero.ts` | Média du hero — photo et **vidéo cinématique optionnelle** (voir `public/hero/`). |
-| `src/data/services.ts` | Cartes de services |
-| `src/data/aids.ts` | Dispositifs d'aides & barème par revenus |
-| `src/data/process.ts` | Les 4 étapes de la méthode |
-| `src/data/reviews.ts` | Avis clients (structure calquée sur l'API Google Places) |
-| `src/data/faq.ts` | Questions / réponses (alimente aussi le JSON-LD) |
-| `src/data/stats.ts` | Compteurs de la barre de réassurance |
+Dans [`worker/wrangler.toml`](./worker/wrangler.toml) :
 
-Les couleurs et typographies sont des **design tokens** dans
-`src/app/globals.css` (bloc `@theme`).
+- **`MODEL`** — modèle forcé côté serveur. Par défaut `claude-sonnet-4-5`.
+  Le front envoie son propre identifiant de modèle, mais celui du Worker prime
+  (pratique pour corriger un id obsolète sans toucher au build). Mets ici le
+  modèle auquel **ton compte Anthropic** a accès.
+- **`ALLOW_ORIGIN`** — restreins l'origine autorisée (ex.
+  `https://<owner>.github.io`) au lieu de `*` en production.
+
+`ANTHROPIC_API_KEY` est un **secret** : ne le mets jamais dans `wrangler.toml`
+ni dans le dépôt — utilise `wrangler secret put`.
 
 ---
 
 ## 🗂️ Structure
 
 ```
-src/
-├── app/
-│   ├── layout.tsx                 # Fonts, metadata, JSON-LD LocalBusiness
-│   ├── page.tsx                   # Assemblage des sections (funnel)
-│   ├── globals.css                # Design tokens Tailwind v4
-│   ├── opengraph-image.tsx        # Image OG générée
-│   ├── sitemap.ts / robots.ts     # SEO
-│   ├── api/lead/route.ts          # Réception des leads (Resend + webhook)
-│   ├── mentions-legales/
-│   └── politique-confidentialite/
-├── components/
-│   ├── sections/                  # Une section = un composant
-│   └── ui/                        # Button, Badge, SectionHeading, CountUp…
-├── config/company.ts              # Configuration centrale
-├── data/                          # Contenu éditable
-└── lib/                           # schema (zod), motion, rateLimit, utils
+├── index.html               # point d'entrée HTML (fonts, meta)
+├── src/
+│   ├── App.tsx              # toute l'app (composants + prompts + styles inline)
+│   ├── main.tsx            # montage React
+│   └── index.css          # reset global léger
+├── worker/                 # proxy Anthropic (Cloudflare Workers)
+│   ├── src/index.ts
+│   └── wrangler.toml
+├── vite.config.ts          # base "./" (compatible sous-chemin GitHub Pages)
+└── .github/workflows/deploy-pages.yml
 ```
 
 ---
 
-## ☁️ Déploiement Vercel
+## ☁️ Déploiement du front
 
-1. Poussez le dépôt sur GitHub.
-2. Sur [vercel.com](https://vercel.com) → **New Project** → importez le repo.
-3. Framework détecté automatiquement (**Next.js**). Aucune configuration requise.
-4. Ajoutez les **variables d'environnement** (onglet _Settings → Environment
-   Variables_) à partir de `.env.example`.
-5. **Deploy**. C'est en ligne.
+### GitHub Pages (automatique)
 
-> Pensez à définir `NEXT_PUBLIC_SITE_URL` sur votre domaine de production pour
-> des URLs correctes dans le sitemap et l'Open Graph.
+Le workflow [`deploy-pages.yml`](./.github/workflows/deploy-pages.yml) build et
+publie l'app sur GitHub Pages à chaque push sur la branche du projet.
 
----
+> Active Pages une fois : **Settings → Pages → Source : GitHub Actions**.
+> URL : `https://<owner>.github.io/<repo>/`
+> (Pages sur dépôt **privé** nécessite un plan payant.)
 
-## 🔗 Maquette partageable — GitHub Pages
+### Vercel / Netlify
 
-Un workflow ([`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml))
-publie automatiquement une **maquette statique** sur GitHub Pages à chaque push
-sur la branche du projet.
-
-- **Export statique** (`output: 'export'`) activé via `STATIC_EXPORT=true`.
-- Le **formulaire est en mode démo** (`NEXT_PUBLIC_FORM_MODE=demo`) : il affiche
-  l'écran de succès **sans envoyer de lead** — idéal pour présenter le rendu.
-- La route API `/api/lead` (incompatible avec l'hébergement statique) est
-  retirée du build Pages uniquement ; elle reste intacte dans le dépôt pour un
-  déploiement Vercel complet.
-
-> URL de la maquette : `https://<owner>.github.io/<repo>/`
-> GitHub Pages sur un dépôt **privé** nécessite un plan payant (Pro/Team) ou de
-> rendre le dépôt public.
-
-## 📈 Brancher un vrai flux de leads
-
-- **Email** : créez un compte Resend, vérifiez votre domaine, renseignez
-  `RESEND_API_KEY`, `LEAD_FROM_EMAIL` et `LEAD_TO_EMAIL`.
-- **CRM / automatisation** : renseignez `LEAD_WEBHOOK_URL` avec un webhook
-  Make / n8n / Zapier — chaque lead y est POSTé en JSON.
-- **Avis Google** : remplacez le contenu de `src/data/reviews.ts` par un appel à
-  l'API Google Places (la structure des données est déjà compatible).
+Framework détecté : **Vite**. Build : `npm run build`, dossier de sortie :
+`dist`. Aucune variable d'environnement côté front (l'endpoint IA se saisit
+dans l'app).
 
 ---
 
