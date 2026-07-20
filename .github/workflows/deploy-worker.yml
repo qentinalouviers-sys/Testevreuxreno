@@ -1,0 +1,50 @@
+name: Deploy Worker (proxy IA)
+
+# Déploie le proxy Cloudflare Worker (dossier worker/) sur Cloudflare.
+#
+# Prérequis — ajoute ces 2 secrets dans le dépôt
+#   (Settings → Secrets and variables → Actions → New repository secret) :
+#     - CLOUDFLARE_API_TOKEN : token API Cloudflare avec la permission
+#                              "Edit Cloudflare Workers".
+#     - ANTHROPIC_API_KEY    : ta clé API Anthropic (injectée comme secret
+#                              du Worker, jamais exposée au navigateur).
+#
+# Déclenchement : à chaque push touchant worker/ sur la branche du projet,
+# ou manuellement via l'onglet Actions (« Run workflow »).
+
+on:
+  push:
+    branches:
+      - claude/nouveau-projet-cr6wbr
+    paths:
+      - "worker/**"
+      - ".github/workflows/deploy-worker.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Deploy Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler deploy
+
+      - name: Set Anthropic API key secret
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: printf '%s' "${{ secrets.ANTHROPIC_API_KEY }}" | npx wrangler secret put ANTHROPIC_API_KEY

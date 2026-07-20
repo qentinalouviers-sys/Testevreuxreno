@@ -68,7 +68,22 @@ Le navigateur ne peut pas appeler directement l'API Anthropic (la clé serait
 exposée et l'API bloque le CORS). Le dossier [`worker/`](./worker) contient un
 **Cloudflare Worker** minimal qui fait l'intermédiaire.
 
-### Déploiement
+### Option A — déploiement automatique (GitHub Actions)
+
+Le workflow [`deploy-worker.yml`](./.github/workflows/deploy-worker.yml) déploie
+le Worker sans aucune commande à taper. Ajoute deux secrets dans le dépôt
+(**Settings → Secrets and variables → Actions → New repository secret**) :
+
+| Secret | Valeur |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Token API Cloudflare avec la permission **Edit Cloudflare Workers** ([créer un token](https://dash.cloudflare.com/profile/api-tokens)). |
+| `ANTHROPIC_API_KEY` | Ta clé API Anthropic. |
+
+Puis lance le workflow (onglet **Actions → Deploy Worker → Run workflow**), ou
+pousse un changement dans `worker/`. L'URL du Worker apparaît dans les logs du
+job (`https://lerat-worker.<sous-domaine>.workers.dev`).
+
+### Option B — déploiement local
 
 ```bash
 cd worker
@@ -78,7 +93,7 @@ npx wrangler secret put ANTHROPIC_API_KEY   # colle ta clé API Anthropic
 npm run deploy
 ```
 
-Wrangler affiche alors l'URL du Worker
+Dans les deux cas, Wrangler affiche l'URL du Worker
 (`https://lerat-worker.<sous-domaine>.workers.dev`). **Colle cette URL dans le
 champ « ENDPOINT IA » de l'app.**
 
