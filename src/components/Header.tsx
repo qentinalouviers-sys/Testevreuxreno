@@ -51,10 +51,8 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-700",
-          scrolled
-            ? "border-b border-gold-500/15 bg-ink-950/88 backdrop-blur-xl"
-            : "border-b border-transparent bg-transparent",
+          "fixed inset-x-0 top-0 z-50 border-b bg-paper/95 backdrop-blur-xl transition-all duration-500",
+          scrolled ? "border-ink/10 shadow-[0_1px_20px_-12px_rgba(23,21,15,0.5)]" : "border-ink/6",
         )}
       >
         <Container size="wide">
@@ -75,7 +73,7 @@ export function Header() {
                   href={link.href}
                   className={cn(
                     "relative py-1 text-[0.68rem] uppercase tracking-[0.18em] transition-colors duration-500",
-                    isActive(link.href) ? "text-gold-200" : "text-cream-dim hover:text-gold-200",
+                    isActive(link.href) ? "text-gold-700" : "text-ink-soft hover:text-gold-700",
                   )}
                 >
                   {link.label}
@@ -93,9 +91,9 @@ export function Header() {
             <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href={href("/pro")}
-                className="hidden items-center gap-2 rounded-[2px] border border-gold-500/30 px-4 py-2
-                           text-[0.66rem] uppercase tracking-[0.2em] text-gold-200 transition-all
-                           duration-500 hover:border-gold-400/70 hover:bg-gold-500/[0.07] xl:inline-flex"
+                className="hidden items-center gap-2 rounded-[2px] border border-gold-500/45 px-4 py-2
+                           text-[0.66rem] uppercase tracking-[0.2em] text-gold-700 transition-all
+                           duration-500 hover:border-gold-600/70 hover:bg-gold-500/[0.10] xl:inline-flex"
               >
                 <Lock className="size-3" strokeWidth={1.5} />
                 {t.nav.pro}
@@ -108,7 +106,7 @@ export function Header() {
                 type="button"
                 onClick={() => setOpen(true)}
                 aria-label={t.a11y.openMenu}
-                className="p-2 text-cream-dim transition-colors hover:text-gold-200 lg:hidden"
+                className="p-2 text-ink-soft transition-colors hover:text-gold-700 lg:hidden"
               >
                 <Menu className="size-5" strokeWidth={1.25} />
               </button>
@@ -124,7 +122,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-ink-950/98 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-[60] bg-paper/98 backdrop-blur-2xl lg:hidden"
           >
             <div className="grain flex h-full flex-col">
               <Container size="wide">
@@ -134,7 +132,7 @@ export function Header() {
                     type="button"
                     onClick={() => setOpen(false)}
                     aria-label={t.a11y.closeMenu}
-                    className="p-2 text-cream-dim transition-colors hover:text-gold-200"
+                    className="p-2 text-ink-soft transition-colors hover:text-gold-700"
                   >
                     <X className="size-5" strokeWidth={1.25} />
                   </button>
@@ -154,8 +152,8 @@ export function Header() {
                   >
                     <Link
                       href={link.href}
-                      className="block border-b border-gold-500/10 py-4 font-display text-2xl
-                                 text-cream transition-colors duration-400 hover:text-gold-300
+                      className="block border-b border-ink/8 py-4 font-display text-2xl
+                                 text-ink transition-colors duration-400 hover:text-gold-600
                                  sm:py-5 sm:text-3xl"
                     >
                       {link.label}

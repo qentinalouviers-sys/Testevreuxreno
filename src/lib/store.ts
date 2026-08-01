@@ -15,6 +15,15 @@ const KEY = "alarifa.store.v1";
 const SESSION_KEY = "alarifa.session.v1";
 
 export type AccountStatus = "pending" | "approved" | "rejected";
+
+/**
+ * Trois natures de compte :
+ * — `producer` vend sous sa marque et perçoit sa part de chaque commande ;
+ * — `buyer` est un professionnel qui achète (restaurant, épicerie, importateur)
+ *   et bénéficie d'une remise négociée sur le catalogue ;
+ * — `admin` administre la place de marché.
+ */
+export type Role = "producer" | "buyer" | "admin";
 export type OrderStatus = "pending" | "confirmed" | "shipped" | "cancelled";
 
 export type Account = {
@@ -30,10 +39,12 @@ export type Account = {
   /** Empreinte du mot de passe — jamais le mot de passe en clair. */
   passwordHash: string;
   status: AccountStatus;
-  /** Taux de commission de la plateforme, en %. null = taux standard. */
+  /** Producteur : taux de commission de la plateforme, en %. null = standard. */
   commissionRate: number | null;
+  /** Acheteur professionnel : remise négociée sur le catalogue, en %. */
+  discountRate: number | null;
   createdAt: string;
-  role: "pro" | "admin";
+  role: Role;
 };
 
 export type Order = {
@@ -58,7 +69,7 @@ type StoreData = {
   orders: Order[];
 };
 
-export type Session = { accountId: string; role: "pro" | "admin" };
+export type Session = { accountId: string; role: Role };
 
 /* ------------------------------------------------------------------ */
 /* Utilitaires                                                         */
@@ -103,6 +114,7 @@ const ADMIN_SEED: Account = {
   passwordHash: hashPassword("arifa2024"),
   status: "approved",
   commissionRate: null,
+  discountRate: null,
   createdAt: "2024-01-01T00:00:00.000Z",
   role: "admin",
 };
@@ -122,8 +134,9 @@ const DEMO_ACCOUNTS: Account[] = [
     passwordHash: hashPassword("demo1234"),
     status: "approved",
     commissionRate: 26,
+    discountRate: null,
     createdAt: "2025-11-04T09:12:00.000Z",
-    role: "pro",
+    role: "producer",
   },
   {
     id: "acc_demo_2",
@@ -138,8 +151,26 @@ const DEMO_ACCOUNTS: Account[] = [
     passwordHash: hashPassword("demo1234"),
     status: "pending",
     commissionRate: null,
+    discountRate: null,
     createdAt: "2026-01-19T15:40:00.000Z",
-    role: "pro",
+    role: "producer",
+  },
+  {
+    id: "acc_demo_3",
+    company: "Table du Marché — Lyon",
+    vat: "FR62889110234",
+    contactName: "L. Fournier",
+    email: "achats@tabledumarche.fr",
+    phone: "+33 4 72 00 00 00",
+    country: "France",
+    activity: "Restauration",
+    volume: "300 unités / an",
+    passwordHash: hashPassword("demo1234"),
+    status: "approved",
+    commissionRate: null,
+    discountRate: 18,
+    createdAt: "2025-12-11T11:20:00.000Z",
+    role: "buyer",
   },
 ];
 
@@ -220,7 +251,7 @@ export function subscribe(listener: () => void): () => void {
 
 export function listAccounts(): Account[] {
   return read()
-    .accounts.filter((a) => a.role === "pro")
+    .accounts.filter((a) => a.role !== "admin")
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
@@ -230,7 +261,7 @@ export function getAccount(id: string): Account | undefined {
 
 export type RegisterInput = Omit<
   Account,
-  "id" | "passwordHash" | "status" | "commissionRate" | "createdAt" | "role"
+  "id" | "passwordHash" | "status" | "commissionRate" | "discountRate" | "createdAt"
 > & { password: string };
 
 export function register(input: RegisterInput): { ok: true; account: Account } | { ok: false; error: "exists" } {
@@ -252,8 +283,9 @@ export function register(input: RegisterInput): { ok: true; account: Account } |
     passwordHash: hashPassword(input.password),
     status: "pending",
     commissionRate: null,
+    discountRate: null,
     createdAt: new Date().toISOString(),
-    role: "pro",
+    role: input.role === "admin" ? "producer" : input.role,
   };
   data.accounts.push(account);
   write(data);
@@ -292,6 +324,15 @@ export function setCommissionRate(id: string, rate: number | null): void {
   const account = data.accounts.find((a) => a.id === id);
   if (!account) return;
   account.commissionRate = rate !== null && rate > 0 && rate < 100 ? rate : null;
+  write(data);
+}
+
+/** Fixe la remise catalogue d'un acheteur professionnel. */
+export function setDiscountRate(id: string, rate: number | null): void {
+  const data = read();
+  const account = data.accounts.find((a) => a.id === id);
+  if (!account) return;
+  account.discountRate = rate !== null && rate > 0 && rate < 100 ? rate : null;
   write(data);
 }
 

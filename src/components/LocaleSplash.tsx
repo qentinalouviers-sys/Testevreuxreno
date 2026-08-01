@@ -35,10 +35,10 @@ export function LocaleSplash() {
   }, [router]);
 
   return (
-    <div className="grain relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
+    <div className="section-dark grain relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(110%_80%_at_50%_35%,#14120f_0%,#080807_50%,#040403_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(110%_80%_at_50%_35%,#262117_0%,#16130e_50%,#100e0b_100%)]"
       />
       <div
         aria-hidden
@@ -51,11 +51,11 @@ export function LocaleSplash() {
         transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
         className="relative flex flex-col items-center text-center"
       >
-        <Rosette className="size-14 text-gold-400" />
-        <h1 className="mt-7 font-display text-4xl tracking-[0.22em] text-gold-gradient sm:text-5xl">
+        <Rosette className="size-14 text-gold-300" />
+        <h1 className="mt-7 font-display text-4xl tracking-[0.22em] text-gold-gradient-dark sm:text-5xl">
           AL ARIFA
         </h1>
-        <p className="mt-3 text-[0.6rem] uppercase tracking-[0.34em] text-cream-mute">
+        <p className="mt-3 text-[0.6rem] uppercase tracking-[0.34em] text-paper-4/80">
           Sélection Héritage
         </p>
         <div className="mx-auto mt-8 h-px w-24 rule-gold" />
@@ -70,9 +70,9 @@ export function LocaleSplash() {
                 hrefLang={meta.htmlLang}
                 lang={meta.htmlLang}
                 dir={meta.dir}
-                className="flex items-center gap-2.5 border border-gold-500/25 px-4 py-2.5
-                           text-[0.68rem] uppercase tracking-[0.16em] text-cream-dim
-                           transition-all duration-500 hover:border-gold-400/60 hover:text-gold-200"
+                className="flex items-center gap-2.5 border border-gold-500/30 px-4 py-2.5
+                           text-[0.68rem] uppercase tracking-[0.16em] text-paper-3
+                           transition-all duration-500 hover:border-gold-400/70 hover:text-gold-200"
               >
                 <Flag code={meta.flag} className="h-3 w-[18px]" />
                 {meta.short}
@@ -81,7 +81,7 @@ export function LocaleSplash() {
           })}
         </nav>
 
-        <p className="mt-8 h-4 text-[0.6rem] uppercase tracking-[0.24em] text-cream-mute/60">
+        <p className="mt-8 h-4 text-[0.6rem] uppercase tracking-[0.24em] text-paper-4/70">
           {target && `→ ${LOCALE_META[target].label}`}
         </p>
       </motion.div>

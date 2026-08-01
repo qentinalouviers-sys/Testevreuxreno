@@ -60,7 +60,7 @@ export function SectionHeading({
         <Reveal delay={0.2}>
           <p
             className={cn(
-              "text-pretty text-[0.95rem] leading-relaxed text-cream-mute",
+              "text-pretty text-[0.95rem] leading-relaxed text-ink-mute",
               centered ? "mx-auto max-w-2xl" : "max-w-2xl",
             )}
           >

@@ -36,13 +36,13 @@ export function Wordmark({
 }) {
   return (
     <span className={cn("flex items-center gap-3", className)}>
-      <Rosette className="size-7 shrink-0 text-gold-400 transition-transform duration-[1.2s] group-hover:rotate-45" />
+      <Rosette className="size-7 shrink-0 text-gold-600 transition-transform duration-[1.2s] group-hover:rotate-45" />
       <span className="flex flex-col leading-none">
         <span className="font-display text-[1.35rem] font-normal tracking-[0.2em] text-gold-gradient">
           AL ARIFA
         </span>
         {showTagline && (
-          <span className="mt-1 font-sans text-[0.52rem] uppercase tracking-[0.32em] text-cream-mute">
+          <span className="mt-1 font-sans text-[0.52rem] uppercase tracking-[0.32em] text-ink-mute">
             Sélection Héritage
           </span>
         )}

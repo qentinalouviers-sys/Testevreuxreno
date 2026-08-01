@@ -52,7 +52,7 @@ export function ProducerContent({ slug }: { slug: string }) {
         <h1 className="mt-8 text-3xl">{t.producers.notFound}</h1>
         <Link
           href={href("/producteurs")}
-          className="mt-8 inline-flex items-center gap-2.5 text-[0.68rem] uppercase tracking-[0.18em] text-gold-300 hover:text-gold-100"
+          className="mt-8 inline-flex items-center gap-2.5 text-[0.68rem] uppercase tracking-[0.18em] text-gold-600 hover:text-gold-700"
         >
           <ArrowLeft className="size-3 rtl:rotate-180" strokeWidth={1.5} />
           {t.producers.backToProducers}
@@ -70,7 +70,7 @@ export function ProducerContent({ slug }: { slug: string }) {
       <section className="grain relative overflow-hidden pt-[calc(68px+3.5rem)] pb-16 sm:pt-[calc(80px+5rem)] sm:pb-20">
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(100%_80%_at_50%_0%,#14120f_0%,#080807_55%,#040403_100%)]"
+          className="absolute inset-0 bg-[radial-gradient(100%_80%_at_50%_0%,#fbf9f4_0%,#f4f0e6_55%,#ece5d6_100%)]"
         />
         <div
           aria-hidden
@@ -80,37 +80,37 @@ export function ProducerContent({ slug }: { slug: string }) {
         <Container className="relative">
           <Link
             href={href("/producteurs")}
-            className="inline-flex items-center gap-2.5 text-[0.62rem] uppercase tracking-[0.18em] text-cream-mute transition-colors hover:text-gold-200"
+            className="inline-flex items-center gap-2.5 text-[0.62rem] uppercase tracking-[0.18em] text-ink-mute transition-colors hover:text-gold-700"
           >
             <ArrowLeft className="size-3 rtl:rotate-180" strokeWidth={1.5} />
             {t.producers.backToProducers}
           </Link>
 
           <div className="mt-10 flex flex-col items-center text-center">
-            <Rosette className="size-12 text-gold-400" />
+            <Rosette className="size-12 text-gold-600" />
 
             <h1 className="mt-7 text-4xl text-gold-gradient sm:text-6xl">{producer.name}</h1>
 
-            <p className="mt-4 inline-flex items-center gap-3 text-[0.62rem] uppercase tracking-[0.22em] text-gold-400/85">
+            <p className="mt-4 inline-flex items-center gap-3 text-[0.62rem] uppercase tracking-[0.22em] text-gold-600">
               <Flag code={producer.flag} className="h-3 w-[18px]" />
               {producer.region} · {producer.country}
             </p>
 
             <div className="mt-7 h-px w-24 rule-gold" />
 
-            <p className="mt-7 max-w-xl text-pretty leading-relaxed text-cream-mute">
+            <p className="mt-7 max-w-xl text-pretty leading-relaxed text-ink-mute">
               {copy?.bio}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <span className="border border-gold-500/25 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-cream-dim">
+              <span className="border border-ink/14 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-ink-soft">
                 {t.producers.since} {producer.founded}
               </span>
               <span
                 className={
                   payoutsActive
-                    ? "inline-flex items-center gap-2 border border-olive-500/45 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-olive-300"
-                    : "inline-flex items-center gap-2 border border-gold-500/40 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-gold-300"
+                    ? "inline-flex items-center gap-2 border border-olive-600/40 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-olive-600"
+                    : "inline-flex items-center gap-2 border border-gold-500/50 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-gold-600"
                 }
               >
                 {payoutsActive ? (
@@ -120,7 +120,7 @@ export function ProducerContent({ slug }: { slug: string }) {
                 )}
                 {payoutsActive ? t.producers.payoutsActive : t.producers.payoutsPending}
               </span>
-              <span className="border border-gold-500/25 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-cream-dim">
+              <span className="border border-ink/14 px-4 py-2 text-[0.58rem] uppercase tracking-[0.16em] text-ink-soft">
                 {t.product.freeShippingFrom} {price(producer.freeShippingFrom)}
               </span>
             </div>

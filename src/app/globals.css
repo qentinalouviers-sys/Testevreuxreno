@@ -1,43 +1,57 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Al Arifa — Design tokens
-   Palette relevée directement sur le bidon Sélection Héritage :
-   noir laqué, or gravé, vert olive du médaillon, rubis du cœur floral.
+   Al Arifa — Jetons de design
+
+   Direction artistique claire : fonds papier, encres sombres, or gravé
+   en accent. Les produits sont photographiés sur fond noir : les poser
+   sur du papier crée le contraste qui les met en valeur, là où un site
+   entièrement sombre les noyait.
+
+   Deux familles à ne pas confondre :
+   — `paper-*` : les fonds, du plus clair au plus soutenu ;
+   — `ink-*`   : les textes, du plus dense au plus discret ;
+   — `noir-*`  : réservé aux quelques sections sombres (hero, bandeaux),
+                 où l'on repasse volontairement en inversé.
 ------------------------------------------------------------------- */
 @theme {
-  /* Noirs */
-  --color-ink-950: #040403;
-  --color-ink-900: #080807;
-  --color-ink-850: #0d0c0a;
-  --color-ink-800: #14120f;
-  --color-ink-700: #1d1a16;
-  --color-ink-600: #2a251e;
+  /* Papiers — fonds */
+  --color-paper: #fbf9f4;
+  --color-paper-2: #f4f0e6;
+  --color-paper-3: #ece5d6;
+  --color-paper-4: #ded4bf;
 
-  /* Ors */
-  --color-gold-100: #f5e9cc;
+  /* Encres — textes */
+  --color-ink: #17150f;
+  --color-ink-soft: #3d382c;
+  --color-ink-mute: #736a57;
+
+  /* Nuit — sections inversées */
+  --color-noir: #100e0b;
+  --color-noir-2: #1b1812;
+  --color-noir-3: #262117;
+
+  /* Ors — calibrés pour rester lisibles sur papier.
+     Les tons 100 à 300 servent sur fond sombre, 600 à 800 sur fond clair. */
+  --color-gold-100: #f6ecd4;
   --color-gold-200: #e9d5a5;
-  --color-gold-300: #dcc07f;
-  --color-gold-400: #cba95e;
-  --color-gold-500: #c19749;
-  --color-gold-600: #a07a35;
-  --color-gold-700: #7c5d27;
-  --color-gold-800: #55401b;
+  --color-gold-300: #d4b473;
+  --color-gold-400: #bd9848;
+  --color-gold-500: #a67f2f;
+  --color-gold-600: #8a6722;
+  --color-gold-700: #6d511a;
+  --color-gold-800: #4c3811;
 
   /* Verts olive (médaillon) */
-  --color-olive-300: #9bb47a;
-  --color-olive-500: #6d8f4b;
-  --color-olive-700: #47612f;
-  --color-olive-900: #24331a;
+  --color-olive-300: #93ab74;
+  --color-olive-500: #5d7d3d;
+  --color-olive-600: #4a6430;
+  --color-olive-700: #3a4f26;
+  --color-olive-900: #1f2c14;
 
   /* Rubis (cœur du motif) */
-  --color-ruby-500: #a6322c;
-  --color-ruby-600: #872621;
-
-  /* Crème / textes */
-  --color-cream: #f2ead8;
-  --color-cream-dim: #cdc3ae;
-  --color-cream-mute: #8d8574;
+  --color-ruby-500: #98302a;
+  --color-ruby-600: #7a2620;
 
   /* Typographies */
   --font-display: var(--font-cormorant), "Cormorant Garamond", "Times New Roman", serif;
@@ -63,12 +77,12 @@
 ------------------------------------------------------------------- */
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
     --header-h: 68px;
   }
 
   * {
-    border-color: color-mix(in oklab, var(--color-gold-500) 14%, transparent);
+    border-color: color-mix(in oklab, var(--color-ink) 12%, transparent);
   }
 
   html {
@@ -77,8 +91,8 @@
   }
 
   body {
-    background-color: var(--color-ink-950);
-    color: var(--color-cream-dim);
+    background-color: var(--color-paper);
+    color: var(--color-ink-soft);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
     -webkit-font-smoothing: antialiased;
@@ -88,14 +102,14 @@
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    color: var(--color-cream);
+    color: var(--color-ink);
     font-weight: 300;
     letter-spacing: -0.01em;
     line-height: 1.05;
   }
 
   /* Le latin serif de la marque ne couvre ni le chinois ni l'arabe.
-     Plutôt que de télécharger des fontes CJK/arabes très lourdes (plusieurs Mo),
+     Plutôt que de télécharger des fontes CJK/arabes très lourdes,
      on s'appuie sur les piles système : rendu natif, aucun coût réseau. */
   html[lang="zh-Hans"] h1,
   html[lang="zh-Hans"] h2,
@@ -118,13 +132,13 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-gold-500) 32%, transparent);
-    color: var(--color-cream);
+    background: color-mix(in oklab, var(--color-gold-500) 28%, transparent);
+    color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 1px solid var(--color-gold-400);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-gold-600);
+    outline-offset: 2px;
   }
 
   input, textarea, select, button {
@@ -133,7 +147,6 @@
     color: inherit;
   }
 
-  /* Masque les flèches natives des inputs number */
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -141,13 +154,14 @@
   }
   input[type="number"] { -moz-appearance: textfield; }
 
-  ::-webkit-scrollbar { width: 9px; height: 9px; }
-  ::-webkit-scrollbar-track { background: var(--color-ink-900); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-paper-2); }
   ::-webkit-scrollbar-thumb {
-    background: color-mix(in oklab, var(--color-gold-700) 70%, black);
-    border-radius: 0;
+    background: color-mix(in oklab, var(--color-ink) 22%, transparent);
   }
-  ::-webkit-scrollbar-thumb:hover { background: var(--color-gold-600); }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--color-ink) 38%, transparent);
+  }
 }
 
 /* L'italique latin n'a pas de sens en arabe ni en chinois. Règle placée hors
@@ -160,13 +174,15 @@ html[lang="zh-Hans"] .italic {
 /* ------------------------------------------------------------------
    Utilitaires maison
 ------------------------------------------------------------------- */
+
+/* Or gravé, pour le lettrage de marque sur fond clair */
 @utility text-gold-gradient {
   background-image: linear-gradient(
     100deg,
     var(--color-gold-700) 0%,
-    var(--color-gold-300) 22%,
-    var(--color-gold-100) 40%,
-    var(--color-gold-400) 58%,
+    var(--color-gold-500) 26%,
+    var(--color-gold-400) 45%,
+    var(--color-gold-600) 68%,
     var(--color-gold-700) 100%
   );
   background-clip: text;
@@ -174,14 +190,29 @@ html[lang="zh-Hans"] .italic {
   color: transparent;
 }
 
-/* Filet doré horizontal, façon gravure sur métal */
+/* Variante pour les sections sombres : l'or doit y être clair */
+@utility text-gold-gradient-dark {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-600) 0%,
+    var(--color-gold-300) 22%,
+    var(--color-gold-100) 42%,
+    var(--color-gold-300) 62%,
+    var(--color-gold-600) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Filet doré horizontal, façon gravure */
 @utility rule-gold {
   background-image: linear-gradient(
     to right,
     transparent,
-    color-mix(in oklab, var(--color-gold-500) 55%, transparent) 22%,
-    var(--color-gold-400) 50%,
-    color-mix(in oklab, var(--color-gold-500) 55%, transparent) 78%,
+    color-mix(in oklab, var(--color-gold-500) 40%, transparent) 22%,
+    var(--color-gold-500) 50%,
+    color-mix(in oklab, var(--color-gold-500) 40%, transparent) 78%,
     transparent
   );
 }
@@ -190,23 +221,29 @@ html[lang="zh-Hans"] .italic {
 @utility eyebrow {
   font-family: var(--font-sans);
   font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.34em;
+  font-weight: 500;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--color-gold-400);
+  color: var(--color-gold-600);
 }
 
-@utility surface {
-  background-color: color-mix(in oklab, var(--color-ink-850) 88%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-gold-500) 16%, transparent);
-  backdrop-filter: blur(14px);
+/* Carte posée sur le papier : ombre très douce plutôt qu'un trait dur */
+@utility card {
+  background-color: #fff;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 9%, transparent);
+  box-shadow: 0 1px 2px rgba(23, 21, 15, 0.04), 0 8px 24px -16px rgba(23, 21, 15, 0.18);
 }
 
-@utility surface-hover {
-  transition: border-color 0.5s ease, background-color 0.5s ease;
+@utility card-hover {
+  transition: border-color 0.45s ease, box-shadow 0.45s ease, transform 0.45s ease;
 }
 
-/* Grain fin : casse le côté « aplat numérique » du fond noir */
+.card-hover:hover {
+  border-color: color-mix(in oklab, var(--color-gold-500) 45%, transparent);
+  box-shadow: 0 2px 4px rgba(23, 21, 15, 0.05), 0 18px 40px -22px rgba(23, 21, 15, 0.3);
+}
+
+/* Grain fin : évite l'aplat numérique, très discret sur papier */
 @utility grain {
   position: relative;
 }
@@ -216,12 +253,12 @@ html[lang="zh-Hans"] .italic {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: overlay;
+  opacity: 0.022;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Halo doré diffus derrière le produit */
+/* Halo doré diffus — utilisé dans les sections sombres */
 @utility glow-gold {
   background: radial-gradient(
     ellipse at center,
@@ -229,6 +266,19 @@ html[lang="zh-Hans"] .italic {
     color-mix(in oklab, var(--color-gold-700) 12%, transparent) 38%,
     transparent 70%
   );
+}
+
+/* Bloc sombre inséré dans la page claire : hero, bandeaux, encarts produit */
+@utility section-dark {
+  background-color: var(--color-noir);
+  color: var(--color-paper-2);
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  color: var(--color-paper);
 }
 
 /* ------------------------------------------------------------------

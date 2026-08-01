@@ -3,11 +3,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useMemo, useState, type FormEvent } from "react";
-import { LogOut, Lock, UserPlus, FileText, Check, Clock, Wallet } from "lucide-react";
+import { LogOut, Lock, UserPlus, FileText, Check, Clock, Wallet, Percent, ShoppingBag } from "lucide-react";
 import { Container } from "../ui/Container";
 import { PageHero } from "../ui/PageHero";
 import { Eyebrow } from "../ui/SectionHeading";
-import { Button } from "../ui/Button";
+import { Button, ButtonLink } from "../ui/Button";
 import { Input, Select } from "../ui/Field";
 import { Rosette } from "../ui/Wordmark";
 import { useLocale } from "@/i18n/LocaleProvider";
@@ -27,10 +27,11 @@ export function ProContent() {
   const { session, ready } = useSession();
   const version = useStoreVersion();
 
-  // Seul un compte de rôle « pro » ouvre le tableau de bord client :
-  // une session administrateur ne doit pas se faire passer pour un client.
+  // Une session administrateur ne doit pas se faire passer pour une maison
+  // ou un acheteur : seuls les deux rôles métier ouvrent un tableau de bord.
   const account = useMemo(
-    () => (session?.role === "pro" ? getAccount(session.accountId) : undefined),
+    () =>
+      session && session.role !== "admin" ? getAccount(session.accountId) : undefined,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [session, version],
   );
@@ -38,6 +39,7 @@ export function ProContent() {
   // Tant que localStorage n'a pas été lu, on n'affiche ni le formulaire
   // ni le tableau de bord : cela évite un flash de l'écran de connexion.
   if (!ready) return <ProSkeleton />;
+  if (account?.role === "buyer") return <BuyerDashboard account={account} />;
   if (account) return <Dashboard account={account} />;
   return <AuthPanel isAdmin={session?.role === "admin"} />;
 }
@@ -46,7 +48,7 @@ function ProSkeleton() {
   const { t } = useLocale();
   return (
     <PageHero eyebrow={t.pro.eyebrow} title={t.pro.title} subtitle={t.pro.subtitle}>
-      <div className="mx-auto h-64 w-full max-w-md animate-pulse border border-gold-500/10 bg-ink-900/40" />
+      <div className="mx-auto h-64 w-full max-w-md animate-pulse border border-ink/8 bg-white" />
     </PageHero>
   );
 }
@@ -64,7 +66,7 @@ function AuthPanel({ isAdmin = false }: { isAdmin?: boolean }) {
       <PageHero eyebrow={t.pro.eyebrow} title={t.pro.title} subtitle={t.pro.subtitle}>
         <div
           role="tablist"
-          className="mx-auto flex w-full max-w-md border border-gold-500/25 p-1"
+          className="mx-auto flex w-full max-w-md border border-ink/14 p-1"
         >
           {(["login", "register"] as const).map((key) => (
             <button
@@ -74,7 +76,7 @@ function AuthPanel({ isAdmin = false }: { isAdmin?: boolean }) {
               onClick={() => setTab(key)}
               className={cn(
                 "relative flex-1 px-4 py-3 text-[0.68rem] uppercase tracking-[0.18em] transition-colors duration-500",
-                tab === key ? "text-ink-950" : "text-cream-dim hover:text-gold-200",
+                tab === key ? "text-ink" : "text-ink-soft hover:text-gold-700",
               )}
             >
               {tab === key && (
@@ -95,14 +97,14 @@ function AuthPanel({ isAdmin = false }: { isAdmin?: boolean }) {
           {/* Une session administrateur est signalée explicitement :
               elle n'ouvre pas l'espace client mais reste active. */}
           {isAdmin && (
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border border-gold-500/30 bg-gold-500/[0.06] px-5 py-4">
-              <p className="text-sm text-gold-200/90">{t.admin.title}</p>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border border-gold-500/45 bg-gold-500/[0.09] px-5 py-4">
+              <p className="text-sm text-gold-700">{t.admin.title}</p>
               <div className="flex items-center gap-3">
                 <Link
                   href={href("/admin")}
-                  className="border border-gold-500/40 px-4 py-2 text-[0.62rem] uppercase
-                             tracking-[0.16em] text-gold-200 transition-colors duration-400
-                             hover:border-gold-400/70 hover:bg-gold-500/10"
+                  className="border border-gold-500/50 px-4 py-2 text-[0.62rem] uppercase
+                             tracking-[0.16em] text-gold-700 transition-colors duration-400
+                             hover:border-gold-600/70 hover:bg-ink/10"
                 >
                   {t.nav.admin}
                 </Link>
@@ -110,7 +112,7 @@ function AuthPanel({ isAdmin = false }: { isAdmin?: boolean }) {
                   type="button"
                   onClick={clearSession}
                   className="inline-flex items-center gap-2 text-[0.62rem] uppercase
-                             tracking-[0.16em] text-cream-mute transition-colors hover:text-gold-200"
+                             tracking-[0.16em] text-ink-mute transition-colors hover:text-gold-700"
                 >
                   <LogOut className="size-3" strokeWidth={1.5} />
                   {t.pro.dashboard.logout}
@@ -128,7 +130,7 @@ function AuthPanel({ isAdmin = false }: { isAdmin?: boolean }) {
   );
 }
 
-const PANEL = "border border-gold-500/18 bg-ink-900/45 p-6 sm:p-10";
+const PANEL = "border border-ink/10 bg-white p-6 sm:p-10";
 const MOTION = {
   initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
@@ -165,7 +167,7 @@ function LoginForm() {
         <Input id="login-password" name="password" type="password" label={t.pro.login.password} required autoComplete="current-password" dir="ltr" />
 
         {error && (
-          <p className="border border-ruby-500/40 bg-ruby-600/10 px-4 py-3 text-sm text-ruby-500">
+          <p className="border border-ruby-500/35 bg-ruby-500/08 px-4 py-3 text-sm text-ruby-500">
             {error}
           </p>
         )}
@@ -175,7 +177,7 @@ function LoginForm() {
           {t.pro.login.submit}
         </Button>
 
-        <p className="mt-2 text-center text-[0.66rem] tracking-wide text-cream-mute/60">
+        <p className="mt-2 text-center text-[0.66rem] tracking-wide text-ink-mute/80">
           {t.pro.login.demoHint}
         </p>
       </form>
@@ -187,6 +189,7 @@ function RegisterForm() {
   const { t } = useLocale();
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [role, setRole] = useState<"producer" | "buyer">("producer");
 
   const activities = [
     t.contact.form.profileOptions.restaurant,
@@ -211,6 +214,7 @@ function RegisterForm() {
     }
 
     const result = register({
+      role,
       company: get("company"),
       vat: get("vat"),
       contactName: get("contactName"),
@@ -234,11 +238,11 @@ function RegisterForm() {
     return (
       <motion.div {...MOTION} className={cn(PANEL, "flex flex-col items-center py-16 text-center")}>
         <span className="relative flex size-16 items-center justify-center">
-          <Rosette className="size-16 text-gold-500/35" />
-          <Check className="absolute size-6 text-olive-300" strokeWidth={2} />
+          <Rosette className="size-16 text-gold-500" />
+          <Check className="absolute size-6 text-olive-600" strokeWidth={2} />
         </span>
         <h2 className="mt-7 text-2xl">{t.pro.register.success}</h2>
-        <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream-mute">
+        <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-mute">
           {t.pro.register.successText}
         </p>
       </motion.div>
@@ -248,9 +252,54 @@ function RegisterForm() {
   return (
     <motion.div {...MOTION} className={PANEL}>
       <Eyebrow>{t.pro.register.title}</Eyebrow>
-      <p className="mt-5 text-sm leading-relaxed text-cream-mute">{t.pro.register.intro}</p>
+      <p className="mt-5 text-sm leading-relaxed text-ink-mute">{t.pro.register.intro}</p>
 
-      <form onSubmit={onSubmit} className="mt-8 grid gap-5 sm:grid-cols-2">
+      {/* Nature du compte : elle change le parcours et les conditions. */}
+      <fieldset className="mt-8">
+        <legend className="mb-3 text-[0.6rem] uppercase tracking-[0.2em] text-ink-mute">
+          {t.pro.register.accountType.label}
+        </legend>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(["producer", "buyer"] as const).map((key) => {
+            const active = role === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setRole(key)}
+                className={cn(
+                  "border p-4 text-start transition-all duration-400",
+                  active
+                    ? "border-gold-600/70 bg-gold-500/[0.10]"
+                    : "border-ink/14 bg-white hover:border-gold-500/50",
+                )}
+              >
+                <span className="flex items-center gap-2.5">
+                  <span
+                    className={cn(
+                      "flex size-4 shrink-0 items-center justify-center rounded-full border",
+                      active ? "border-gold-600 bg-gold-500" : "border-ink/25",
+                    )}
+                  >
+                    {active && <Check className="size-2.5 text-white" strokeWidth={3} />}
+                  </span>
+                  <span className="text-sm text-ink">
+                    {t.pro.register.accountType[key]}
+                  </span>
+                </span>
+                <span className="mt-2 block ps-6.5 text-[0.72rem] leading-relaxed text-ink-mute">
+                  {key === "producer"
+                    ? t.pro.register.accountType.producerNote
+                    : t.pro.register.accountType.buyerNote}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <form onSubmit={onSubmit} className="mt-6 grid gap-5 sm:grid-cols-2">
         <Input id="reg-company" name="company" label={t.pro.register.company} required autoComplete="organization" />
         <Input id="reg-vat" name="vat" label={t.pro.register.vat} required />
         <Input id="reg-contact" name="contactName" label={t.pro.register.contactName} required autoComplete="name" />
@@ -277,7 +326,7 @@ function RegisterForm() {
         <Input id="reg-password2" name="passwordConfirm" type="password" label={t.pro.register.passwordConfirm} required autoComplete="new-password" dir="ltr" />
 
         {error && (
-          <p className="border border-ruby-500/40 bg-ruby-600/10 px-4 py-3 text-sm text-ruby-500 sm:col-span-2">
+          <p className="border border-ruby-500/35 bg-ruby-500/08 px-4 py-3 text-sm text-ruby-500 sm:col-span-2">
             {error}
           </p>
         )}
@@ -298,10 +347,10 @@ function RegisterForm() {
 /* ------------------------------------------------------------------ */
 
 const STATUS_STYLE: Record<string, string> = {
-  pending: "border-gold-500/40 text-gold-300",
-  confirmed: "border-olive-500/50 text-olive-300",
-  shipped: "border-olive-300/50 text-olive-300",
-  cancelled: "border-ruby-500/40 text-ruby-500",
+  pending: "border-gold-500/50 text-gold-600",
+  confirmed: "border-olive-600/45 text-olive-600",
+  shipped: "border-olive-600/45 text-olive-600",
+  cancelled: "border-ruby-500/35 text-ruby-500",
 };
 
 function Dashboard({ account }: { account: Account }) {
@@ -337,16 +386,16 @@ function Dashboard({ account }: { account: Account }) {
         title={<span className="text-gold-gradient">{account.company}</span>}
       >
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <span className="inline-flex items-center gap-2.5 border border-olive-500/45 px-4 py-2 text-[0.62rem] uppercase tracking-[0.18em] text-olive-300">
+          <span className="inline-flex items-center gap-2.5 border border-olive-600/40 px-4 py-2 text-[0.62rem] uppercase tracking-[0.18em] text-olive-600">
             <Check className="size-3" strokeWidth={2} />
             {t.pro.status.approved}
           </span>
           <button
             type="button"
             onClick={clearSession}
-            className="inline-flex items-center gap-2.5 border border-gold-500/25 px-4 py-2
-                       text-[0.62rem] uppercase tracking-[0.18em] text-cream-dim
-                       transition-colors duration-400 hover:border-gold-400/60 hover:text-gold-200"
+            className="inline-flex items-center gap-2.5 border border-ink/14 px-4 py-2
+                       text-[0.62rem] uppercase tracking-[0.18em] text-ink-soft
+                       transition-colors duration-400 hover:border-gold-600/60 hover:text-gold-700"
           >
             <LogOut className="size-3" strokeWidth={1.5} />
             {t.pro.dashboard.logout}
@@ -361,26 +410,26 @@ function Dashboard({ account }: { account: Account }) {
             className={cn(
               "mb-6 flex flex-wrap items-center justify-between gap-5 border p-6 sm:p-7",
               payoutsActive
-                ? "border-olive-500/40 bg-olive-700/10"
-                : "border-gold-500/35 bg-gold-500/[0.06]",
+                ? "border-olive-600/40 bg-olive-600/08"
+                : "border-gold-500/45 bg-gold-500/[0.09]",
             )}
           >
             <div className="flex items-start gap-4">
               <span
                 className={cn(
                   "flex size-11 shrink-0 items-center justify-center border",
-                  payoutsActive ? "border-olive-500/50" : "border-gold-500/40",
+                  payoutsActive ? "border-olive-600/45" : "border-gold-500/50",
                 )}
               >
                 {payoutsActive ? (
-                  <Wallet className="size-5 text-olive-300" strokeWidth={1.25} />
+                  <Wallet className="size-5 text-olive-600" strokeWidth={1.25} />
                 ) : (
-                  <Clock className="size-5 text-gold-300" strokeWidth={1.25} />
+                  <Clock className="size-5 text-gold-600" strokeWidth={1.25} />
                 )}
               </span>
               <div>
                 <p className="eyebrow">{t.pro.dashboard.payoutsTitle}</p>
-                <p className="mt-2 text-sm text-cream-dim">
+                <p className="mt-2 text-sm text-ink-soft">
                   {payoutsActive
                     ? t.pro.dashboard.payoutsActive
                     : t.pro.dashboard.payoutsPending}
@@ -388,7 +437,7 @@ function Dashboard({ account }: { account: Account }) {
               </div>
             </div>
             {!payoutsActive && (
-              <span className="border border-gold-500/30 px-3 py-1.5 text-[0.55rem] uppercase tracking-[0.16em] text-gold-400/85">
+              <span className="border border-gold-500/45 px-3 py-1.5 text-[0.55rem] uppercase tracking-[0.16em] text-gold-600">
                 {t.pro.dashboard.payoutsSoon}
               </span>
             )}
@@ -399,7 +448,7 @@ function Dashboard({ account }: { account: Account }) {
             <div className={PANEL}>
               <Eyebrow>{t.pro.dashboard.revenueTitle}</Eyebrow>
 
-              <div className="mt-8 grid grid-cols-3 gap-px bg-gold-500/12">
+              <div className="mt-8 grid grid-cols-3 gap-px bg-ink/10">
                 <Metric label={t.pro.dashboard.revenueGross} value={price(revenue.gross)} />
                 <Metric label={t.pro.dashboard.revenueYours} value={price(revenue.yours)} accent />
                 <Metric
@@ -408,36 +457,36 @@ function Dashboard({ account }: { account: Account }) {
                 />
               </div>
 
-              <p className="mt-6 flex items-baseline justify-between gap-4 border-t border-gold-500/12 pt-6 text-sm">
-                <span className="text-cream-mute">{t.pro.dashboard.yourRate}</span>
-                <span className="font-display text-2xl text-gold-200">
+              <p className="mt-6 flex items-baseline justify-between gap-4 border-t border-ink/8 pt-6 text-sm">
+                <span className="text-ink-mute">{t.pro.dashboard.yourRate}</span>
+                <span className="font-display text-2xl text-gold-700">
                   {100 - rate} % / {rate} %
                 </span>
               </p>
 
               {/* Produits publiés */}
-              <div className="mt-8 border-t border-gold-500/12 pt-8">
+              <div className="mt-8 border-t border-ink/8 pt-8">
                 <p className="eyebrow">{t.pro.dashboard.productsTitle}</p>
                 {products.length === 0 ? (
-                  <p className="mt-5 text-sm text-cream-mute">{t.pro.dashboard.productsEmpty}</p>
+                  <p className="mt-5 text-sm text-ink-mute">{t.pro.dashboard.productsEmpty}</p>
                 ) : (
-                  <ul className="mt-5 divide-y divide-gold-500/10">
+                  <ul className="mt-5 divide-y divide-ink/8">
                     {products.map((product) => (
                       <li
                         key={product.id}
                         className="flex items-center justify-between gap-4 py-3.5"
                       >
                         <span className="min-w-0">
-                          <span className="block truncate text-sm text-cream">{product.name}</span>
-                          <span className="mt-0.5 block text-[0.66rem] uppercase tracking-[0.14em] text-cream-mute">
+                          <span className="block truncate text-sm text-ink">{product.name}</span>
+                          <span className="mt-0.5 block text-[0.66rem] uppercase tracking-[0.14em] text-ink-mute">
                             {product.format}
                           </span>
                         </span>
                         <span className="shrink-0 text-end">
-                          <span className="block font-display text-lg text-gold-200">
+                          <span className="block font-display text-lg text-gold-700">
                             {price(product.price)}
                           </span>
-                          <span className="block text-[0.6rem] text-olive-300">
+                          <span className="block text-[0.6rem] text-olive-600">
                             {price((product.price * (100 - rate)) / 100)}
                           </span>
                         </span>
@@ -454,28 +503,28 @@ function Dashboard({ account }: { account: Account }) {
                 <Eyebrow>{t.pro.dashboard.ordersTitle}</Eyebrow>
 
                 {orders.length === 0 ? (
-                  <p className="mt-8 text-sm text-cream-mute">{t.pro.dashboard.ordersEmpty}</p>
+                  <p className="mt-8 text-sm text-ink-mute">{t.pro.dashboard.ordersEmpty}</p>
                 ) : (
-                  <ul className="mt-8 divide-y divide-gold-500/12">
+                  <ul className="mt-8 divide-y divide-ink/8">
                     {orders.map((order) => (
                       <li
                         key={order.id}
                         className="flex flex-wrap items-center justify-between gap-3 py-4"
                       >
                         <div>
-                          <p className="font-display text-lg text-cream" dir="ltr">
+                          <p className="font-display text-lg text-ink" dir="ltr">
                             {order.ref}
                           </p>
-                          <p className="mt-0.5 text-[0.68rem] text-cream-mute">
+                          <p className="mt-0.5 text-[0.68rem] text-ink-mute">
                             {date(order.createdAt)} · {order.quantity} {t.pro.dashboard.orderQty}
                           </p>
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="text-end">
-                            <span className="block font-display text-lg text-olive-300">
+                            <span className="block font-display text-lg text-olive-600">
                               {price(order.producerShare)}
                             </span>
-                            <span className="block text-[0.6rem] text-cream-mute">
+                            <span className="block text-[0.6rem] text-ink-mute">
                               / {price(order.gross)}
                             </span>
                           </span>
@@ -500,13 +549,13 @@ function Dashboard({ account }: { account: Account }) {
                   {t.pro.dashboard.docs.map((doc) => (
                     <li
                       key={doc}
-                      className="flex items-center justify-between gap-4 border border-gold-500/12 px-4 py-3.5"
+                      className="flex items-center justify-between gap-4 border border-ink/8 px-4 py-3.5"
                     >
-                      <span className="flex items-center gap-3 text-sm text-cream-dim">
-                        <FileText className="size-4 shrink-0 text-gold-500/70" strokeWidth={1.25} />
+                      <span className="flex items-center gap-3 text-sm text-ink-soft">
+                        <FileText className="size-4 shrink-0 text-gold-600" strokeWidth={1.25} />
                         {doc}
                       </span>
-                      <span className="shrink-0 text-[0.55rem] uppercase tracking-[0.16em] text-cream-mute/60">
+                      <span className="shrink-0 text-[0.55rem] uppercase tracking-[0.16em] text-ink-mute/80">
                         {t.pro.dashboard.docsSoon}
                       </span>
                     </li>
@@ -521,14 +570,133 @@ function Dashboard({ account }: { account: Account }) {
   );
 }
 
+
+/* ------------------------------------------------------------------ */
+/* Tableau de bord acheteur professionnel                              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Un acheteur pro ne vend rien : il achète. Son espace montre donc sa remise
+ * négociée et ses commandes, pas des reversements.
+ */
+function BuyerDashboard({ account }: { account: Account }) {
+  const { t, href, price, date } = useLocale();
+  const version = useStoreVersion();
+
+  const orders = useMemo(
+    () => listOrders(account.id),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [account.id, version],
+  );
+
+  const discount = account.discountRate;
+
+  return (
+    <>
+      <PageHero
+        eyebrow={t.pro.eyebrow}
+        title={<span className="text-gold-gradient">{account.company}</span>}
+      >
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <span className="inline-flex items-center gap-2.5 border border-olive-600/40 px-4 py-2 text-[0.62rem] uppercase tracking-[0.18em] text-olive-600">
+            <Check className="size-3" strokeWidth={2} />
+            {t.pro.buyer.approved}
+          </span>
+          <button
+            type="button"
+            onClick={clearSession}
+            className="inline-flex items-center gap-2.5 border border-ink/14 px-4 py-2
+                       text-[0.62rem] uppercase tracking-[0.18em] text-ink-soft
+                       transition-colors duration-400 hover:border-gold-600/60 hover:text-gold-700"
+          >
+            <LogOut className="size-3" strokeWidth={1.5} />
+            {t.pro.dashboard.logout}
+          </button>
+        </div>
+      </PageHero>
+
+      <section className="pb-24 sm:pb-32">
+        <Container size="wide">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className={PANEL}>
+              <Eyebrow>{t.pro.buyer.title}</Eyebrow>
+
+              <div className="mt-8 flex items-center gap-5">
+                <span className="flex size-14 shrink-0 items-center justify-center border border-gold-500/45">
+                  <Percent className="size-6 text-gold-600" strokeWidth={1.25} />
+                </span>
+                <div>
+                  <p className="text-[0.6rem] uppercase tracking-[0.2em] text-ink-mute">
+                    {t.pro.buyer.discount}
+                  </p>
+                  <p className="mt-1 font-display text-4xl text-gold-gradient">
+                    {discount !== null ? `−${discount} %` : "—"}
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-6 text-sm leading-relaxed text-ink-mute">
+                {discount !== null ? t.pro.buyer.discountNote : t.pro.buyer.none}
+              </p>
+
+              <ButtonLink href={href("/produits")} size="lg" className="mt-8 w-full">
+                <ShoppingBag className="size-3.5" strokeWidth={1.5} />
+                {t.pro.buyer.catalogCta}
+              </ButtonLink>
+            </div>
+
+            <div className={PANEL}>
+              <Eyebrow>{t.pro.dashboard.ordersTitle}</Eyebrow>
+              {orders.length === 0 ? (
+                <p className="mt-8 text-sm text-ink-mute">{t.pro.dashboard.ordersEmpty}</p>
+              ) : (
+                <ul className="mt-8 divide-y divide-ink/8">
+                  {orders.map((order) => (
+                    <li
+                      key={order.id}
+                      className="flex flex-wrap items-center justify-between gap-3 py-4"
+                    >
+                      <div>
+                        <p className="font-display text-lg text-ink" dir="ltr">
+                          {order.ref}
+                        </p>
+                        <p className="mt-0.5 text-[0.68rem] text-ink-mute">
+                          {date(order.createdAt)} · {order.quantity} {t.pro.dashboard.orderQty}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="font-display text-lg text-gold-700">
+                          {price(order.gross)}
+                        </span>
+                        <span
+                          className={cn(
+                            "border px-2.5 py-1 text-[0.55rem] uppercase tracking-[0.16em]",
+                            STATUS_STYLE[order.status],
+                          )}
+                        >
+                          {t.admin.orders.statuses[order.status]}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}
+
 function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 bg-ink-950 px-3 py-6 text-center">
-      <span className="text-[0.55rem] uppercase tracking-[0.16em] text-cream-mute">{label}</span>
+    <div className="flex flex-col items-center justify-center gap-2 bg-paper px-3 py-6 text-center">
+      <span className="text-[0.55rem] uppercase tracking-[0.16em] text-ink-mute">{label}</span>
       <span
         className={cn(
           "font-display text-xl sm:text-2xl",
-          accent ? "text-gold-gradient" : "text-cream",
+          accent ? "text-gold-gradient" : "text-ink",
         )}
       >
         {value}

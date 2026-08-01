@@ -8,6 +8,7 @@ import { PageHero } from "../ui/PageHero";
 import { Eyebrow } from "../ui/SectionHeading";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Field";
+import { RateSlider } from "../admin/RateSlider";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useSession, useStoreVersion } from "@/lib/useStore";
 import {
@@ -18,6 +19,7 @@ import {
   login,
   setAccountStatus,
   setCommissionRate,
+  setDiscountRate,
   setOrderStatus,
   type Account,
   type OrderStatus,
@@ -46,7 +48,7 @@ function AdminSkeleton() {
   const { t } = useLocale();
   return (
     <PageHero eyebrow={t.nav.admin} title={t.admin.title}>
-      <div className="mx-auto h-56 w-full max-w-md animate-pulse border border-gold-500/10 bg-ink-900/40" />
+      <div className="mx-auto h-56 w-full max-w-md animate-pulse border border-ink/8 bg-white" />
     </PageHero>
   );
 }
@@ -73,14 +75,14 @@ function AdminLogin() {
       <PageHero eyebrow={t.nav.admin} title={t.admin.title} subtitle={t.admin.subtitle} />
       <section className="pb-24 sm:pb-32">
         <Container size="narrow">
-          <div className="mx-auto max-w-md border border-gold-500/18 bg-ink-900/45 p-8 sm:p-10">
+          <div className="mx-auto max-w-md border border-ink/10 bg-white p-8 sm:p-10">
             <Eyebrow>{t.admin.login.title}</Eyebrow>
             <form onSubmit={onSubmit} className="mt-8 grid gap-5">
               <Input id="admin-email" name="email" type="email" label={t.admin.login.email} required autoComplete="email" dir="ltr" />
               <Input id="admin-password" name="password" type="password" label={t.admin.login.password} required autoComplete="current-password" dir="ltr" />
 
               {error && (
-                <p className="border border-ruby-500/40 bg-ruby-600/10 px-4 py-3 text-sm text-ruby-500">
+                <p className="border border-ruby-500/35 bg-ruby-500/08 px-4 py-3 text-sm text-ruby-500">
                   {t.admin.login.error}
                 </p>
               )}
@@ -90,7 +92,7 @@ function AdminLogin() {
                 {t.admin.login.submit}
               </Button>
 
-              <p className="mt-2 text-center text-[0.66rem] tracking-wide text-cream-mute/60">
+              <p className="mt-2 text-center text-[0.66rem] tracking-wide text-ink-mute/80">
                 {t.pro.login.demoHint}
               </p>
             </form>
@@ -106,12 +108,12 @@ function AdminLogin() {
 /* ------------------------------------------------------------------ */
 
 const STATUS_STYLE: Record<string, string> = {
-  pending: "border-gold-500/40 text-gold-300",
-  approved: "border-olive-500/50 text-olive-300",
-  confirmed: "border-olive-500/50 text-olive-300",
-  shipped: "border-olive-300/50 text-olive-300",
-  rejected: "border-ruby-500/40 text-ruby-500",
-  cancelled: "border-ruby-500/40 text-ruby-500",
+  pending: "border-gold-500/50 text-gold-600",
+  approved: "border-olive-600/45 text-olive-600",
+  confirmed: "border-olive-600/45 text-olive-600",
+  shipped: "border-olive-600/45 text-olive-600",
+  rejected: "border-ruby-500/35 text-ruby-500",
+  cancelled: "border-ruby-500/35 text-ruby-500",
 };
 
 function AdminPanel() {
@@ -135,7 +137,7 @@ function AdminPanel() {
     <>
       <PageHero eyebrow={t.nav.admin} title={t.admin.title} subtitle={t.admin.subtitle}>
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <div role="tablist" className="flex flex-wrap justify-center border border-gold-500/25 p-1">
+          <div role="tablist" className="flex flex-wrap justify-center border border-ink/14 p-1">
             {(["accounts", "orders", "pricing"] as Tab[]).map((key) => (
               <button
                 key={key}
@@ -144,7 +146,7 @@ function AdminPanel() {
                 onClick={() => setTab(key)}
                 className={cn(
                   "relative px-5 py-2.5 text-[0.64rem] uppercase tracking-[0.16em] transition-colors duration-500",
-                  tab === key ? "text-ink-950" : "text-cream-dim hover:text-gold-200",
+                  tab === key ? "text-ink" : "text-ink-soft hover:text-gold-700",
                 )}
               >
                 {tab === key && (
@@ -169,9 +171,9 @@ function AdminPanel() {
           <button
             type="button"
             onClick={clearSession}
-            className="inline-flex items-center gap-2.5 border border-gold-500/25 px-4 py-2.5
-                       text-[0.62rem] uppercase tracking-[0.16em] text-cream-dim
-                       transition-colors duration-400 hover:border-gold-400/60 hover:text-gold-200"
+            className="inline-flex items-center gap-2.5 border border-ink/14 px-4 py-2.5
+                       text-[0.62rem] uppercase tracking-[0.16em] text-ink-soft
+                       transition-colors duration-400 hover:border-gold-600/60 hover:text-gold-700"
           >
             <LogOut className="size-3" strokeWidth={1.5} />
             {t.admin.logout}
@@ -200,11 +202,12 @@ function AccountsTable({ accounts }: { accounts: Account[] }) {
   }
 
   return (
-    <div className="overflow-x-auto border border-gold-500/18">
+    <div className="overflow-x-auto border border-ink/10">
       <table className="w-full min-w-[52rem] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-gold-500/18 bg-ink-900/60">
+          <tr className="border-b border-ink/10 bg-paper-2">
             <Th>{t.admin.accounts.company}</Th>
+            <Th>{t.admin.pricing.type}</Th>
             <Th>{t.admin.accounts.contact}</Th>
             <Th>{t.admin.accounts.country}</Th>
             <Th>{t.admin.accounts.activity}</Th>
@@ -217,17 +220,31 @@ function AccountsTable({ accounts }: { accounts: Account[] }) {
           {accounts.map((account) => (
             <tr
               key={account.id}
-              className="border-b border-gold-500/10 transition-colors duration-400 last:border-0 hover:bg-ink-900/40"
+              className="border-b border-ink/8 transition-colors duration-400 last:border-0 hover:bg-white"
             >
               <Td>
-                <span className="text-cream">{account.company}</span>
-                <span className="mt-0.5 block text-[0.68rem] text-cream-mute" dir="ltr">
+                <span className="text-ink">{account.company}</span>
+                <span className="mt-0.5 block text-[0.68rem] text-ink-mute" dir="ltr">
                   {account.vat}
                 </span>
               </Td>
               <Td>
-                <span className="text-cream-dim">{account.contactName}</span>
-                <span className="mt-0.5 block text-[0.68rem] text-cream-mute" dir="ltr">
+                <span
+                  className={cn(
+                    "inline-block border px-2 py-0.5 text-[0.55rem] uppercase tracking-[0.12em]",
+                    account.role === "buyer"
+                      ? "border-olive-600/40 text-olive-600"
+                      : "border-gold-500/45 text-gold-700",
+                  )}
+                >
+                  {account.role === "buyer"
+                    ? t.pro.register.accountType.buyer
+                    : t.pro.register.accountType.producer}
+                </span>
+              </Td>
+              <Td>
+                <span className="text-ink-soft">{account.contactName}</span>
+                <span className="mt-0.5 block text-[0.68rem] text-ink-mute" dir="ltr">
                   {account.email}
                 </span>
               </Td>
@@ -282,10 +299,10 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
   const statuses: OrderStatus[] = ["pending", "confirmed", "shipped", "cancelled"];
 
   return (
-    <div className="overflow-x-auto border border-gold-500/18">
+    <div className="overflow-x-auto border border-ink/10">
       <table className="w-full min-w-[48rem] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-gold-500/18 bg-ink-900/60">
+          <tr className="border-b border-ink/10 bg-paper-2">
             <Th>{t.admin.orders.ref}</Th>
             <Th>{t.admin.orders.client}</Th>
             <Th>{t.admin.orders.date}</Th>
@@ -300,10 +317,10 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
           {orders.map((order) => (
             <tr
               key={order.id}
-              className="border-b border-gold-500/10 transition-colors duration-400 last:border-0 hover:bg-ink-900/40"
+              className="border-b border-ink/8 transition-colors duration-400 last:border-0 hover:bg-white"
             >
               <Td>
-                <span className="font-display text-base text-gold-200" dir="ltr">
+                <span className="font-display text-base text-gold-700" dir="ltr">
                   {order.ref}
                 </span>
               </Td>
@@ -311,21 +328,21 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
               <Td>{date(order.createdAt)}</Td>
               <Td className="text-end">{order.quantity}</Td>
               <Td className="text-end">{price(order.gross)}</Td>
-              <Td className="text-end text-gold-200">{price(order.commission)}</Td>
-              <Td className="text-end text-olive-300">{price(order.producerShare)}</Td>
+              <Td className="text-end text-gold-700">{price(order.commission)}</Td>
+              <Td className="text-end text-olive-600">{price(order.producerShare)}</Td>
               <Td className="text-end">
                 <select
                   value={order.status}
                   onChange={(e) => setOrderStatus(order.id, e.target.value as OrderStatus)}
                   aria-label={t.admin.orders.status}
                   className={cn(
-                    "border bg-ink-900 px-2.5 py-1.5 text-[0.6rem] uppercase tracking-[0.12em]",
+                    "border bg-paper-2 px-2.5 py-1.5 text-[0.6rem] uppercase tracking-[0.12em]",
                     "focus:outline-none focus-visible:outline focus-visible:outline-gold-400",
                     STATUS_STYLE[order.status],
                   )}
                 >
                   {statuses.map((status) => (
-                    <option key={status} value={status} className="bg-ink-900 text-cream">
+                    <option key={status} value={status} className="bg-paper-2 text-ink">
                       {t.admin.orders.statuses[status]}
                     </option>
                   ))}
@@ -342,22 +359,30 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
 /* ---------------------------- Tarifs ------------------------------ */
 
 function PricingTable({ accounts }: { accounts: Account[] }) {
-  const { t } = useLocale();
+  const { t, price } = useLocale();
   const approved = accounts.filter((a) => a.status === "approved");
-  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [drafts, setDrafts] = useState<Record<string, number>>({});
   const [saved, setSaved] = useState(false);
 
   if (approved.length === 0) return <Empty>{t.admin.accounts.empty}</Empty>;
 
-  const valueFor = (account: Account) =>
-    drafts[account.id] ?? (account.commissionRate !== null ? String(account.commissionRate) : "");
+  const rateOf = (account: Account) =>
+    drafts[account.id] ??
+    (account.role === "buyer"
+      ? (account.discountRate ?? 0)
+      : (account.commissionRate ?? DEFAULT_COMMISSION_RATE));
+
+  const dirty = Object.keys(drafts).length > 0;
 
   function save() {
     for (const account of approved) {
-      const raw = drafts[account.id];
-      if (raw === undefined) continue;
-      const parsed = raw.trim() === "" ? null : Number(raw);
-      setCommissionRate(account.id, parsed !== null && Number.isFinite(parsed) ? parsed : null);
+      const value = drafts[account.id];
+      if (value === undefined) continue;
+      if (account.role === "buyer") {
+        setDiscountRate(account.id, value > 0 ? value : null);
+      } else {
+        setCommissionRate(account.id, value);
+      }
     }
     setDrafts({});
     setSaved(true);
@@ -366,87 +391,110 @@ function PricingTable({ accounts }: { accounts: Account[] }) {
 
   return (
     <div>
-      <div className="border border-gold-500/18 bg-ink-900/45 p-6 sm:p-8">
+      <div className="border border-ink/10 bg-white p-6 sm:p-8">
         <Eyebrow>{t.admin.pricing.title}</Eyebrow>
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-cream-mute">
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ink-mute">
           {t.admin.pricing.note}
         </p>
       </div>
 
-      <div className="mt-6 overflow-x-auto border border-gold-500/18">
-        <table className="w-full min-w-[44rem] border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-gold-500/18 bg-ink-900/60">
-              <Th>{t.admin.pricing.client}</Th>
-              <Th className="text-end">{t.admin.pricing.publicPrice}</Th>
-              <Th className="text-end">{t.admin.pricing.customPrice}</Th>
-              <Th className="text-end">{t.admin.pricing.discount}</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {approved.map((account) => {
-              const raw = valueFor(account);
-              const parsed = Number(raw);
-              const effective =
-                raw.trim() !== "" && Number.isFinite(parsed) && parsed > 0 && parsed < 100
-                  ? parsed
-                  : DEFAULT_COMMISSION_RATE;
-              return (
-                <tr
-                  key={account.id}
-                  className="border-b border-gold-500/10 last:border-0 hover:bg-ink-900/40"
+      {/* Une carte par contrat : la jauge et son effet chiffré côte à côte. */}
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        {approved.map((account) => {
+          const rate = rateOf(account);
+          const isBuyer = account.role === "buyer";
+          return (
+            <article key={account.id} className="border border-ink/10 bg-white p-6 sm:p-7">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="truncate font-display text-xl text-ink">{account.company}</h3>
+                  <p className="mt-0.5 truncate text-[0.68rem] text-ink-mute" dir="ltr">
+                    {account.email}
+                  </p>
+                </div>
+                <span
+                  className={cn(
+                    "shrink-0 border px-2.5 py-1 text-[0.55rem] uppercase tracking-[0.14em]",
+                    isBuyer
+                      ? "border-olive-600/40 text-olive-600"
+                      : "border-gold-500/45 text-gold-700",
+                  )}
                 >
-                  <Td>
-                    <span className="text-cream">{account.company}</span>
-                    <span className="mt-0.5 block text-[0.68rem] text-cream-mute" dir="ltr">
-                      {account.email}
-                    </span>
-                  </Td>
-                  <Td className="text-end text-cream-mute">{DEFAULT_COMMISSION_RATE} %</Td>
-                  <Td className="text-end">
-                    <div className="inline-flex items-center gap-2">
-                      <input
-                        type="number"
-                        min={0}
-                        max={99}
-                        step="1"
-                        inputMode="numeric"
-                        value={raw}
-                        placeholder={t.admin.pricing.placeholder}
-                        aria-label={`${t.admin.pricing.customPrice} — ${account.company}`}
-                        onChange={(e) =>
-                          setDrafts((d) => ({ ...d, [account.id]: e.target.value }))
-                        }
-                        className="w-24 border border-gold-500/25 bg-ink-950/70 px-3 py-2 text-end
-                                   text-cream placeholder:text-cream-mute/50
-                                   focus:border-gold-400/70 focus:outline-none"
-                        dir="ltr"
+                  {isBuyer
+                    ? t.pro.register.accountType.buyer
+                    : t.pro.register.accountType.producer}
+                </span>
+              </div>
+
+              <div className="mt-7">
+                <RateSlider
+                  id={`rate-${account.id}`}
+                  value={rate}
+                  onChange={(v) => setDrafts((d) => ({ ...d, [account.id]: v }))}
+                  min={0}
+                  max={isBuyer ? 40 : 60}
+                  tone={isBuyer ? "olive" : "gold"}
+                  label={isBuyer ? t.admin.pricing.buyerDiscount : t.admin.pricing.commissionLabel}
+                  hint={t.admin.pricing.dragHint}
+                />
+              </div>
+
+              {/* Effet du réglage sur une commande de référence */}
+              <div className="mt-7 border-t border-ink/8 pt-5">
+                <p className="text-[0.58rem] uppercase tracking-[0.18em] text-ink-mute">
+                  {t.admin.pricing.simulation}
+                </p>
+                <div className="mt-4 grid grid-cols-2 gap-px bg-ink/10">
+                  {isBuyer ? (
+                    <>
+                      <Cell label={t.admin.pricing.buyerDiscount} value={`−${price(rate)}`} />
+                      <Cell label={t.cart.total} value={price(100 - rate)} accent />
+                    </>
+                  ) : (
+                    <>
+                      <Cell
+                        label={t.admin.pricing.producerGets}
+                        value={price(100 - rate)}
+                        accent
                       />
-                      <span className="text-cream-mute">%</span>
-                    </div>
-                  </Td>
-                  <Td className="text-end">
-                    <span className="font-display text-lg text-olive-300">{100 - effective} %</span>
-                  </Td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                      <Cell label={t.admin.pricing.platformGets} value={price(rate)} />
+                    </>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
 
-      <div className="mt-6 flex items-center gap-5">
-        <Button onClick={save} size="lg">
+      <div className="mt-7 flex flex-wrap items-center gap-5">
+        <Button onClick={save} size="lg" disabled={!dirty}>
           <Save className="size-3.5" strokeWidth={1.5} />
           {t.admin.pricing.save}
         </Button>
         {saved && (
-          <span className="inline-flex items-center gap-2 text-sm text-olive-300">
+          <span className="inline-flex items-center gap-2 text-sm text-olive-600">
             <Check className="size-3.5" strokeWidth={2} />
             {t.admin.pricing.saved}
           </span>
         )}
       </div>
+    </div>
+  );
+}
+
+function Cell({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="flex flex-col items-center gap-1.5 bg-white px-3 py-5 text-center">
+      <span className="text-[0.55rem] uppercase tracking-[0.14em] text-ink-mute">{label}</span>
+      <span
+        className={cn(
+          "font-display text-2xl tabular-nums",
+          accent ? "text-olive-600" : "text-ink",
+        )}
+      >
+        {value}
+      </span>
     </div>
   );
 }
@@ -458,7 +506,7 @@ function Th({ children, className }: { children: React.ReactNode; className?: st
     <th
       scope="col"
       className={cn(
-        "px-4 py-3.5 text-start text-[0.58rem] font-normal uppercase tracking-[0.16em] text-gold-400 sm:px-5",
+        "px-4 py-3.5 text-start text-[0.58rem] font-normal uppercase tracking-[0.16em] text-gold-600 sm:px-5",
         className,
       )}
     >
@@ -469,13 +517,13 @@ function Th({ children, className }: { children: React.ReactNode; className?: st
 
 function Td({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <td className={cn("px-4 py-4 align-top text-cream-dim sm:px-5", className)}>{children}</td>
+    <td className={cn("px-4 py-4 align-top text-ink-soft sm:px-5", className)}>{children}</td>
   );
 }
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <p className="border border-gold-500/18 bg-ink-900/45 px-6 py-16 text-center text-sm text-cream-mute">
+    <p className="border border-ink/10 bg-white px-6 py-16 text-center text-sm text-ink-mute">
       {children}
     </p>
   );
@@ -505,11 +553,11 @@ function IconAction({
         "flex size-8 items-center justify-center border transition-all duration-400",
         tone === "olive"
           ? active
-            ? "border-olive-500/70 bg-olive-700/35 text-olive-300"
-            : "border-gold-500/20 text-cream-mute hover:border-olive-500/60 hover:text-olive-300"
+            ? "border-olive-500/70 bg-olive-600/15 text-olive-600"
+            : "border-ink/12 text-ink-mute hover:border-olive-500/60 hover:text-olive-600"
           : active
-            ? "border-ruby-500/70 bg-ruby-600/25 text-ruby-500"
-            : "border-gold-500/20 text-cream-mute hover:border-ruby-500/60 hover:text-ruby-500",
+            ? "border-ruby-500/50 bg-ruby-500/10 text-ruby-500"
+            : "border-ink/12 text-ink-mute hover:border-ruby-500/50 hover:text-ruby-500",
       )}
     >
       {children}

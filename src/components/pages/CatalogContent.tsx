@@ -34,7 +34,7 @@ export function CatalogContent() {
       <section className="pb-24 sm:pb-32">
         <Container size="wide">
           {/* Filtres */}
-          <div className="flex flex-col gap-5 border-y border-gold-500/12 py-6">
+          <div className="flex flex-col gap-5 border-y border-ink/8 py-6">
             <FilterRow
               label={t.catalog.filterCategory}
               options={[
@@ -56,7 +56,7 @@ export function CatalogContent() {
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-[0.62rem] uppercase tracking-[0.2em] text-cream-mute">
+            <p className="text-[0.62rem] uppercase tracking-[0.2em] text-ink-mute">
               {products.length} {t.catalog.results}
             </p>
             {filtered && (
@@ -67,7 +67,7 @@ export function CatalogContent() {
                   setProducerId(null);
                 }}
                 className="inline-flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.16em]
-                           text-gold-300 transition-colors hover:text-gold-100"
+                           text-gold-600 transition-colors hover:text-gold-700"
               >
                 <X className="size-3" strokeWidth={2} />
                 {t.catalog.reset}
@@ -76,7 +76,7 @@ export function CatalogContent() {
           </div>
 
           {products.length === 0 ? (
-            <p className="mt-16 border border-gold-500/15 bg-ink-900/40 px-6 py-20 text-center text-sm text-cream-mute">
+            <p className="mt-16 border border-ink/10 bg-white px-6 py-20 text-center text-sm text-ink-mute">
               {t.catalog.empty}
             </p>
           ) : (
@@ -110,7 +110,7 @@ function FilterRow({
 }) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-      <span className="shrink-0 text-[0.58rem] uppercase tracking-[0.22em] text-gold-400/80">
+      <span className="shrink-0 text-[0.58rem] uppercase tracking-[0.22em] text-gold-600">
         {label}
       </span>
       {/* Défilement horizontal en mobile plutôt qu'un retour à la ligne anarchique. */}
@@ -127,8 +127,8 @@ function FilterRow({
                 "shrink-0 border px-3.5 py-2 text-[0.64rem] uppercase tracking-[0.14em]",
                 "transition-all duration-400",
                 active
-                  ? "border-gold-400/70 bg-gold-500/10 text-gold-200"
-                  : "border-gold-500/18 text-cream-mute hover:border-gold-500/45 hover:text-cream",
+                  ? "border-gold-600/70 bg-ink/10 text-gold-700"
+                  : "border-ink/10 text-ink-mute hover:border-gold-500/60 hover:text-ink",
               )}
             >
               {option.label}

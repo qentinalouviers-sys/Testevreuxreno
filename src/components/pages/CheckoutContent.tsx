@@ -23,7 +23,7 @@ export function CheckoutContent() {
   if (!ready) {
     return (
       <PageHero eyebrow={t.checkout.eyebrow} title={t.checkout.title}>
-        <div className="mx-auto h-64 w-full max-w-3xl animate-pulse border border-gold-500/10 bg-ink-900/40" />
+        <div className="mx-auto h-64 w-full max-w-3xl animate-pulse border border-ink/8 bg-white" />
       </PageHero>
     );
   }
@@ -34,9 +34,9 @@ export function CheckoutContent() {
         <PageHero eyebrow={t.checkout.eyebrow} title={t.checkout.title} />
         <section className="pb-24 sm:pb-32">
           <Container size="narrow">
-            <div className="flex flex-col items-center border border-gold-500/15 bg-ink-900/40 px-6 py-20 text-center">
-              <Rosette className="size-12 text-gold-500/35" />
-              <p className="mt-7 text-cream-mute">{t.checkout.empty}</p>
+            <div className="flex flex-col items-center border border-ink/10 bg-white px-6 py-20 text-center">
+              <Rosette className="size-12 text-gold-500" />
+              <p className="mt-7 text-ink-mute">{t.checkout.empty}</p>
               <ButtonLink href={href("/produits")} size="lg" className="mt-8">
                 {t.checkout.emptyCta}
               </ButtonLink>
@@ -60,7 +60,7 @@ export function CheckoutContent() {
           <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start lg:gap-12">
             {/* Récapitulatif */}
             <div className="space-y-6">
-              <div className="border border-gold-500/18 bg-ink-900/45 p-6 sm:p-8">
+              <div className="border border-ink/10 bg-white p-6 sm:p-8">
                 <p className="eyebrow">{t.checkout.summary}</p>
 
                 <div className="mt-7 space-y-6">
@@ -68,25 +68,25 @@ export function CheckoutContent() {
                     <div key={group.producer.id}>
                       <Link
                         href={href(`/producteurs/${group.producer.slug}`)}
-                        className="flex items-center gap-2.5 text-sm text-cream transition-colors hover:text-gold-200"
+                        className="flex items-center gap-2.5 text-sm text-ink transition-colors hover:text-gold-700"
                       >
                         <Flag code={group.producer.flag} className="h-2.5 w-[15px]" />
                         <span className="font-display text-lg">{group.producer.name}</span>
                       </Link>
-                      <ul className="mt-3 space-y-2 border-s border-gold-500/15 ps-4">
+                      <ul className="mt-3 space-y-2 border-s border-ink/10 ps-4">
                         {group.lines.map(({ product, quantity, total }) => (
                           <li
                             key={product.id}
-                            className="flex justify-between gap-4 text-[0.82rem] text-cream-mute"
+                            className="flex justify-between gap-4 text-[0.82rem] text-ink-mute"
                           >
                             <span className="min-w-0 truncate">
                               {quantity} × {product.name}{" "}
-                              <span className="text-cream-mute/60">({product.format})</span>
+                              <span className="text-ink-mute/80">({product.format})</span>
                             </span>
-                            <span className="shrink-0 text-cream-dim">{price(total)}</span>
+                            <span className="shrink-0 text-ink-soft">{price(total)}</span>
                           </li>
                         ))}
-                        <li className="flex justify-between gap-4 text-[0.78rem] text-cream-mute/70">
+                        <li className="flex justify-between gap-4 text-[0.78rem] text-ink-mute">
                           <span>{t.cart.shipping}</span>
                           <span>
                             {group.shipping === 0 ? t.cart.freeShipping : price(group.shipping)}
@@ -97,30 +97,30 @@ export function CheckoutContent() {
                   ))}
                 </div>
 
-                <dl className="mt-8 space-y-3 border-t border-gold-500/20 pt-6 text-sm">
+                <dl className="mt-8 space-y-3 border-t border-ink/12 pt-6 text-sm">
                   <div className="flex justify-between gap-4">
-                    <dt className="text-cream-mute">{t.cart.goods}</dt>
-                    <dd className="text-cream">{price(summary.goods)}</dd>
+                    <dt className="text-ink-mute">{t.cart.goods}</dt>
+                    <dd className="text-ink">{price(summary.goods)}</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-cream-mute">{t.cart.shipping}</dt>
-                    <dd className="text-cream">
+                    <dt className="text-ink-mute">{t.cart.shipping}</dt>
+                    <dd className="text-ink">
                       {summary.shipping === 0 ? (
-                        <span className="text-olive-300">{t.cart.freeShipping}</span>
+                        <span className="text-olive-600">{t.cart.freeShipping}</span>
                       ) : (
                         price(summary.shipping)
                       )}
                     </dd>
                   </div>
-                  <div className="flex items-baseline justify-between gap-4 border-t border-gold-500/25 pt-4">
-                    <dt className="text-[0.62rem] uppercase tracking-[0.2em] text-gold-400">
+                  <div className="flex items-baseline justify-between gap-4 border-t border-ink/14 pt-4">
+                    <dt className="text-[0.62rem] uppercase tracking-[0.2em] text-gold-600">
                       {t.cart.total}
                     </dt>
-                    <dd className="font-display text-3xl text-gold-200">{price(summary.total)}</dd>
+                    <dd className="font-display text-3xl text-gold-700">{price(summary.total)}</dd>
                   </div>
                 </dl>
 
-                <p className="mt-6 flex items-start gap-3 text-xs leading-relaxed text-cream-mute">
+                <p className="mt-6 flex items-start gap-3 text-xs leading-relaxed text-ink-mute">
                   <Package className="mt-0.5 size-3.5 shrink-0" strokeWidth={1.5} />
                   {t.checkout.deliveryNote} {t.cart.parcelNote}
                 </p>
@@ -131,9 +131,9 @@ export function CheckoutContent() {
 
             {/* Paiement */}
             <div className="lg:sticky lg:top-28">
-              <div className="border border-gold-500/18 bg-ink-900/45 p-6 sm:p-8">
+              <div className="border border-ink/10 bg-white p-6 sm:p-8">
                 <p className="eyebrow">{t.checkout.payment.title}</p>
-                <p className="mt-3.5 text-sm text-cream-mute">{t.checkout.payment.subtitle}</p>
+                <p className="mt-3.5 text-sm text-ink-mute">{t.checkout.payment.subtitle}</p>
 
                 <div className="mt-7">
                   <PaymentMethods value={method} onChange={setMethod} />
@@ -149,7 +149,7 @@ export function CheckoutContent() {
 
                 <Link
                   href={href("/panier")}
-                  className="mt-4 block text-center text-[0.64rem] uppercase tracking-[0.16em] text-cream-mute transition-colors hover:text-gold-200"
+                  className="mt-4 block text-center text-[0.64rem] uppercase tracking-[0.16em] text-ink-mute transition-colors hover:text-gold-700"
                 >
                   {t.nav.cart}
                 </Link>

@@ -50,8 +50,8 @@ export function StoryContent() {
                   <p className="font-display text-2xl text-gold-gradient sm:text-3xl">
                     {chapter.year}
                   </p>
-                  <h2 className="mt-2 text-xl text-cream sm:text-2xl">{chapter.title}</h2>
-                  <p className="mt-4 text-pretty leading-relaxed text-cream-mute">
+                  <h2 className="mt-2 text-xl text-ink sm:text-2xl">{chapter.title}</h2>
+                  <p className="mt-4 text-pretty leading-relaxed text-ink-mute">
                     {chapter.text}
                   </p>
                 </Reveal>
@@ -62,7 +62,7 @@ export function StoryContent() {
       </section>
 
       {/* Citation */}
-      <section className="grain relative overflow-hidden border-y border-gold-500/15 py-24 sm:py-28">
+      <section className="grain relative overflow-hidden border-y border-ink/10 py-24 sm:py-28">
         <div
           aria-hidden
           className="glow-gold pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-72 w-[40rem] -translate-y-1/2 opacity-30 blur-3xl"
@@ -70,11 +70,11 @@ export function StoryContent() {
         <Container size="narrow" className="relative">
           <Reveal>
             <figure className="flex flex-col items-center text-center">
-              <Rosette className="size-10 text-gold-500/70" />
-              <blockquote className="mt-8 font-display text-2xl leading-snug text-balance text-cream italic sm:text-4xl">
+              <Rosette className="size-10 text-gold-600" />
+              <blockquote className="mt-8 font-display text-2xl leading-snug text-balance text-ink italic sm:text-4xl">
                 {t.story.quote}
               </blockquote>
-              <figcaption className="mt-8 flex items-center gap-3 text-[0.62rem] uppercase tracking-[0.26em] text-gold-400">
+              <figcaption className="mt-8 flex items-center gap-3 text-[0.62rem] uppercase tracking-[0.26em] text-gold-600">
                 <Lozenge />
                 {t.story.quoteAuthor}
               </figcaption>
@@ -90,13 +90,13 @@ export function StoryContent() {
             <Eyebrow>{t.story.valuesTitle}</Eyebrow>
           </Reveal>
 
-          <div className="mt-12 grid gap-px bg-gold-500/12 sm:grid-cols-3">
+          <div className="mt-12 grid gap-px bg-ink/10 sm:grid-cols-3">
             {t.story.values.map((value, i) => (
               <Reveal key={value.title} delay={i * 0.08} className="h-full">
-                <article className="h-full bg-ink-950 p-8 sm:p-9">
-                  <h3 className="font-display text-2xl text-cream">{value.title}</h3>
+                <article className="h-full bg-paper p-8 sm:p-9">
+                  <h3 className="font-display text-2xl text-ink">{value.title}</h3>
                   <div className="mt-4 h-px w-10 bg-gold-500/40" />
-                  <p className="mt-5 text-sm leading-relaxed text-cream-mute">{value.text}</p>
+                  <p className="mt-5 text-sm leading-relaxed text-ink-mute">{value.text}</p>
                 </article>
               </Reveal>
             ))}
@@ -105,7 +105,7 @@ export function StoryContent() {
       </section>
 
       {/* Rappel produit */}
-      <section className="grain relative overflow-hidden border-t border-gold-500/15 py-20 sm:py-24">
+      <section className="grain relative overflow-hidden border-t border-ink/10 py-20 sm:py-24">
         <Container>
           <div className="grid items-center gap-12 sm:grid-cols-[0.8fr_1.2fr] sm:gap-16">
             <div className="relative mx-auto w-full max-w-[16rem]">
@@ -117,7 +117,7 @@ export function StoryContent() {
                   width={1000}
                   height={1526}
                   sizes="(max-width: 640px) 60vw, 24vw"
-                  className="relative z-10 h-auto w-full drop-shadow-[0_28px_50px_rgba(0,0,0,0.85)]"
+                  className="relative z-10 h-auto w-full drop-shadow-[0_24px_44px_rgba(23,21,15,0.24)]"
                 />
               </Reveal>
             </div>
@@ -127,7 +127,7 @@ export function StoryContent() {
                 <h2 className="text-3xl sm:text-4xl">{t.catalogData.producers["al-arifa"].tagline}</h2>
               </Reveal>
               <Reveal delay={0.08}>
-                <p className="mt-5 max-w-lg text-pretty leading-relaxed text-cream-mute">
+                <p className="mt-5 max-w-lg text-pretty leading-relaxed text-ink-mute">
                   {t.catalogData.products["arifa-5l"].description}
                 </p>
               </Reveal>

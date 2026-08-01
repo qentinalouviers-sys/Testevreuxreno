@@ -23,7 +23,7 @@ export function PageHero({
     <section className="grain relative overflow-hidden pt-[calc(68px+4.5rem)] pb-16 sm:pt-[calc(80px+6rem)] sm:pb-20">
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(100%_80%_at_50%_0%,#14120f_0%,#080807_55%,#040403_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(100%_80%_at_50%_0%,#fbf9f4_0%,#f4f0e6_55%,#ece5d6_100%)]"
       />
       <div
         aria-hidden
@@ -63,7 +63,7 @@ export function PageHero({
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.36, ease: EASE }}
-              className="mt-7 max-w-2xl text-pretty leading-relaxed text-cream-mute"
+              className="mt-7 max-w-2xl text-pretty leading-relaxed text-ink-mute"
             >
               {subtitle}
             </motion.p>

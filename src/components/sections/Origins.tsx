@@ -34,18 +34,18 @@ export function Origins() {
               <div className="mt-7 h-px w-24 rule-gold" />
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="mt-7 text-pretty leading-relaxed text-cream-mute">{t.origins.text}</p>
+              <p className="mt-7 text-pretty leading-relaxed text-ink-mute">{t.origins.text}</p>
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-2 gap-px bg-gold-500/12">
+          <div className="grid grid-cols-2 gap-px bg-ink/10">
             {t.origins.stats.map((stat, i) => (
               <Reveal key={stat.label} delay={0.1 + i * 0.08} className="h-full">
-                <div className="flex h-full flex-col items-center justify-center bg-ink-950 px-5 py-12 text-center">
+                <div className="flex h-full flex-col items-center justify-center bg-paper px-5 py-12 text-center">
                   <p className="font-display text-4xl text-gold-gradient sm:text-5xl">
                     {stat.value}
                   </p>
-                  <p className="mt-3 text-[0.6rem] uppercase tracking-[0.22em] text-cream-mute">
+                  <p className="mt-3 text-[0.6rem] uppercase tracking-[0.22em] text-ink-mute">
                     {stat.label}
                   </p>
                 </div>

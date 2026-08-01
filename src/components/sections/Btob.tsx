@@ -21,11 +21,11 @@ export function Btob() {
   return (
     <section
       id="professionnels"
-      className="grain relative overflow-hidden border-y border-gold-500/15 py-24 sm:py-32"
+      className="grain relative overflow-hidden border-y border-ink/10 py-24 sm:py-32"
     >
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_0%,#16130e_0%,#0a0a08_55%,#040403_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_0%,#ffffff_0%,#f7f4ec_55%,#f0eadd_100%)]"
       />
 
       <Container size="wide" className="relative">
@@ -41,7 +41,7 @@ export function Btob() {
               <div className="mt-7 h-px w-24 rule-gold" />
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="mt-7 max-w-xl text-pretty leading-relaxed text-cream-mute">
+              <p className="mt-7 max-w-xl text-pretty leading-relaxed text-ink-mute">
                 {t.btob.text}
               </p>
             </Reveal>
@@ -50,10 +50,10 @@ export function Btob() {
               {t.btob.bullets.map((bullet, i) => (
                 <Reveal key={bullet} delay={0.26 + i * 0.06}>
                   <li className="flex items-start gap-4">
-                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-gold-500/40">
-                      <Check className="size-2.5 text-gold-300" strokeWidth={2.5} />
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-gold-500/50">
+                      <Check className="size-2.5 text-gold-600" strokeWidth={2.5} />
                     </span>
-                    <span className="text-sm leading-relaxed text-cream-dim">{bullet}</span>
+                    <span className="text-sm leading-relaxed text-ink-soft">{bullet}</span>
                   </li>
                 </Reveal>
               ))}
@@ -77,21 +77,21 @@ export function Btob() {
 
           {/* Trois métiers servis — `self-start` évite que le fond doré du
               séparateur ne s'étire sous la dernière carte. */}
-          <div className="flex flex-col gap-px self-start bg-gold-500/12">
+          <div className="flex flex-col gap-px self-start bg-ink/10">
             {t.btob.cards.map((card, i) => {
               const Icon = CARD_ICONS[i] ?? Building2;
               return (
                 <Reveal key={card.title} delay={0.15 + i * 0.1}>
-                  <article className="group flex gap-6 bg-ink-950 p-8 transition-colors duration-700 hover:bg-ink-850 sm:p-10">
+                  <article className="group flex gap-6 bg-paper p-8 transition-colors duration-700 hover:bg-paper-2 sm:p-10">
                     <span
-                      className="flex size-12 shrink-0 items-center justify-center border border-gold-500/25
-                                 transition-colors duration-700 group-hover:border-gold-400/60"
+                      className="flex size-12 shrink-0 items-center justify-center border border-ink/14
+                                 transition-colors duration-700 group-hover:border-gold-600/60"
                     >
-                      <Icon className="size-5 text-gold-400" strokeWidth={1.25} />
+                      <Icon className="size-5 text-gold-600" strokeWidth={1.25} />
                     </span>
                     <div>
-                      <h3 className="text-lg text-cream">{card.title}</h3>
-                      <p className="mt-2.5 text-sm leading-relaxed text-cream-mute">{card.text}</p>
+                      <h3 className="text-lg text-ink">{card.title}</h3>
+                      <p className="mt-2.5 text-sm leading-relaxed text-ink-mute">{card.text}</p>
                     </div>
                   </article>
                 </Reveal>

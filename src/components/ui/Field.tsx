@@ -5,9 +5,9 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 const CONTROL =
-  "w-full border border-gold-500/22 bg-ink-900/55 px-4 py-3 text-sm text-cream " +
-  "placeholder:text-cream-mute/55 transition-colors duration-400 " +
-  "focus:border-gold-400/70 focus:bg-ink-900 focus:outline-none";
+  "w-full border border-ink/14 bg-white px-4 py-3 text-sm text-ink " +
+  "placeholder:text-ink-mute/55 transition-colors duration-400 " +
+  "focus:border-gold-600/70 focus:bg-paper-2 focus:outline-none";
 
 export function Label({
   htmlFor,
@@ -21,7 +21,7 @@ export function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-2 block text-[0.6rem] uppercase tracking-[0.2em] text-cream-mute"
+      className="mb-2 block text-[0.6rem] uppercase tracking-[0.2em] text-ink-mute"
     >
       {children}
       {required && <span className="ms-1 text-gold-500">*</span>}
@@ -51,7 +51,7 @@ export function Input({
         id={id}
         required={required}
         aria-invalid={!!error}
-        className={cn(CONTROL, error && "border-ruby-500/60")}
+        className={cn(CONTROL, error && "border-ruby-500/50")}
         {...props}
       />
       <FieldError>{error}</FieldError>
@@ -76,7 +76,7 @@ export function Textarea({
         id={id}
         required={required}
         aria-invalid={!!error}
-        className={cn(CONTROL, "min-h-32 resize-y", error && "border-ruby-500/60")}
+        className={cn(CONTROL, "min-h-32 resize-y", error && "border-ruby-500/50")}
         {...props}
       />
       <FieldError>{error}</FieldError>
@@ -111,8 +111,8 @@ export function Select({
           aria-invalid={!!error}
           className={cn(
             CONTROL,
-            "appearance-none pe-11 [&>option]:bg-ink-900",
-            error && "border-ruby-500/60",
+            "appearance-none pe-11 [&>option]:bg-paper-2",
+            error && "border-ruby-500/50",
           )}
           {...props}
         >

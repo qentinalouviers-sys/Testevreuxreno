@@ -7,8 +7,10 @@ Chaque maison vend **sous sa propre marque**, un panier peut contenir plusieurs
 producteurs, et le paiement est **scindé à la source** : 70 % au producteur,
 30 % à la plateforme, sans refacturation ni avance de trésorerie.
 
-Thème sombre, codes de la maison de parfum : noir laqué, or gravé, filets fins,
-mouvement discret. Mobile first, cinq langues, mise en avant du BtoB.
+Direction artistique claire : fonds papier, encres sombres, or gravé en accent.
+Les produits sont photographiés sur fond noir — les poser sur du papier crée
+le contraste qui les met en valeur. Seuls le hero et l'écran de choix de langue
+restent des blocs sombres. Mobile first, cinq langues, BtoB assumé.
 
 ---
 
@@ -153,7 +155,20 @@ Comptes de démonstration :
 | --- | --- |
 | Administrateur | `admin@al-arifa.com` / `arifa2024` |
 | Producteur référencé | `contact@mieldescedres.ma` / `demo1234` |
+| Acheteur professionnel | `achats@tabledumarche.fr` / `demo1234` |
 | Candidature en attente | `hola@almendrasderonda.es` / `demo1234` |
+
+**Trois natures de compte** (`src/lib/store.ts`, type `Role`) :
+
+- **Producteur** — vend sous sa marque, perçoit sa part de chaque commande.
+  Son contrat est un *taux de commission*.
+- **Acheteur professionnel** — restaurant, épicerie, importateur. Son contrat
+  est une *remise catalogue* négociée.
+- **Administrateur** — règle les contrats et suit les commandes.
+
+En administration, l'onglet « Commissions » présente une carte par contrat avec
+une **jauge** (curseur natif, donc accessible au clavier et au tactile) et la
+simulation en direct de l'effet sur une commande de 100 €.
 
 > ⚠️ **Persistance de démonstration.** `src/lib/store.ts` stocke maisons, taux et
 > commandes dans le `localStorage` du navigateur, et hache les mots de passe avec

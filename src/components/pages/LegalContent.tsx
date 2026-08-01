@@ -104,7 +104,7 @@ export function LegalContent({ kind }: { kind: LegalKind }) {
       <section className="pb-24 sm:pb-32">
         <Container size="narrow">
           <Reveal>
-            <p className="flex items-start gap-3.5 border border-gold-500/25 bg-gold-500/[0.05] px-5 py-4 text-sm leading-relaxed text-gold-200/85">
+            <p className="flex items-start gap-3.5 border border-ink/14 bg-gold-500/[0.08] px-5 py-4 text-sm leading-relaxed text-gold-700/85">
               <Info className="mt-0.5 size-4 shrink-0" strokeWidth={1.5} />
               {t.legal.placeholder}
             </p>
@@ -114,9 +114,9 @@ export function LegalContent({ kind }: { kind: LegalKind }) {
             {sections[kind].map((section, i) => (
               <Reveal key={section.heading} delay={i * 0.06}>
                 <article>
-                  <h2 className="text-xl text-cream sm:text-2xl">{section.heading}</h2>
+                  <h2 className="text-xl text-ink sm:text-2xl">{section.heading}</h2>
                   <div className="mt-3 h-px w-12 bg-gold-500/35" />
-                  <p className="mt-4 text-pretty leading-relaxed text-cream-mute">
+                  <p className="mt-4 text-pretty leading-relaxed text-ink-mute">
                     {section.body}
                   </p>
                 </article>
@@ -124,14 +124,14 @@ export function LegalContent({ kind }: { kind: LegalKind }) {
             ))}
           </div>
 
-          <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-gold-500/12 pt-8">
-            <p className="text-xs text-cream-mute/70">
+          <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-ink/8 pt-8">
+            <p className="text-xs text-ink-mute">
               {t.legal.updated} : {date(LAST_UPDATED)}
             </p>
             <Link
               href={href("/")}
               className="inline-flex items-center gap-2.5 text-[0.68rem] uppercase
-                         tracking-[0.18em] text-gold-300 transition-colors hover:text-gold-100"
+                         tracking-[0.18em] text-gold-600 transition-colors hover:text-gold-700"
             >
               <ArrowLeft className="size-3 rtl:rotate-180" strokeWidth={1.5} />
               {t.legal.backHome}

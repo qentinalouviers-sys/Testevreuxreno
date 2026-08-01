@@ -17,8 +17,8 @@ export function CartButton() {
       href={href("/panier")}
       aria-label={`${t.a11y.openCart}${ready && count > 0 ? ` — ${count} ${t.a11y.itemsInCart}` : ""}`}
       className="group relative flex size-9 items-center justify-center rounded-[2px]
-                 border border-gold-500/25 text-cream-dim transition-colors duration-400
-                 hover:border-gold-400/60 hover:text-gold-200"
+                 border border-ink/14 text-ink-soft transition-colors duration-400
+                 hover:border-gold-600/60 hover:text-gold-700"
     >
       <ShoppingBag className="size-4" strokeWidth={1.25} />
       <AnimatePresence>
@@ -30,7 +30,7 @@ export function CartButton() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="absolute -end-1.5 -top-1.5 flex min-w-4 items-center justify-center
                        rounded-full bg-gradient-to-r from-gold-600 to-gold-400 px-1
-                       text-[0.55rem] font-medium leading-4 text-ink-950"
+                       text-[0.55rem] font-medium leading-4 text-ink"
           >
             {count > 99 ? "99+" : count}
           </motion.span>

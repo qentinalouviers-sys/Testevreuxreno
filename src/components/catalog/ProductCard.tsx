@@ -23,8 +23,8 @@ export function ProductCard({ product, className }: { product: Product; classNam
     <Link
       href={href(`/produits/${product.slug}`)}
       className={cn(
-        "group flex h-full flex-col border border-gold-500/15 bg-ink-900/40",
-        "transition-all duration-600 hover:border-gold-400/45 hover:bg-ink-850",
+        "group flex h-full flex-col border border-ink/10 bg-white",
+        "transition-all duration-600 hover:border-gold-600/50 hover:bg-paper-2",
         className,
       )}
     >
@@ -45,33 +45,33 @@ export function ProductCard({ product, className }: { product: Product; classNam
         ) : (
           // Faute de photo, on affiche la rosace : mieux qu'un carré gris.
           <span className="relative z-10 flex h-full items-center justify-center">
-            <Rosette className="size-20 text-gold-500/25 transition-transform duration-[1.4s] group-hover:rotate-45" />
+            <Rosette className="size-20 text-gold-400 transition-transform duration-[1.4s] group-hover:rotate-45" />
           </span>
         )}
       </div>
 
       {/* Texte */}
-      <div className="flex flex-1 flex-col border-t border-gold-500/12 p-5">
+      <div className="flex flex-1 flex-col border-t border-ink/8 p-5">
         {producer && (
-          <span className="flex items-center gap-2 text-[0.58rem] uppercase tracking-[0.2em] text-gold-400/85">
+          <span className="flex items-center gap-2 text-[0.58rem] uppercase tracking-[0.2em] text-gold-600">
             <Flag code={producer.flag} className="h-2.5 w-[15px]" />
             {producer.name}
           </span>
         )}
 
-        <h3 className="mt-2.5 font-display text-xl leading-tight text-cream">{product.name}</h3>
-        <p className="mt-1.5 text-[0.78rem] leading-relaxed text-cream-mute">{copy?.tagline}</p>
+        <h3 className="mt-2.5 font-display text-xl leading-tight text-ink">{product.name}</h3>
+        <p className="mt-1.5 text-[0.78rem] leading-relaxed text-ink-mute">{copy?.tagline}</p>
 
         <div className="mt-auto flex items-end justify-between gap-4 pt-5">
           <span>
-            <span className="block font-display text-2xl text-gold-200">{price(product.price)}</span>
-            <span className="mt-0.5 block text-[0.6rem] uppercase tracking-[0.16em] text-cream-mute">
+            <span className="block font-display text-2xl text-gold-700">{price(product.price)}</span>
+            <span className="mt-0.5 block text-[0.6rem] uppercase tracking-[0.16em] text-ink-mute">
               {product.format}
             </span>
           </span>
           <ArrowRight
-            className="mb-1 size-4 shrink-0 text-gold-500/60 transition-all duration-500
-                       group-hover:translate-x-1 group-hover:text-gold-300
+            className="mb-1 size-4 shrink-0 text-gold-600 transition-all duration-500
+                       group-hover:translate-x-1 group-hover:text-gold-600
                        rtl:rotate-180 rtl:group-hover:-translate-x-1"
             strokeWidth={1.5}
           />

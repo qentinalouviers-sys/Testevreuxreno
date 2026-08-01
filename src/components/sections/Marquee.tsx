@@ -13,21 +13,21 @@ export function Marquee() {
   const items = [...t.marquee, ...t.marquee];
 
   return (
-    <div className="relative overflow-hidden border-y border-gold-500/15 bg-ink-900/60 py-4">
+    <div className="relative overflow-hidden border-y border-ink/10 bg-paper-2 py-4">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 start-0 z-10 w-16 bg-gradient-to-r from-ink-950 to-transparent sm:w-28"
+        className="pointer-events-none absolute inset-y-0 start-0 z-10 w-16 bg-gradient-to-r from-paper-2 to-transparent sm:w-28"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 end-0 z-10 w-16 bg-gradient-to-l from-ink-950 to-transparent sm:w-28"
+        className="pointer-events-none absolute inset-y-0 end-0 z-10 w-16 bg-gradient-to-l from-paper-2 to-transparent sm:w-28"
       />
       <div className="flex w-max animate-marquee">
         {items.map((item, i) => (
           <span
             key={i}
             className="flex shrink-0 items-center gap-5 px-5 text-[0.65rem] uppercase
-                       tracking-[0.28em] text-gold-300/75 sm:gap-7 sm:px-7 sm:text-[0.7rem]"
+                       tracking-[0.28em] text-gold-600 sm:gap-7 sm:px-7 sm:text-[0.7rem]"
           >
             {item}
             <Lozenge className="opacity-60" />

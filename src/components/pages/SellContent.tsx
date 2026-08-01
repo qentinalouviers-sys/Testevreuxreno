@@ -39,7 +39,7 @@ export function SellContent() {
       </PageHero>
 
       {/* La règle 70 / 30, en grand */}
-      <section className="grain relative overflow-hidden border-y border-gold-500/15 py-20 sm:py-28">
+      <section className="grain relative overflow-hidden border-y border-ink/10 py-20 sm:py-28">
         <div
           aria-hidden
           className="glow-gold pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-80 w-[44rem] -translate-y-1/2 opacity-30 blur-3xl"
@@ -48,30 +48,30 @@ export function SellContent() {
           <Reveal>
             <div className="flex flex-col items-center text-center">
               <Eyebrow>{t.sell.splitTitle}</Eyebrow>
-              <p className="mt-6 font-display text-xl text-cream-dim sm:text-2xl">
+              <p className="mt-6 font-display text-xl text-ink-soft sm:text-2xl">
                 {t.sell.splitLead}
               </p>
 
               <div className="mt-10 grid w-full grid-cols-2 gap-px bg-gold-500/15">
-                <div className="flex flex-col items-center justify-center bg-ink-950 px-4 py-12">
+                <div className="flex flex-col items-center justify-center bg-paper px-4 py-12">
                   <span className="font-display text-6xl text-gold-gradient sm:text-8xl">
                     {producerShare} %
                   </span>
-                  <span className="mt-4 text-[0.62rem] uppercase tracking-[0.22em] text-olive-300">
+                  <span className="mt-4 text-[0.62rem] uppercase tracking-[0.22em] text-olive-600">
                     {t.sell.splitProducer}
                   </span>
                 </div>
-                <div className="flex flex-col items-center justify-center bg-ink-950 px-4 py-12">
-                  <span className="font-display text-6xl text-cream-mute/70 sm:text-8xl">
+                <div className="flex flex-col items-center justify-center bg-paper px-4 py-12">
+                  <span className="font-display text-6xl text-ink-mute sm:text-8xl">
                     {DEFAULT_COMMISSION_RATE} %
                   </span>
-                  <span className="mt-4 text-[0.62rem] uppercase tracking-[0.22em] text-cream-mute">
+                  <span className="mt-4 text-[0.62rem] uppercase tracking-[0.22em] text-ink-mute">
                     {t.sell.splitPlatform}
                   </span>
                 </div>
               </div>
 
-              <p className="mt-8 max-w-xl text-pretty text-sm leading-relaxed text-cream-mute">
+              <p className="mt-8 max-w-xl text-pretty text-sm leading-relaxed text-ink-mute">
                 {t.sell.splitNote}
               </p>
             </div>
@@ -84,17 +84,17 @@ export function SellContent() {
         <Container>
           <SectionHeading title={t.sell.pillarsTitle} />
 
-          <div className="mt-14 grid gap-px overflow-hidden border border-gold-500/12 bg-gold-500/12 sm:grid-cols-2">
+          <div className="mt-14 grid gap-px overflow-hidden border border-ink/8 bg-ink/10 sm:grid-cols-2">
             {t.sell.pillars.map((pillar, i) => {
               const Icon = PILLAR_ICONS[i] ?? HandCoins;
               return (
                 <Reveal key={pillar.title} delay={i * 0.07} className="h-full">
-                  <article className="group h-full bg-ink-950 p-8 transition-colors duration-700 hover:bg-ink-850 sm:p-10">
-                    <span className="flex size-11 items-center justify-center border border-gold-500/25 transition-colors duration-700 group-hover:border-gold-400/60">
-                      <Icon className="size-5 text-gold-400" strokeWidth={1.25} />
+                  <article className="group h-full bg-paper p-8 transition-colors duration-700 hover:bg-paper-2 sm:p-10">
+                    <span className="flex size-11 items-center justify-center border border-ink/14 transition-colors duration-700 group-hover:border-gold-600/60">
+                      <Icon className="size-5 text-gold-600" strokeWidth={1.25} />
                     </span>
-                    <h3 className="mt-6 text-xl text-cream">{pillar.title}</h3>
-                    <p className="mt-4 text-sm leading-relaxed text-cream-mute">{pillar.text}</p>
+                    <h3 className="mt-6 text-xl text-ink">{pillar.title}</h3>
+                    <p className="mt-4 text-sm leading-relaxed text-ink-mute">{pillar.text}</p>
                   </article>
                 </Reveal>
               );
@@ -104,7 +104,7 @@ export function SellContent() {
       </section>
 
       {/* Le parcours */}
-      <section className="border-y border-gold-500/12 bg-ink-900/40 py-24 sm:py-32">
+      <section className="border-y border-ink/8 bg-white py-24 sm:py-32">
         <Container size="narrow">
           <SectionHeading title={t.sell.howTitle} />
 
@@ -125,8 +125,8 @@ export function SellContent() {
                   <p className="font-display text-2xl text-gold-gradient">
                     {String(i + 1).padStart(2, "0")}
                   </p>
-                  <h3 className="mt-2 text-xl text-cream">{step.title}</h3>
-                  <p className="mt-3 text-pretty leading-relaxed text-cream-mute">{step.text}</p>
+                  <h3 className="mt-2 text-xl text-ink">{step.title}</h3>
+                  <p className="mt-3 text-pretty leading-relaxed text-ink-mute">{step.text}</p>
                 </Reveal>
               </li>
             ))}
@@ -139,15 +139,15 @@ export function SellContent() {
         <Container size="narrow">
           <SectionHeading title={t.sell.faqTitle} />
 
-          <dl className="mt-14 divide-y divide-gold-500/12 border-y border-gold-500/12">
+          <dl className="mt-14 divide-y divide-ink/8 border-y border-ink/8">
             {t.sell.faq.map((item, i) => (
               <Reveal key={item.q} delay={i * 0.05}>
                 <div className="py-7">
-                  <dt className="flex items-start gap-3.5 text-lg text-cream">
+                  <dt className="flex items-start gap-3.5 text-lg text-ink">
                     <Lozenge className="mt-2.5 shrink-0" />
                     {item.q}
                   </dt>
-                  <dd className="mt-3 ps-7 text-pretty leading-relaxed text-cream-mute">
+                  <dd className="mt-3 ps-7 text-pretty leading-relaxed text-ink-mute">
                     {item.a}
                   </dd>
                 </div>
@@ -158,7 +158,7 @@ export function SellContent() {
       </section>
 
       {/* Appel final */}
-      <section className="grain relative overflow-hidden border-t border-gold-500/15 py-24 sm:py-28">
+      <section className="grain relative overflow-hidden border-t border-ink/10 py-24 sm:py-28">
         <div
           aria-hidden
           className="glow-gold pointer-events-none absolute inset-x-0 top-0 mx-auto h-64 w-[38rem] opacity-30 blur-3xl"
@@ -168,7 +168,7 @@ export function SellContent() {
             <div className="flex flex-col items-center text-center">
               <h2 className="text-balance text-3xl sm:text-4xl">{t.sell.ctaTitle}</h2>
               <div className="mt-7 h-px w-24 rule-gold" />
-              <p className="mt-7 max-w-lg text-pretty leading-relaxed text-cream-mute">
+              <p className="mt-7 max-w-lg text-pretty leading-relaxed text-ink-mute">
                 {t.sell.ctaText}
               </p>
 
@@ -176,7 +176,7 @@ export function SellContent() {
                 {t.sell.pillars.map((pillar) => (
                   <li
                     key={pillar.title}
-                    className="inline-flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.14em] text-olive-300"
+                    className="inline-flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.14em] text-olive-600"
                   >
                     <Check className="size-3" strokeWidth={2.5} />
                     {pillar.title}

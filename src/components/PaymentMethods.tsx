@@ -56,38 +56,38 @@ export function PaymentMethods({
               "group relative flex h-full flex-col items-start gap-3 border p-5 text-start",
               "transition-all duration-500",
               active
-                ? "border-gold-400/70 bg-gold-500/[0.08]"
-                : "border-gold-500/18 bg-ink-900/50 hover:border-gold-500/45 hover:bg-ink-850",
+                ? "border-gold-600/70 bg-gold-500/[0.12]"
+                : "border-ink/10 bg-white hover:border-gold-500/60 hover:bg-paper-2",
             )}
           >
             <span className="flex w-full items-start justify-between gap-3">
               <Icon
                 className={cn(
                   "size-6 transition-colors duration-500",
-                  active ? "text-gold-200" : "text-gold-500/80 group-hover:text-gold-300",
+                  active ? "text-gold-700" : "text-gold-600 group-hover:text-gold-600",
                 )}
                 strokeWidth={1.25}
               />
               <span
                 className={cn(
                   "flex size-4 shrink-0 items-center justify-center rounded-full border transition-all duration-500",
-                  active ? "border-gold-300 bg-gold-400" : "border-gold-500/35",
+                  active ? "border-gold-300 bg-gold-400" : "border-gold-500/45",
                 )}
               >
-                {active && <Check className="size-2.5 text-ink-950" strokeWidth={3} />}
+                {active && <Check className="size-2.5 text-ink" strokeWidth={3} />}
               </span>
             </span>
 
             <span className="block">
-              <span className="block text-sm text-cream">{method.name}</span>
-              <span className="mt-1 block text-[0.7rem] leading-relaxed text-cream-mute">
+              <span className="block text-sm text-ink">{method.name}</span>
+              <span className="mt-1 block text-[0.7rem] leading-relaxed text-ink-mute">
                 {method.note}
               </span>
             </span>
 
             {/* `mt-auto` aligne les badges en pied de carte même quand
                 une note passe sur deux lignes. */}
-            <span className="mt-auto inline-block border border-gold-500/25 px-2 py-0.5 pt-1 text-[0.55rem] uppercase tracking-[0.2em] text-gold-400/80">
+            <span className="mt-auto inline-block border border-ink/14 px-2 py-0.5 pt-1 text-[0.55rem] uppercase tracking-[0.2em] text-gold-600">
               {t.payment.soon}
             </span>
           </button>

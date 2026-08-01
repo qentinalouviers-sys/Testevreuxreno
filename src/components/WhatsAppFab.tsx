@@ -44,20 +44,20 @@ export function WhatsAppFab() {
           exit={{ opacity: 0, scale: 0.7, y: 20 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="group fixed bottom-5 end-5 z-[70] flex items-center gap-3 rounded-full
-                     border border-olive-500/40 bg-ink-900/92 py-3 ps-3 pe-3 shadow-2xl shadow-black/70
+                     border border-olive-600/40 bg-paper-2/92 py-3 ps-3 pe-3 shadow-2xl shadow-ink/12
                      backdrop-blur-md transition-all duration-500
-                     hover:border-olive-300/70 hover:pe-5 sm:bottom-7 sm:end-7"
+                     hover:border-olive-600/60 hover:pe-5 sm:bottom-7 sm:end-7"
         >
-          <span className="relative flex size-9 items-center justify-center rounded-full bg-olive-700/80">
+          <span className="relative flex size-9 items-center justify-center rounded-full bg-olive-600">
             <span
               aria-hidden
-              className="absolute inset-0 animate-ping rounded-full bg-olive-500/25 [animation-duration:3s]"
+              className="absolute inset-0 animate-ping rounded-full bg-olive-600/20 [animation-duration:3s]"
             />
-            <WhatsAppGlyph className="relative size-5 text-cream" />
+            <WhatsAppGlyph className="relative size-5 text-ink" />
           </span>
           <span
             className="max-w-0 overflow-hidden whitespace-nowrap text-[0.66rem] uppercase
-                       tracking-[0.18em] text-cream-dim opacity-0 transition-all duration-500
+                       tracking-[0.18em] text-ink-soft opacity-0 transition-all duration-500
                        group-hover:max-w-[14rem] group-hover:opacity-100"
           >
             {t.contact.whatsapp}

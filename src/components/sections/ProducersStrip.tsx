@@ -13,7 +13,7 @@ export function ProducersStrip() {
   const { t, href } = useLocale();
 
   return (
-    <section className="relative border-y border-gold-500/12 bg-ink-900/40 py-24 sm:py-32">
+    <section className="relative border-y border-ink/8 bg-white py-24 sm:py-32">
       <Container size="wide">
         <SectionHeading
           eyebrow={t.producers.eyebrow}

@@ -102,7 +102,7 @@ export function ContactContent() {
         <Container size="wide">
           <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
             {/* Formulaire */}
-            <div className="border border-gold-500/18 bg-ink-900/45 p-6 sm:p-10">
+            <div className="border border-ink/10 bg-white p-6 sm:p-10">
               <Eyebrow>{t.contact.quickTitle}</Eyebrow>
 
               <AnimatePresence mode="wait">
@@ -116,18 +116,18 @@ export function ContactContent() {
                     className="flex flex-col items-center py-16 text-center"
                   >
                     <span className="relative flex size-16 items-center justify-center">
-                      <Rosette className="size-16 text-gold-500/35" />
-                      <Check className="absolute size-6 text-olive-300" strokeWidth={2} />
+                      <Rosette className="size-16 text-gold-500" />
+                      <Check className="absolute size-6 text-olive-600" strokeWidth={2} />
                     </span>
                     <h2 className="mt-7 text-2xl">{t.contact.form.successTitle}</h2>
-                    <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream-mute">
+                    <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-mute">
                       {t.contact.form.successText}
                     </p>
                     <button
                       type="button"
                       onClick={() => setState("idle")}
                       className="mt-8 inline-flex items-center gap-2 text-[0.68rem] uppercase
-                                 tracking-[0.18em] text-gold-300 transition-colors hover:text-gold-100"
+                                 tracking-[0.18em] text-gold-600 transition-colors hover:text-gold-700"
                     >
                       {t.contact.form.another}
                       <ArrowRight className="size-3 rtl:rotate-180" strokeWidth={1.5} />
@@ -179,13 +179,13 @@ export function ContactContent() {
                     <div className="sm:col-span-2">
                       <label
                         htmlFor="consent"
-                        className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-cream-mute"
+                        className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-ink-mute"
                       >
                         <input
                           id="consent"
                           name="consent"
                           type="checkbox"
-                          className="mt-0.5 size-4 shrink-0 appearance-none border border-gold-500/40 bg-ink-900
+                          className="mt-0.5 size-4 shrink-0 appearance-none border border-gold-500/50 bg-paper-2
                                      transition-colors checked:border-gold-400 checked:bg-gold-500
                                      focus:outline-none focus-visible:outline focus-visible:outline-gold-400"
                         />
@@ -214,14 +214,14 @@ export function ContactContent() {
             {/* Colonne latérale : WhatsApp + coordonnées */}
             <div className="flex flex-col gap-6">
               <Reveal>
-                <div className="relative overflow-hidden border border-olive-500/35 bg-ink-900/55 p-7 sm:p-8">
+                <div className="relative overflow-hidden border border-olive-600/35 bg-white p-7 sm:p-8">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute -end-16 -top-16 size-48 rounded-full
                                bg-[radial-gradient(circle,rgba(109,143,75,0.22),transparent_70%)] blur-2xl"
                   />
-                  <p className="eyebrow relative text-olive-300">{t.contact.whatsappTitle}</p>
-                  <p className="relative mt-4 text-sm leading-relaxed text-cream-mute">
+                  <p className="eyebrow relative text-olive-600">{t.contact.whatsappTitle}</p>
+                  <p className="relative mt-4 text-sm leading-relaxed text-ink-mute">
                     {t.contact.whatsappText}
                   </p>
                   <a
@@ -230,9 +230,9 @@ export function ContactContent() {
                     rel="noopener noreferrer"
                     className={cn(
                       "relative mt-7 inline-flex w-full items-center justify-center gap-2.5",
-                      "border border-olive-500/50 bg-olive-700/25 px-6 py-3.5",
-                      "text-[0.68rem] uppercase tracking-[0.18em] text-cream",
-                      "transition-all duration-500 hover:border-olive-300/70 hover:bg-olive-700/45",
+                      "border border-olive-600/45 bg-olive-600/12 px-6 py-3.5",
+                      "text-[0.68rem] uppercase tracking-[0.18em] text-ink",
+                      "transition-all duration-500 hover:border-olive-600/60 hover:bg-olive-600/20",
                     )}
                   >
                     {t.contact.whatsapp}
@@ -242,28 +242,28 @@ export function ContactContent() {
               </Reveal>
 
               <Reveal delay={0.1}>
-                <div className="border border-gold-500/18 bg-ink-900/45 p-7 sm:p-8">
+                <div className="border border-ink/10 bg-white p-7 sm:p-8">
                   <p className="eyebrow">{t.contact.infoTitle}</p>
                   <dl className="mt-6 space-y-4">
                     {t.contact.info.map((item) => (
                       <div key={item.label} className="flex flex-col gap-1">
-                        <dt className="text-[0.58rem] uppercase tracking-[0.2em] text-cream-mute/70">
+                        <dt className="text-[0.58rem] uppercase tracking-[0.2em] text-ink-mute">
                           {item.label}
                         </dt>
                         {/* `bdi` isole la direction : un numéro ou un e-mail
                             reste lisible dans une page arabe. */}
-                        <dd className="text-sm text-cream">
+                        <dd className="text-sm text-ink">
                           <bdi>{item.value}</bdi>
                         </dd>
                       </div>
                     ))}
                   </dl>
 
-                  <div className="mt-7 flex items-center gap-3 border-t border-gold-500/12 pt-5">
+                  <div className="mt-7 flex items-center gap-3 border-t border-ink/8 pt-5">
                     <Lozenge />
                     <a
                       href={`mailto:${SITE.email}`}
-                      className="text-sm text-gold-300 transition-colors hover:text-gold-100"
+                      className="text-sm text-gold-600 transition-colors hover:text-gold-700"
                     >
                       {SITE.email}
                     </a>

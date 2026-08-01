@@ -51,20 +51,20 @@ export function Footer() {
   ];
 
   return (
-    <footer className="grain relative overflow-hidden border-t border-gold-500/15 bg-ink-900/60">
+    <footer className="grain relative overflow-hidden border-t border-ink/10 bg-paper-2">
       <Container size="wide" className="relative py-16 sm:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
           {/* Identité + newsletter */}
           <div>
             <Wordmark showTagline />
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-cream-mute">
+            <p className="mt-6 max-w-xs text-sm leading-relaxed text-ink-mute">
               {t.footer.madeIn}
             </p>
 
             <form onSubmit={onSubscribe} className="mt-8 max-w-xs">
               <label
                 htmlFor="newsletter"
-                className="text-[0.6rem] uppercase tracking-[0.22em] text-cream-mute"
+                className="text-[0.6rem] uppercase tracking-[0.22em] text-ink-mute"
               >
                 {t.footer.newsletter}
               </label>
@@ -74,21 +74,21 @@ export function Footer() {
                   type="email"
                   required
                   placeholder={t.footer.newsletterPlaceholder}
-                  className="min-w-0 flex-1 border border-gold-500/25 bg-ink-950/70 px-3.5 py-2.5
-                             text-sm text-cream placeholder:text-cream-mute/60
-                             focus:border-gold-400/60 focus:outline-none"
+                  className="min-w-0 flex-1 border border-ink/14 bg-white px-3.5 py-2.5
+                             text-sm text-ink placeholder:text-ink-mute/55
+                             focus:border-gold-600/60 focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="shrink-0 border border-s-0 border-gold-500/25 bg-gold-500/10 px-4
-                             text-[0.6rem] uppercase tracking-[0.16em] text-gold-200
+                  className="shrink-0 border border-s-0 border-ink/14 bg-ink/10 px-4
+                             text-[0.6rem] uppercase tracking-[0.16em] text-gold-700
                              transition-colors duration-400 hover:bg-gold-500/20"
                 >
                   {t.footer.newsletterCta}
                 </button>
               </div>
               {subscribed && (
-                <p className="mt-2.5 text-xs text-olive-300">{t.footer.newsletterOk}</p>
+                <p className="mt-2.5 text-xs text-olive-600">{t.footer.newsletterOk}</p>
               )}
             </form>
           </div>
@@ -96,7 +96,7 @@ export function Footer() {
           {/* Colonnes de liens */}
           {columns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
-              <h3 className="text-[0.6rem] font-normal uppercase tracking-[0.24em] text-gold-400">
+              <h3 className="text-[0.6rem] font-normal uppercase tracking-[0.24em] text-gold-600">
                 {column.title}
               </h3>
               <ul className="mt-5 space-y-3">
@@ -104,7 +104,7 @@ export function Footer() {
                   <li key={link.label + link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-cream-mute transition-colors duration-400 hover:text-gold-200"
+                      className="text-sm text-ink-mute transition-colors duration-400 hover:text-gold-700"
                     >
                       {link.label}
                     </Link>
@@ -116,18 +116,18 @@ export function Footer() {
         </div>
 
         {/* Contact direct */}
-        <div className="mt-14 flex flex-col gap-4 border-t border-gold-500/12 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-ink/8 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">
             <a
               href={`mailto:${SITE.email}`}
-              className="inline-flex items-center gap-2.5 text-sm text-cream-mute transition-colors hover:text-gold-200"
+              className="inline-flex items-center gap-2.5 text-sm text-ink-mute transition-colors hover:text-gold-700"
             >
               <Mail className="size-3.5" strokeWidth={1.5} />
               {SITE.email}
             </a>
             <a
               href={`tel:${SITE.phone}`}
-              className="inline-flex items-center gap-2.5 text-sm text-cream-mute transition-colors hover:text-gold-200"
+              className="inline-flex items-center gap-2.5 text-sm text-ink-mute transition-colors hover:text-gold-700"
               dir="ltr"
             >
               <Phone className="size-3.5" strokeWidth={1.5} />
@@ -141,15 +141,15 @@ export function Footer() {
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label={t.a11y.scrollTop}
-              className="flex size-9 items-center justify-center border border-gold-500/25
-                         text-gold-400 transition-colors duration-400 hover:border-gold-400/60 hover:text-gold-200"
+              className="flex size-9 items-center justify-center border border-ink/14
+                         text-gold-600 transition-colors duration-400 hover:border-gold-600/60 hover:text-gold-700"
             >
               <ArrowUp className="size-3.5" strokeWidth={1.5} />
             </button>
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-2 text-[0.68rem] text-cream-mute/70 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-2 text-[0.68rem] text-ink-mute sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {SITE.legalName}. {t.footer.rights}
           </p>

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "gold" | "outline" | "ghost";
+/** `outlineDark` est réservé aux blocs sombres (hero, bandeaux inversés). */
+type Variant = "gold" | "outline" | "outlineDark" | "ghost" | "ink";
 type Size = "md" | "lg";
 
 const BASE =
@@ -16,14 +17,20 @@ const SIZES: Record<Size, string> = {
 };
 
 const VARIANTS: Record<Variant, string> = {
+  // Or plein, texte encre : lisible aussi bien sur papier que sur fond sombre.
   gold:
     "bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600 bg-[length:200%_100%] " +
-    "text-ink-950 font-medium shadow-[0_0_30px_-12px_var(--color-gold-500)] " +
-    "hover:bg-[position:100%_0] hover:shadow-[0_0_46px_-10px_var(--color-gold-400)]",
+    "text-ink font-medium shadow-[0_10px_28px_-14px_rgba(166,127,47,0.85)] " +
+    "hover:bg-[position:100%_0] hover:shadow-[0_14px_34px_-12px_rgba(166,127,47,0.95)]",
+  ink:
+    "bg-ink text-paper font-medium hover:bg-noir-3",
   outline:
-    "border border-gold-500/40 text-gold-200 hover:border-gold-400 hover:text-gold-100 " +
-    "hover:bg-gold-500/[0.07]",
-  ghost: "text-cream-dim hover:text-gold-200",
+    "border border-ink/25 text-ink hover:border-gold-600/70 hover:text-gold-700 " +
+    "hover:bg-gold-500/[0.08]",
+  outlineDark:
+    "border border-gold-500/45 text-gold-200 hover:border-gold-300/80 hover:text-gold-100 " +
+    "hover:bg-gold-500/[0.12]",
+  ghost: "text-ink-soft hover:text-gold-700",
 };
 
 /** Reflet balayant, comme la lumière sur un filet doré gravé. */
@@ -47,7 +54,7 @@ export function Button({
 }: ComponentProps<"button"> & { variant?: Variant; size?: Size; children: ReactNode }) {
   return (
     <button className={cn(BASE, SIZES[size], VARIANTS[variant], className)} {...props}>
-      {variant === "gold" && <Sheen />}
+      {(variant === "gold" || variant === "ink") && <Sheen />}
       <span className="relative z-10 inline-flex items-center gap-2.5">{children}</span>
     </button>
   );
@@ -71,7 +78,7 @@ export function ButtonLink({
   const classes = cn(BASE, SIZES[size], VARIANTS[variant], className);
   const inner = (
     <>
-      {variant === "gold" && <Sheen />}
+      {(variant === "gold" || variant === "ink") && <Sheen />}
       <span className="relative z-10 inline-flex items-center gap-2.5">{children}</span>
     </>
   );
