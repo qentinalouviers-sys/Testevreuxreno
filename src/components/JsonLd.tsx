@@ -1,72 +1,48 @@
-import { company, siteUrl } from "@/config/company";
-import { faq } from "@/data/faq";
+"use client";
 
-/** LocalBusiness — profil de l'entreprise pour Google. */
-export function LocalBusinessJsonLd() {
+import { useLocale } from "@/i18n/LocaleProvider";
+import { PRODUCT } from "@/lib/catalog";
+import { SITE } from "@/lib/site";
+
+/** Données structurées produit + organisation, pour les moteurs de recherche. */
+export function JsonLd() {
+  const { t, locale } = useLocale();
+
   const data = {
     "@context": "https://schema.org",
-    "@type": "HomeAndConstructionBusiness",
-    "@id": `${siteUrl}/#business`,
-    name: company.name,
-    description: `${company.tagline}. Artisans certifiés RGE, spécialistes de l'isolation, des pompes à chaleur et des aides MaPrimeRénov'.`,
-    url: siteUrl,
-    telephone: company.phone.href,
-    email: company.email,
-    priceRange: "€€",
-    image: `${siteUrl}/opengraph-image`,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: company.address.street,
-      postalCode: company.address.postalCode,
-      addressLocality: company.address.city,
-      addressRegion: company.address.region,
-      addressCountry: "FR",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: company.address.geo.latitude,
-      longitude: company.address.geo.longitude,
-    },
-    areaServed: company.serviceAreas.map((name) => ({
-      "@type": "City",
-      name,
-    })),
-    openingHoursSpecification: company.openingHoursSpec.map((h) => ({
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: h.days,
-      opens: h.opens,
-      closes: h.closes,
-    })),
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: company.rating.value,
-      reviewCount: company.rating.count,
-      bestRating: 5,
-    },
-    foundingDate: String(company.foundedYear),
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
-}
-
-/** FAQPage — rich snippet des questions/réponses. */
-export function FaqJsonLd() {
-  const data = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faq.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE.url}/#organization`,
+        name: SITE.name,
+        url: SITE.url,
+        email: SITE.email,
+        telephone: SITE.phoneDisplay,
+        description: t.meta.description,
+        address: {
+          "@type": "PostalAddress",
+          addressCountry: "PT",
+          addressRegion: SITE.address.region,
+        },
       },
-    })),
+      {
+        "@type": "Product",
+        name: `${t.product.name} — ${t.product.variant}`,
+        description: t.product.description,
+        sku: PRODUCT.sku,
+        category: t.product.subtitle,
+        image: `${SITE.url}${PRODUCT.image}`,
+        brand: { "@type": "Brand", name: SITE.name },
+        countryOfOrigin: "PT",
+        offers: {
+          "@type": "Offer",
+          price: PRODUCT.retailPrice,
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+          url: `${SITE.url}/${locale}/commande`,
+        },
+      },
+    ],
   };
 
   return (

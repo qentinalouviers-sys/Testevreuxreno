@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { siteUrl } from "@/config/company";
+import { SITE } from "@/lib/site";
 
 export const dynamic = "force-static";
 
@@ -8,9 +8,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/api/",
+      disallow: ["/fr/pro", "/en/pro", "/pt/pro", "/ar/pro", "/zh/pro", "/fr/admin", "/en/admin", "/pt/admin", "/ar/admin", "/zh/admin"],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    sitemap: `${SITE.url}/sitemap.xml`,
   };
 }

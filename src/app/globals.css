@@ -1,63 +1,241 @@
 @import "tailwindcss";
 
-/* ─────────────────────────────────────────────────────────────
-   Design tokens — Rénovation Énergétique Évreux
-   ───────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------
+   Al Arifa — Design tokens
+   Palette relevée directement sur le bidon Sélection Héritage :
+   noir laqué, or gravé, vert olive du médaillon, rubis du cœur floral.
+------------------------------------------------------------------- */
 @theme {
-  /* Palette */
-  --color-forest: #1b4332; /* vert profond */
-  --color-forest-700: #163a2a;
-  --color-energy: #2d6a4f; /* vert énergie */
-  --color-energy-400: #40916c;
-  --color-amber: #f4a261; /* accent solaire */
-  --color-amber-600: #e08a45;
-  --color-cream: #fefae0; /* fond crème */
-  --color-cream-200: #f7f2d3;
-  --color-ink: #1a2e25; /* texte foncé chaud */
+  /* Noirs */
+  --color-ink-950: #040403;
+  --color-ink-900: #080807;
+  --color-ink-850: #0d0c0a;
+  --color-ink-800: #14120f;
+  --color-ink-700: #1d1a16;
+  --color-ink-600: #2a251e;
 
-  /* Typographies (variables injectées par next/font) */
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Ors */
+  --color-gold-100: #f5e9cc;
+  --color-gold-200: #e9d5a5;
+  --color-gold-300: #dcc07f;
+  --color-gold-400: #cba95e;
+  --color-gold-500: #c19749;
+  --color-gold-600: #a07a35;
+  --color-gold-700: #7c5d27;
+  --color-gold-800: #55401b;
 
-  /* Rayons */
-  --radius-xl: 1.25rem;
-  --radius-2xl: 1.75rem;
+  /* Verts olive (médaillon) */
+  --color-olive-300: #9bb47a;
+  --color-olive-500: #6d8f4b;
+  --color-olive-700: #47612f;
+  --color-olive-900: #24331a;
+
+  /* Rubis (cœur du motif) */
+  --color-ruby-500: #a6322c;
+  --color-ruby-600: #872621;
+
+  /* Crème / textes */
+  --color-cream: #f2ead8;
+  --color-cream-dim: #cdc3ae;
+  --color-cream-mute: #8d8574;
+
+  /* Typographies */
+  --font-display: var(--font-cormorant), "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: var(--font-jost), "Jost", ui-sans-serif, system-ui, sans-serif;
+
+  /* Rythme */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+
+  /* Animations */
+  --animate-marquee: marquee 42s linear infinite;
 }
 
-/* ── Base ──────────────────────────────────────────────────── */
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 6rem; /* compense le header sticky sur les ancres */
+/* Le contenu du bandeau est dupliqué une fois : translater de -50 %
+   ramène exactement au point de départ, la boucle est invisible. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-body {
-  background-color: var(--color-cream);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* Titres en serif display par défaut */
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.02em;
-}
-
-/* ── Focus accessible visible partout ──────────────────────── */
-:focus-visible {
-  outline: 2px solid var(--color-energy);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-/* ── Respect de prefers-reduced-motion ─────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+@layer base {
+  :root {
+    color-scheme: dark;
+    --header-h: 68px;
   }
+
+  * {
+    border-color: color-mix(in oklab, var(--color-gold-500) 14%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-cream-dim);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-cream);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  /* Le latin serif de la marque ne couvre ni le chinois ni l'arabe.
+     Plutôt que de télécharger des fontes CJK/arabes très lourdes (plusieurs Mo),
+     on s'appuie sur les piles système : rendu natif, aucun coût réseau. */
+  html[lang="zh-Hans"] h1,
+  html[lang="zh-Hans"] h2,
+  html[lang="zh-Hans"] h3,
+  html[lang="zh-Hans"] h4,
+  html[lang="zh-Hans"] body {
+    font-family: "Songti SC", "STSong", "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", var(--font-sans);
+    letter-spacing: 0.01em;
+  }
+
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] h4,
+  html[lang="ar"] body {
+    font-family: "Noto Naskh Arabic", "Amiri", "Geeza Pro", "Traditional Arabic",
+      "Segoe UI", Tahoma, var(--font-sans);
+    letter-spacing: 0;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold-500) 32%, transparent);
+    color: var(--color-cream);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-gold-400);
+    outline-offset: 3px;
+  }
+
+  input, textarea, select, button {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  /* Masque les flèches natives des inputs number */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: var(--color-ink-900); }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--color-gold-700) 70%, black);
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-gold-600); }
+}
+
+/* L'italique latin n'a pas de sens en arabe ni en chinois. Règle placée hors
+   de tout `@layer` pour passer devant l'utilitaire Tailwind `italic`. */
+html[lang="ar"] .italic,
+html[lang="zh-Hans"] .italic {
+  font-style: normal;
+}
+
+/* ------------------------------------------------------------------
+   Utilitaires maison
+------------------------------------------------------------------- */
+@utility text-gold-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-700) 0%,
+    var(--color-gold-300) 22%,
+    var(--color-gold-100) 40%,
+    var(--color-gold-400) 58%,
+    var(--color-gold-700) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Filet doré horizontal, façon gravure sur métal */
+@utility rule-gold {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in oklab, var(--color-gold-500) 55%, transparent) 22%,
+    var(--color-gold-400) 50%,
+    color-mix(in oklab, var(--color-gold-500) 55%, transparent) 78%,
+    transparent
+  );
+}
+
+/* Petites capitales espacées : la signature typographique de la maison */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-gold-400);
+}
+
+@utility surface {
+  background-color: color-mix(in oklab, var(--color-ink-850) 88%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-gold-500) 16%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+@utility surface-hover {
+  transition: border-color 0.5s ease, background-color 0.5s ease;
+}
+
+/* Grain fin : casse le côté « aplat numérique » du fond noir */
+@utility grain {
+  position: relative;
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Halo doré diffus derrière le produit */
+@utility glow-gold {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in oklab, var(--color-gold-500) 26%, transparent) 0%,
+    color-mix(in oklab, var(--color-gold-700) 12%, transparent) 38%,
+    transparent 70%
+  );
+}
+
+/* ------------------------------------------------------------------
+   Accessibilité
+------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *,
   *::before,
   *::after {
@@ -65,21 +243,4 @@ h3 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-}
-
-/* ── Utilitaire : dégradé de texte solaire ─────────────────── */
-.text-gradient-amber {
-  background: linear-gradient(120deg, var(--color-amber), #f6b880);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* ── Scrollbar fine pour le carousel d'avis ────────────────── */
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
 }

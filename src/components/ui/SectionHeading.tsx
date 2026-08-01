@@ -1,60 +1,73 @@
-"use client";
+import type { ReactNode } from "react";
+import { cn } from "@/lib/cn";
+import { Reveal } from "./Reveal";
 
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { fadeUp, staggerContainer, staggerItem, viewportOnce } from "@/lib/motion";
+/** Losange doré : le motif repris du bandeau gravé sur le bidon. */
+export function Lozenge({ className }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cn("inline-block size-1.5 rotate-45 bg-gold-400/80", className)}
+    />
+  );
+}
+
+export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <span className={cn("eyebrow inline-flex items-center gap-3", className)}>
+      <Lozenge />
+      {children}
+    </span>
+  );
+}
 
 export function SectionHeading({
   eyebrow,
   title,
-  description,
+  subtitle,
   align = "center",
   className,
 }: {
   eyebrow?: string;
-  title: React.ReactNode;
-  description?: React.ReactNode;
-  align?: "center" | "left";
+  title: ReactNode;
+  subtitle?: string;
+  align?: "center" | "start";
   className?: string;
 }) {
+  const centered = align === "center";
   return (
-    <motion.div
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
+    <div
       className={cn(
-        "flex flex-col gap-4",
-        align === "center" ? "items-center text-center" : "items-start text-left",
-        className
+        "flex flex-col gap-5",
+        centered ? "items-center text-center" : "items-start text-start",
+        className,
       )}
     >
-      {eyebrow ? (
-        <motion.span
-          variants={staggerItem}
-          className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-energy"
-        >
-          <span className="h-px w-8 bg-amber" aria-hidden />
-          {eyebrow}
-        </motion.span>
-      ) : null}
-      <motion.h2
-        variants={fadeUp}
-        className="max-w-3xl text-3xl font-semibold leading-[1.1] text-forest sm:text-4xl md:text-[2.75rem]"
-      >
-        {title}
-      </motion.h2>
-      {description ? (
-        <motion.p
-          variants={staggerItem}
-          className={cn(
-            "max-w-2xl text-base leading-relaxed text-ink/70 sm:text-lg",
-            align === "center" && "mx-auto"
-          )}
-        >
-          {description}
-        </motion.p>
-      ) : null}
-    </motion.div>
+      {eyebrow && (
+        <Reveal>
+          <Eyebrow>{eyebrow}</Eyebrow>
+        </Reveal>
+      )}
+      <Reveal delay={0.08}>
+        <h2 className="text-balance text-3xl leading-[1.08] sm:text-4xl md:text-[3.1rem]">
+          {title}
+        </h2>
+      </Reveal>
+      <Reveal delay={0.14}>
+        <div className={cn("h-px w-24 rule-gold", centered && "mx-auto")} />
+      </Reveal>
+      {subtitle && (
+        <Reveal delay={0.2}>
+          <p
+            className={cn(
+              "text-pretty text-[0.95rem] leading-relaxed text-cream-mute",
+              centered ? "mx-auto max-w-2xl" : "max-w-2xl",
+            )}
+          >
+            {subtitle}
+          </p>
+        </Reveal>
+      )}
+    </div>
   );
 }
