@@ -5,7 +5,7 @@ import { Reveal } from "../ui/Reveal";
 import { Eyebrow } from "../ui/SectionHeading";
 import { useLocale } from "@/i18n/LocaleProvider";
 
-export function Terroir() {
+export function Origins() {
   const { t } = useLocale();
 
   return (
@@ -25,21 +25,21 @@ export function Terroir() {
         <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
           <div>
             <Reveal>
-              <Eyebrow>{t.terroir.eyebrow}</Eyebrow>
+              <Eyebrow>{t.origins.eyebrow}</Eyebrow>
             </Reveal>
             <Reveal delay={0.08}>
-              <h2 className="mt-6 text-balance text-4xl sm:text-5xl">{t.terroir.title}</h2>
+              <h2 className="mt-6 text-balance text-4xl sm:text-5xl">{t.origins.title}</h2>
             </Reveal>
             <Reveal delay={0.14}>
               <div className="mt-7 h-px w-24 rule-gold" />
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="mt-7 text-pretty leading-relaxed text-cream-mute">{t.terroir.text}</p>
+              <p className="mt-7 text-pretty leading-relaxed text-cream-mute">{t.origins.text}</p>
             </Reveal>
           </div>
 
           <div className="grid grid-cols-2 gap-px bg-gold-500/12">
-            {t.terroir.stats.map((stat, i) => (
+            {t.origins.stats.map((stat, i) => (
               <Reveal key={stat.label} delay={0.1 + i * 0.08} className="h-full">
                 <div className="flex h-full flex-col items-center justify-center bg-ink-950 px-5 py-12 text-center">
                   <p className="font-display text-4xl text-gold-gradient sm:text-5xl">

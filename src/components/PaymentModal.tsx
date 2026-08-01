@@ -58,7 +58,7 @@ export function PaymentModal({ open, onClose }: { open: boolean; onClose: () => 
             <button
               type="button"
               onClick={onClose}
-              aria-label={t.order.modal.close}
+              aria-label={t.checkout.modal.close}
               className="absolute end-4 top-4 z-10 p-2 text-cream-mute transition-colors hover:text-gold-300"
             >
               <X className="size-4" strokeWidth={1.5} />
@@ -73,22 +73,22 @@ export function PaymentModal({ open, onClose }: { open: boolean; onClose: () => 
               </p>
 
               <h3 id="payment-modal-title" className="mt-4 text-2xl sm:text-3xl">
-                {t.order.modal.title}
+                {t.checkout.modal.title}
               </h3>
 
               <div className="mx-auto mt-6 h-px w-20 rule-gold" />
 
               <p className="mt-6 text-pretty text-sm leading-relaxed text-cream-mute">
-                {t.order.modal.text}
+                {t.checkout.modal.text}
               </p>
               <p className="mt-4 text-pretty text-sm leading-relaxed text-gold-300/75">
-                {t.order.modal.hint}
+                {t.checkout.modal.hint}
               </p>
 
               <div className="mt-9 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
                 <ButtonLink href={href("/contact")} size="md" onClick={onClose}>
                   <MessageCircle className="size-3.5" strokeWidth={1.5} />
-                  {t.order.modal.contact}
+                  {t.checkout.modal.contact}
                 </ButtonLink>
                 <button
                   type="button"
@@ -96,7 +96,7 @@ export function PaymentModal({ open, onClose }: { open: boolean; onClose: () => 
                   className="px-6 py-3 text-[0.68rem] uppercase tracking-[0.18em] text-cream-mute
                              transition-colors duration-400 hover:text-gold-200"
                 >
-                  {t.order.modal.close}
+                  {t.checkout.modal.close}
                 </button>
               </div>
             </div>

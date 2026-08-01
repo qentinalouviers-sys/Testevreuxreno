@@ -8,6 +8,7 @@ import { Menu, X, Lock } from "lucide-react";
 import { Container } from "./ui/Container";
 import { Wordmark } from "./ui/Wordmark";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { CartButton } from "./CartButton";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { cn } from "@/lib/cn";
 
@@ -36,9 +37,10 @@ export function Header() {
   }, [open]);
 
   const links = [
-    { href: href("/"), label: t.nav.home },
+    { href: href("/produits"), label: t.nav.catalog },
+    { href: href("/producteurs"), label: t.nav.producers },
     { href: href("/histoire"), label: t.nav.story },
-    { href: href("/commande"), label: t.nav.order },
+    { href: href("/vendre"), label: t.nav.sell },
     { href: href("/contact"), label: t.nav.contact },
   ];
 
@@ -66,13 +68,13 @@ export function Header() {
               <Wordmark />
             </Link>
 
-            <nav className="hidden items-center gap-9 lg:flex" aria-label={t.nav.menu}>
+            <nav className="hidden items-center gap-7 lg:flex xl:gap-9" aria-label={t.nav.menu}>
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "relative py-1 text-[0.7rem] uppercase tracking-[0.22em] transition-colors duration-500",
+                    "relative py-1 text-[0.68rem] uppercase tracking-[0.18em] transition-colors duration-500",
                     isActive(link.href) ? "text-gold-200" : "text-cream-dim hover:text-gold-200",
                   )}
                 >
@@ -93,12 +95,13 @@ export function Header() {
                 href={href("/pro")}
                 className="hidden items-center gap-2 rounded-[2px] border border-gold-500/30 px-4 py-2
                            text-[0.66rem] uppercase tracking-[0.2em] text-gold-200 transition-all
-                           duration-500 hover:border-gold-400/70 hover:bg-gold-500/[0.07] sm:inline-flex"
+                           duration-500 hover:border-gold-400/70 hover:bg-gold-500/[0.07] xl:inline-flex"
               >
                 <Lock className="size-3" strokeWidth={1.5} />
                 {t.nav.pro}
               </Link>
 
+              <CartButton />
               <LanguageSwitcher />
 
               <button
@@ -151,8 +154,9 @@ export function Header() {
                   >
                     <Link
                       href={link.href}
-                      className="block border-b border-gold-500/10 py-5 font-display text-3xl
-                                 text-cream transition-colors duration-400 hover:text-gold-300"
+                      className="block border-b border-gold-500/10 py-4 font-display text-2xl
+                                 text-cream transition-colors duration-400 hover:text-gold-300
+                                 sm:py-5 sm:text-3xl"
                     >
                       {link.label}
                     </Link>

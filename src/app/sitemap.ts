@@ -1,9 +1,22 @@
 import type { MetadataRoute } from "next";
 import { LOCALES, LOCALE_META } from "@/i18n/config";
+import { PRODUCERS, PRODUCTS } from "@/lib/marketplace";
 import { SITE } from "@/lib/site";
 
-/** Pages publiques uniquement — l'espace pro et l'admin sont exclus. */
-const PATHS = ["", "/histoire", "/commande", "/contact", "/mentions-legales", "/confidentialite", "/cgv"];
+/** Pages publiques uniquement — panier, espace producteur et admin sont exclus. */
+const PATHS = [
+  "",
+  "/produits",
+  "/producteurs",
+  "/histoire",
+  "/vendre",
+  "/contact",
+  "/mentions-legales",
+  "/confidentialite",
+  "/cgv",
+  ...PRODUCTS.map((p) => `/produits/${p.slug}`),
+  ...PRODUCERS.map((p) => `/producteurs/${p.slug}`),
+];
 
 export const dynamic = "force-static";
 

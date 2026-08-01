@@ -6,7 +6,8 @@ import type { LocaleMeta } from "@/i18n/config";
  * Ratio 3:2, viewBox 24×16.
  */
 
-type FlagCode = LocaleMeta["flag"];
+/** Les drapeaux servent au sélecteur de langue et aux pays des producteurs. */
+export type FlagCode = LocaleMeta["flag"] | "ma" | "tn" | "es" | "it" | "gr";
 
 function Fr() {
   return (
@@ -85,6 +86,68 @@ function Cn() {
   );
 }
 
+function Ma() {
+  return (
+    <>
+      <rect width="24" height="16" fill="#c1272d" />
+      {/* Pentagramme entrelacé, tracé en une seule polyligne */}
+      <polygon
+        points="12,4.6 13.72,9.9 9.21,6.62 14.79,6.62 10.28,9.9"
+        fill="none"
+        stroke="#006233"
+        strokeWidth="1.15"
+        strokeLinejoin="round"
+      />
+    </>
+  );
+}
+
+function Tn() {
+  return (
+    <>
+      <rect width="24" height="16" fill="#e70013" />
+      <circle cx="12" cy="8" r="4.4" fill="#f4f4f4" />
+      <circle cx="12" cy="8" r="3.1" fill="#e70013" />
+      <circle cx="13.1" cy="8" r="2.5" fill="#f4f4f4" />
+      <g fill="#e70013">
+        <Star cx={13.3} cy={8} r={1.35} />
+      </g>
+    </>
+  );
+}
+
+function Es() {
+  return (
+    <>
+      <rect width="24" height="16" fill="#c60b1e" />
+      <rect y="4" width="24" height="8" fill="#ffc400" />
+    </>
+  );
+}
+
+function It() {
+  return (
+    <>
+      <rect width="8" height="16" fill="#009246" />
+      <rect x="8" width="8" height="16" fill="#f4f4f4" />
+      <rect x="16" width="8" height="16" fill="#ce2b37" />
+    </>
+  );
+}
+
+function Gr() {
+  return (
+    <>
+      <rect width="24" height="16" fill="#f4f4f4" />
+      {[0, 2, 4, 6, 8].map((i) => (
+        <rect key={i} y={(i * 16) / 9} width="24" height={16 / 9} fill="#0d5eaf" />
+      ))}
+      <rect width="8.9" height="8.9" fill="#0d5eaf" />
+      <path d="M3.55 0v8.9M0 3.55h8.9" stroke="#f4f4f4" strokeWidth="1.8" />
+    </>
+  );
+}
+
 function Star({ cx, cy, r }: { cx: number; cy: number; r: number }) {
   const points: string[] = [];
   for (let i = 0; i < 10; i++) {
@@ -101,6 +164,11 @@ const FLAGS: Record<FlagCode, () => React.JSX.Element> = {
   pt: Pt,
   sa: Sa,
   cn: Cn,
+  ma: Ma,
+  tn: Tn,
+  es: Es,
+  it: It,
+  gr: Gr,
 };
 
 export function Flag({ code, className = "" }: { code: FlagCode; className?: string }) {

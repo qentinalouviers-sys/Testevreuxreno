@@ -10,12 +10,15 @@ import { ButtonLink } from "../ui/Button";
 import { Lozenge } from "../ui/SectionHeading";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { asset } from "@/lib/asset";
-import { PRODUCT } from "@/lib/catalog";
+import { getProduct } from "@/lib/marketplace";
 
 // La 3D ne doit jamais bloquer le premier rendu ni partir au SSR.
 const OliveScene = dynamic(() => import("../three/OliveScene"), { ssr: false });
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/** Produit d'appel du hero : le bidon de la maison fondatrice. */
+const HERO_PRODUCT = getProduct("arifa-5l");
 
 export function Hero() {
   const { t, href } = useLocale();
@@ -109,11 +112,11 @@ export function Hero() {
               transition={{ duration: 1, delay: 0.85, ease: EASE }}
               className="mt-7 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-4"
             >
-              <ButtonLink href={href("/commande")} size="lg">
+              <ButtonLink href={href("/produits")} size="lg">
                 {t.hero.ctaPrimary}
                 <ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" strokeWidth={1.5} />
               </ButtonLink>
-              <ButtonLink href={href("/pro")} variant="outline" size="lg">
+              <ButtonLink href={href("/vendre")} variant="outline" size="lg">
                 {t.hero.ctaSecondary}
               </ButtonLink>
             </motion.div>
@@ -138,10 +141,10 @@ export function Hero() {
               className="relative"
             >
               <Image
-                src={asset(PRODUCT.image)}
+                src={asset(HERO_PRODUCT?.image ?? "/product/al-arifa-5l.webp")}
                 alt={t.meta.ogAlt}
-                width={PRODUCT.imageWidth}
-                height={PRODUCT.imageHeight}
+                width={1000}
+                height={1526}
                 priority
                 sizes="(max-width: 640px) 60vw, (max-width: 1024px) 44vw, 30vw"
                 // `max-h` en unités d'écran : le bidon ne pousse jamais

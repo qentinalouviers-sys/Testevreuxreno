@@ -2,18 +2,22 @@ import type { Dictionary } from "./fr";
 
 const pt: Dictionary = {
   meta: {
-    title: "Al Arifa — Azeite virgem extra, Seleção Herança",
+    title: "Al Arifa — O mercado dos produtores do Mediterrâneo",
     description:
-      "Al Arifa, azeite virgem extra de primeira prensagem a frio. O sabor autêntico dos olivais de Portugal. Distribuição internacional, preços profissionais e grandes volumes.",
-    ogAlt: "Lata de 5 L Al Arifa — azeite virgem extra",
+      "Azeites, méis, açafrão, sais e frutos secos de produtores independentes do Mediterrâneo. Cada casa vende sob a sua marca e recebe diretamente, sem intermediário.",
+    ogAlt: "Al Arifa — seleção de produtores mediterrânicos",
   },
 
   nav: {
     home: "Início",
+    catalog: "A seleção",
+    producers: "Os produtores",
     story: "A História",
+    sell: "Tornar-se produtor",
     order: "Encomendar",
     contact: "Contacto",
-    pro: "Acesso Pro",
+    cart: "Carrinho",
+    pro: "Área do produtor",
     admin: "Admin",
     menu: "Menu",
     close: "Fechar",
@@ -21,48 +25,227 @@ const pt: Dictionary = {
   },
 
   hero: {
-    eyebrow: "Seleção Herança",
-    titleTop: "O ouro líquido",
-    titleBottom: "de Portugal",
+    eyebrow: "Casas independentes · Mediterrâneo",
+    titleTop: "As grandes casas",
+    titleBottom: "do Sul, reunidas",
     subtitle:
-      "Azeite virgem extra, primeira prensagem a frio. Uma colheita confidencial, um saber transmitido, uma assinatura aromática inimitável.",
+      "Uma seleção restrita de produtores que vendem sob a sua própria marca. Encomende a vários de uma só vez — cada um é pago diretamente, sem intermediário.",
     ctaPrimary: "Descobrir a seleção",
-    ctaSecondary: "Tornar-se parceiro",
+    ctaSecondary: "Vender na Al Arifa",
     scroll: "Deslize",
   },
 
   marquee: [
-    "Primeira prensagem a frio",
-    "Colheita manual",
-    "Acidez < 0,3 %",
-    "Origem Portugal",
-    "Exportação mundial",
+    "Produtores independentes",
+    "Cada um sob a sua marca",
+    "Pagamento direto",
+    "Seis países mediterrânicos",
+    "Expedição mundial",
   ],
 
   product: {
     eyebrow: "O produto",
-    name: "Al Arifa",
-    subtitle: "Azeite virgem extra",
-    variant: "Seleção Herança",
-    tagline: "O sabor autêntico dos olivais de Portugal",
-    description:
-      "Prensado nas 12 horas seguintes à colheita, o nosso azeite conserva a totalidade dos seus polifenóis. Uma cor de ouro profundo, um nariz de erva fresca e amêndoa verde, um final apimentado que assina os grandes azeites.",
-    specsTitle: "Ficha do produto",
-    specs: [
-      { label: "Formato", value: "Lata 5 L" },
-      { label: "Categoria", value: "Virgem extra" },
-      { label: "Extração", value: "Primeira prensagem a frio" },
-      { label: "Acidez livre", value: "< 0,3 %" },
-      { label: "Origem", value: "Portugal" },
-      { label: "Conservação", value: "24 meses" },
+    producer: "Produtor",
+    origin: "Origem",
+    category: "Categoria",
+    format: "Formato",
+    price: "Preço",
+    tradePrice: "Preço profissional",
+    tradeNote: "S/ IVA, a partir de 12 unidades — disponível com conta profissional.",
+    quantity: "Quantidade",
+    addToCart: "Adicionar ao carrinho",
+    added: "Adicionado ao carrinho",
+    viewCart: "Ver carrinho",
+    shipping: "Expedido pelo produtor",
+    freeShippingFrom: "Portes grátis a partir de",
+    otherProducts: "Outros produtos da casa",
+    backToCatalog: "Voltar à seleção",
+    notFound: "Produto não encontrado",
+  },
+
+  catalog: {
+    metaTitle: "A seleção",
+    metaDescription:
+      "Todos os produtos das casas referenciadas: azeites, méis, especiarias, sais, azeitonas e frutos secos.",
+    eyebrow: "A seleção",
+    title: "Todo o catálogo",
+    subtitle: "Cada produto vem de uma casa independente. Filtre por família ou por produtor.",
+    allCategories: "Todas as famílias",
+    allProducers: "Todos os produtores",
+    filterCategory: "Família",
+    filterProducer: "Produtor",
+    results: "produtos",
+    empty: "Nenhum produto corresponde a estes filtros.",
+    reset: "Repor",
+    categories: {
+      huile: "Azeites",
+      miel: "Méis",
+      epices: "Especiarias",
+      "fruits-secs": "Frutos secos",
+      sel: "Sais",
+      olives: "Azeitonas",
+    },
+  },
+
+  producers: {
+    metaTitle: "Os produtores",
+    metaDescription:
+      "As casas referenciadas na Al Arifa: seis famílias de produtores do Mediterrâneo, cada uma sob a sua marca.",
+    eyebrow: "As casas",
+    title: "Os nossos produtores",
+    subtitle:
+      "Seis famílias, seis terroirs, seis formas de trabalhar. Nenhuma abdicou do seu nome ao juntar-se a nós.",
+    since: "Casa fundada em",
+    products: "produtos",
+    discover: "Descobrir a casa",
+    theirProducts: "Os produtos da casa",
+    payoutsActive: "Pagamento direto ativo",
+    payoutsPending: "Conta de pagamento em ativação",
+    notFound: "Produtor não encontrado",
+    backToProducers: "Voltar aos produtores",
+  },
+
+  cart: {
+    metaTitle: "O seu carrinho",
+    eyebrow: "Carrinho",
+    title: "A sua encomenda",
+    empty: "O seu carrinho está vazio.",
+    emptyCta: "Percorrer a seleção",
+    shippedBy: "Expedido por",
+    remove: "Remover",
+    goods: "Subtotal produtos",
+    shipping: "Envio",
+    freeShipping: "Grátis",
+    subtotal: "Subtotal",
+    total: "Total a pagar",
+    checkout: "Finalizar encomenda",
+    continue: "Continuar a comprar",
+    multiProducerNote:
+      "O seu carrinho contém produtos de várias casas. Paga apenas uma vez: cada produtor recebe a sua parte e expede a sua encomenda.",
+    parcels: "encomendas",
+    parcelNote: "Receberá uma encomenda por produtor.",
+  },
+
+  split: {
+    title: "Repartição do pagamento",
+    subtitle: "Para onde vai o seu pagamento. Nenhum montante passa por uma conta intermediária.",
+    producerShare: "Pago ao produtor",
+    platformShare: "Comissão Al Arifa",
+    commission: "comissão",
+    shippingNote: "Os portes são pagos na totalidade ao produtor que expede.",
+    transfers: "transferências distintas",
+    explain:
+      "O pagamento é cobrado uma única vez e depois dividido automaticamente. Cada casa é creditada da sua parte no próprio dia, sem fatura a emitir nem adiantamento de tesouraria.",
+  },
+
+  checkout: {
+    metaTitle: "Encomendar",
+    metaDescription: "Finalize a sua encomenda junto das casas selecionadas.",
+    eyebrow: "Encomendar",
+    title: "Finalizar a encomenda",
+    subtitle: "Verifique o carrinho e escolha a sua forma de pagamento.",
+    summary: "Resumo",
+    delivery: "Entrega",
+    deliveryNote: "Cada casa expede a partir da sua oficina.",
+    empty: "O seu carrinho está vazio.",
+    emptyCta: "Percorrer a seleção",
+    payment: {
+      title: "Forma de pagamento",
+      subtitle: "Selecione o seu meio de pagamento preferido.",
+      card: { name: "Cartão bancário", note: "Visa, Mastercard, Amex — via Stripe" },
+      transfer: { name: "Transferência bancária", note: "SEPA & SWIFT — ideal para grandes volumes" },
+      crypto: { name: "Criptomoeda", note: "BTC, ETH, USDT" },
+      cta: "Validar e pagar",
+    },
+    modal: {
+      title: "Pagamento em desenvolvimento",
+      text: "O módulo de pagamento repartido está a ser integrado com o Stripe Connect. Entretanto, a nossa equipa finaliza a sua encomenda manualmente em 24 horas úteis.",
+      hint: "Contacte-nos pelo formulário ou WhatsApp para validar a sua encomenda de imediato.",
+      contact: "Contactar-nos",
+      close: "Fechar",
+    },
+  },
+
+  sell: {
+    metaTitle: "Tornar-se produtor referenciado",
+    metaDescription:
+      "Venda sob a sua própria marca na Al Arifa. Recebe diretamente 70 % de cada encomenda, sem refaturação nem adiantamento de tesouraria.",
+    eyebrow: "Produtores",
+    title: "A sua marca, o seu dinheiro",
+    subtitle:
+      "Não compramos a sua produção nem a revendemos com o nosso nome. Vende em seu nome, na nossa montra.",
+    heroCta: "Enviar candidatura",
+    heroCtaAlt: "Falar com alguém",
+
+    splitTitle: "A regra é simples",
+    splitLead: "Em cada encomenda de 100 €",
+    splitProducer: "para si",
+    splitPlatform: "para a plataforma",
+    splitNote: "Os portes são-lhe pagos na totalidade. A comissão incide apenas sobre a mercadoria.",
+
+    pillarsTitle: "O que muda na prática",
+    pillars: [
+      {
+        title: "Sem refaturação",
+        text: "A nossa comissão é retida na origem no momento do pagamento. Não tem nenhuma fatura a emitir nem nada a devolver-nos.",
+      },
+      {
+        title: "Sem adiantamento de tesouraria",
+        text: "A sua parte é creditada no dia da encomenda. Não espera trinta ou sessenta dias para ser pago.",
+      },
+      {
+        title: "A sua marca continua sua",
+        text: "O seu nome, o seu rótulo, a sua página. O cliente sabe a quem compra e a relação continua sua.",
+      },
+      {
+        title: "Não cede o seu stock",
+        text: "Sem compra firme, sem consignação. Expede o que for vendido, a partir da sua oficina.",
+      },
     ],
-    notesTitle: "Perfil aromático",
-    notes: [
-      { title: "Ataque", text: "Erva cortada, alcachofra, maçã verde." },
-      { title: "Meio de boca", text: "Amêndoa fresca, tomate, nota floral." },
-      { title: "Final", text: "Amargor nobre e picante apimentado." },
+
+    howTitle: "Como funciona",
+    steps: [
+      {
+        title: "Candidatura",
+        text: "Apresenta-nos a sua casa, os produtos e os volumes. Respondemos em 48 horas úteis.",
+      },
+      {
+        title: "Verificação",
+        text: "Provamos e verificamos as suas análises e documentos. É a única etapa em que somos exigentes.",
+      },
+      {
+        title: "Conta de pagamento",
+        text: "Abre a sua conta de pagamento em cinco minutos. É essa conta que recebe a sua parte, diretamente.",
+      },
+      {
+        title: "Publicação",
+        text: "A sua página de marca e os produtos ficam online. Gere preços e stocks a partir da sua área.",
+      },
     ],
-    cta: "Pedir preço",
+
+    faqTitle: "Perguntas frequentes",
+    faq: [
+      {
+        q: "Quando sou pago exatamente?",
+        a: "A sua parte é creditada na conta de pagamento no momento em que o cliente paga. A transferência para a sua conta bancária segue depois o calendário padrão, configurável até diariamente.",
+      },
+      {
+        q: "Quem suporta os custos bancários?",
+        a: "A plataforma, sobre a sua parte. Os 70 % anunciados são líquidos para si.",
+      },
+      {
+        q: "E se um cliente pedir reembolso?",
+        a: "O reembolso é retirado proporcionalmente dos dois lados: a sua parte e a nossa comissão. Ninguém adianta pelo outro.",
+      },
+      {
+        q: "Posso vender noutro lado ao mesmo tempo?",
+        a: "Sim. Sem exclusividade, sem prazo mínimo, sem compromisso de volume.",
+      },
+    ],
+
+    ctaTitle: "A sua casa tem lugar aqui?",
+    ctaText: "Apresente-a. Analisamos cada candidatura pessoalmente.",
+    ctaButton: "Enviar candidatura",
   },
 
   pillars: {
@@ -70,43 +253,43 @@ const pt: Dictionary = {
     title: "Quatro princípios, nenhum compromisso",
     items: [
       {
-        title: "Terroir único",
-        text: "Olivais centenários selecionados parcela a parcela, em solos argilo-calcários banhados pela luz atlântica.",
+        title: "Seleção à mão",
+        text: "Provamos tudo e recusamos muito. Uma casa entra no catálogo porque nos convenceu, não porque pagou.",
       },
       {
-        title: "Colheita à mão",
-        text: "Colhida à mão na maturação ideal, no início do pintor, para captar a intensidade aromática máxima do fruto.",
+        title: "Cada um em seu nome",
+        text: "Sem marca branca, sem origem vaga. Sabe sempre que família produziu o que está a comprar.",
       },
       {
-        title: "Prensagem a frio",
-        text: "Extração mecânica abaixo dos 27 °C, sem solventes nem tratamento térmico. Nada é adicionado, nada é retirado.",
+        title: "Pagamento direto",
+        text: "O produtor é creditado da sua parte no momento do seu pagamento. Nunca detemos o dinheiro dele.",
       },
       {
         title: "Rastreabilidade total",
-        text: "Cada lote é numerado, analisado e documentado da árvore à lata. Certificados disponíveis a pedido.",
+        text: "Cada lote é numerado, analisado e documentado. Certificados disponíveis a pedido.",
       },
     ],
   },
 
-  terroir: {
-    eyebrow: "O terroir",
-    title: "Onde a luz se torna azeite",
-    text: "Entre o Alentejo e Trás-os-Montes, os nossos olivais vivem ao ritmo lento das estações. Verões secos, noites frescas, uma terra exigente: as condições que dão às azeitonas a sua rara concentração.",
+  origins: {
+    eyebrow: "As origens",
+    title: "Um arco, do Atlântico ao Levante",
+    text: "Portugal, Espanha, Itália, Marrocos, Tunísia: as nossas casas distribuem-se por todo o Mediterrâneo. Verões secos, noites frescas, terras exigentes — as condições que dão às colheitas a sua rara concentração.",
     stats: [
-      { value: "1898", label: "Primeiras plantações" },
-      { value: "12 h", label: "Da árvore ao lagar" },
-      { value: "< 0,3 %", label: "Acidez livre" },
-      { value: "5", label: "Continentes servidos" },
+      { value: "6", label: "Casas referenciadas" },
+      { value: "5", label: "Países de origem" },
+      { value: "70 %", label: "Pagos ao produtor" },
+      { value: "0", label: "Intermediários" },
     ],
   },
 
   btob: {
     eyebrow: "Profissionais",
-    title: "Um parceiro para a sua mesa, o seu linear, o seu mercado",
-    text: "Alta restauração, mercearias finas, importadores, grossistas e distribuidores: a Al Arifa acompanha profissionais exigentes em todo o mundo, da primeira palete ao contrato anual.",
+    title: "Um só interlocutor, todas as casas",
+    text: "Alta restauração, mercearias finas, importadores e distribuidores: encomende a vários produtores de uma só vez, com uma única fatura e um preço negociado por conta.",
     bullets: [
-      "Preços degressivos negociados por volume",
-      "Marca branca e rotulagem personalizada",
+      "Preços degressivos negociados, aplicados a todo o catálogo",
+      "Um carrinho, várias casas, uma única encomenda",
       "Documentos de exportação, certificados de análise e fichas técnicas",
       "Logística de palete, contentor e grupagem internacional",
       "Interlocutor comercial dedicado",
@@ -120,7 +303,7 @@ const pt: Dictionary = {
       },
       {
         title: "Distribuição",
-        text: "Mercearia fina, garrafeira, concept store: um produto de forte valor percebido e margem sólida.",
+        text: "Mercearia fina, garrafeira, concept store: produtos de forte valor percebido e margem sólida.",
       },
       {
         title: "Import / Export",
@@ -130,17 +313,17 @@ const pt: Dictionary = {
   },
 
   cta: {
-    eyebrow: "Encomendar",
-    title: "Particulares e profissionais",
+    eyebrow: "Começar",
+    title: "Comprar ou vender",
     text: "Escolha o seu canal. A nossa equipa responde em 24 horas úteis.",
-    particulier: "Sou particular",
-    pro: "Sou profissional",
+    particulier: "Quero encomendar",
+    pro: "Sou produtor",
   },
 
   story: {
     metaTitle: "A História Al Arifa",
     metaDescription:
-      "Três gerações, um olival, uma obsessão: o azeite mais puro possível. Descubra a história da casa Al Arifa.",
+      "De um olival do Alentejo a um mercado de produtores mediterrânicos. A história da casa Al Arifa.",
     eyebrow: "A História",
     title: "Al Arifa",
     lead: "«Al Arifa» — aquela que sabe. Um nome herdado de uma avó que reconhecia, apenas pelo cheiro, o dia exato da colheita.",
@@ -148,12 +331,12 @@ const pt: Dictionary = {
       {
         year: "1898",
         title: "A primeira parcela",
-        text: "No fim de um caminho de terra, uma família planta trinta oliveiras numa colina que ninguém queria. O solo é pobre, o declive é duro — mas a luz permanece até ao último momento do dia. São essas árvores, hoje centenárias, que continuam a dar o coração do nosso lote.",
+        text: "No fim de um caminho de terra, uma família planta trinta oliveiras numa colina que ninguém queria. O solo é pobre, o declive é duro — mas a luz permanece até ao último momento do dia. São essas árvores, hoje centenárias, que continuam a dar o coração do nosso azeite.",
       },
       {
         year: "1954",
         title: "O lagar",
-        text: "A segunda geração constrói o seu próprio lagar a minutos das parcelas. Uma decisão simples e decisiva: nunca mais deixar passar mais de doze horas entre a colheita e a prensagem. É aí que nasce a frescura de cada lata.",
+        text: "A segunda geração constrói o seu próprio lagar a minutos das parcelas. Uma decisão simples e decisiva: nunca mais deixar passar mais de doze horas entre a colheita e a prensagem.",
       },
       {
         year: "1987",
@@ -162,8 +345,8 @@ const pt: Dictionary = {
       },
       {
         year: "Hoje",
-        title: "A Seleção Herança",
-        text: "A casa exporta hoje para cinco continentes sem alterar nada ao método. Cada lote tem um número, cada número tem um nome de parcela. A Seleção Herança é a nossa cuvée mais exigente: aquela que Aïcha teria aprovado.",
+        title: "A casa abre as portas",
+        text: "Ao exportar, encontrámos outras famílias: um apicultor do Médio Atlas, um produtor de açafrão do Souss, um salineiro siciliano. Os mesmos gestos, as mesmas recusas, a mesma dificuldade em ganhar espaço. A Al Arifa tornou-se a montra comum — cada uma em seu nome, cada uma paga diretamente.",
       },
     ],
     valuesTitle: "O que nunca mudará",
@@ -178,86 +361,26 @@ const pt: Dictionary = {
       },
       {
         title: "A verdade",
-        text: "Sem lotes de conveniência, sem origem vaga. O que está escrito é o que está na lata.",
+        text: "Sem lotes de conveniência, sem origem vaga. O que está escrito é o que está no frasco.",
       },
     ],
     quote: "«Não se fabrica um grande azeite. Apenas se evita estragá-lo.»",
     quoteAuthor: "Aïcha — Al Arifa",
-    cta: "Descobrir a Seleção Herança",
-  },
-
-  order: {
-    metaTitle: "Encomendar — Particulares & Profissionais",
-    metaDescription:
-      "Encomende o azeite Al Arifa como particular ou abra uma conta profissional para aceder a preços degressivos.",
-    eyebrow: "Encomendar",
-    title: "Particular ou profissional",
-    subtitle: "Dois percursos, a mesma exigência. Escolha o seu para ver as condições adequadas.",
-    tabs: { b2c: "Particular", b2b: "Profissional" },
-    recommended: "Recomendado",
-    b2c: {
-      title: "Encomenda particular",
-      text: "A lata de 5 L da Seleção Herança, expedida em 48 h na Europa e em 5 a 10 dias no resto do mundo.",
-      priceLabel: "Preço público recomendado",
-      quantityLabel: "Quantidade",
-      shipping: "Portes grátis a partir de 3 latas em Portugal continental.",
-      cta: "Adicionar e continuar",
-    },
-    b2b: {
-      title: "Encomenda profissional",
-      text: "Preços degressivos, marca branca e logística de palete. Crie a sua conta pro para ver os seus preços negociados.",
-      tiersTitle: "Escalões indicativos",
-      tiers: [
-        { qty: "12 – 47 latas", note: "Caixa completa" },
-        { qty: "48 – 143 latas", note: "Meia palete" },
-        { qty: "144 latas ou mais", note: "Palete completa" },
-        { qty: "Contentor", note: "Orçamento dedicado" },
-      ],
-      tiersFootnote:
-        "Os preços profissionais são personalizados por cliente. Inicie sessão na sua área pro para ver a sua tabela de preços.",
-      cta: "Aceder à minha área pro",
-      ctaAlt: "Criar conta profissional",
-    },
-    summary: {
-      title: "Resumo",
-      product: "Al Arifa — Seleção Herança 5 L",
-      unit: "Preço unitário",
-      quantity: "Quantidade",
-      subtotal: "Subtotal",
-      vat: "IVA (calculado na etapa seguinte)",
-      total: "Total estimado",
-      empty: "Selecione uma quantidade para continuar.",
-    },
-    payment: {
-      title: "Forma de pagamento",
-      subtitle: "Selecione o seu meio de pagamento preferido.",
-      card: { name: "Cartão bancário", note: "Visa, Mastercard, Amex — via Stripe" },
-      transfer: { name: "Transferência bancária", note: "SEPA & SWIFT — ideal para grandes volumes" },
-      crypto: { name: "Criptomoeda", note: "BTC, ETH, USDT" },
-      cta: "Validar encomenda",
-    },
-    modal: {
-      title: "Pagamento em desenvolvimento",
-      text: "O módulo de pagamento online está a ser integrado. Entretanto, a nossa equipa finaliza a sua encomenda manualmente em 24 horas úteis.",
-      hint: "Contacte-nos pelo formulário ou WhatsApp para validar a sua encomenda de imediato.",
-      contact: "Contactar-nos",
-      close: "Fechar",
-    },
+    cta: "Descobrir a seleção",
   },
 
   contact: {
     metaTitle: "Contacto — Al Arifa",
     metaDescription:
-      "Contacte a casa Al Arifa: pedido de preço, amostra, parceria profissional ou grande volume.",
+      "Contacte a Al Arifa: encomendas, preço profissional, candidatura de produtor ou grandes volumes.",
     eyebrow: "Contacto",
     title: "Vamos falar do seu projeto",
     subtitle: "Uma questão, uma amostra, um volume a orçamentar? Resposta em 24 horas úteis.",
     quickTitle: "Contacto rápido",
     whatsappTitle: "Resposta imediata",
-    whatsappText: "A nossa equipa comercial responde diretamente no WhatsApp, de segunda a sábado.",
+    whatsappText: "A nossa equipa responde diretamente no WhatsApp, de segunda a sábado.",
     whatsapp: "Escrever no WhatsApp",
-    whatsappMessage:
-      "Olá Al Arifa, gostaria de informações sobre o vosso azeite Seleção Herança.",
+    whatsappMessage: "Olá Al Arifa, gostaria de informações sobre a vossa seleção.",
     form: {
       name: "Nome completo",
       company: "Empresa (opcional)",
@@ -270,10 +393,11 @@ const pt: Dictionary = {
         restaurant: "Restauração",
         retail: "Mercearia / Distribuição",
         importer: "Importador / Grossista",
+        producer: "Produtor candidato",
         other: "Outro",
       },
       volume: "Volume estimado",
-      volumePlaceholder: "Ex. 48 latas / mês",
+      volumePlaceholder: "Ex. 48 unidades / mês",
       message: "A sua mensagem",
       messagePlaceholder: "Descreva a sua necessidade em algumas linhas…",
       consent: "Aceito ser contactado sobre o meu pedido.",
@@ -297,13 +421,13 @@ const pt: Dictionary = {
   },
 
   pro: {
-    metaTitle: "Acesso Profissional — Al Arifa",
+    metaTitle: "Área do produtor — Al Arifa",
     metaDescription:
-      "Área profissional Al Arifa: preços personalizados, acompanhamento de encomendas e documentos de exportação.",
-    eyebrow: "Área profissional",
-    title: "Acesso Pro",
-    subtitle: "Os seus preços negociados, as suas encomendas e os seus documentos, num espaço privado.",
-    tabs: { login: "Iniciar sessão", register: "Criar conta" },
+      "Área do produtor Al Arifa: os seus produtos, encomendas, receitas e conta de pagamento.",
+    eyebrow: "Área do produtor",
+    title: "A sua casa",
+    subtitle: "Os seus produtos, encomendas e pagamentos, num espaço privado.",
+    tabs: { login: "Iniciar sessão", register: "Candidatar-me" },
     login: {
       title: "Iniciar sessão",
       email: "E-mail profissional",
@@ -311,72 +435,74 @@ const pt: Dictionary = {
       submit: "Entrar",
       error: "Credenciais incorretas.",
       pendingError:
-        "A sua conta aguarda validação pela nossa equipa. Será notificado por e-mail.",
-      rejectedError: "O seu pedido de conta não foi aprovado. Contacte-nos para saber mais.",
+        "A sua candidatura está em análise. Será notificado por e-mail assim que for aprovada.",
+      rejectedError: "A sua candidatura não foi aceite. Contacte-nos para saber mais.",
       demoHint: "Demo — admin: admin@al-arifa.com / arifa2024",
     },
     register: {
-      title: "Pedido de abertura de conta",
+      title: "Candidatura de produtor",
       intro:
-        "A sua conta é ativada após verificação da sua atividade, geralmente em 24 horas úteis.",
-      company: "Denominação social",
+        "Apresente-nos a sua casa. Analisamos cada candidatura pessoalmente e respondemos em 48 horas úteis.",
+      company: "Nome da casa",
       vat: "N.º de IVA / registo comercial",
       contactName: "Nome do contacto",
       email: "E-mail profissional",
       phone: "Telefone",
       country: "País",
-      activity: "Tipo de atividade",
-      volume: "Volume mensal estimado",
+      activity: "Família de produtos",
+      volume: "Produção anual estimada",
       password: "Palavra-passe",
       passwordConfirm: "Confirmar palavra-passe",
-      submit: "Enviar o meu pedido",
-      success: "Pedido registado",
-      successText:
-        "Obrigado. A sua conta aguarda validação. Receberá um e-mail assim que for ativada.",
-      errorExists: "Já existe uma conta com este e-mail.",
+      submit: "Enviar a minha candidatura",
+      success: "Candidatura registada",
+      successText: "Obrigado. Vamos analisar o seu processo e responder em 48 horas úteis.",
+      errorExists: "Já existe uma candidatura com este e-mail.",
       errorPassword: "A palavra-passe deve ter pelo menos 8 caracteres.",
       errorMatch: "As palavras-passe não coincidem.",
     },
     dashboard: {
       welcome: "Olá",
-      status: "Estado da conta",
+      status: "Estado",
       logout: "Terminar sessão",
-      pricingTitle: "A sua tabela de preços",
-      pricingNote: "Preços negociados especificamente para a sua conta. Sem impostos, à saída do armazém.",
-      publicPrice: "Preço público",
-      yourPrice: "O seu preço",
-      discount: "Desconto",
-      newOrderTitle: "Nova encomenda",
-      quantity: "Quantidade (latas 5 L)",
-      estimate: "Total estimado s/ IVA",
-      placeOrder: "Fazer encomenda",
+      payoutsTitle: "Conta de pagamento",
+      payoutsActive: "Ativa — a sua parte é creditada automaticamente",
+      payoutsPending: "A ativar para receber os seus pagamentos",
+      payoutsCta: "Ativar a minha conta",
+      payoutsSoon: "Integração Stripe Connect em curso",
+      revenueTitle: "As suas receitas",
+      revenueGross: "Volume cobrado",
+      revenueYours: "A sua parte",
+      revenueCommission: "Comissão da plataforma",
+      yourRate: "A sua taxa",
+      productsTitle: "Os seus produtos",
+      productsEmpty: "Ainda sem produtos publicados.",
       ordersTitle: "As suas encomendas",
       ordersEmpty: "Ainda sem encomendas.",
       orderRef: "Referência",
       orderDate: "Data",
-      orderQty: "Quantidade",
-      orderTotal: "Total s/ IVA",
+      orderQty: "Artigos",
+      orderTotal: "Montante",
+      orderYours: "A sua parte",
       orderStatus: "Estado",
-      orderPlaced: "Encomenda registada",
       docsTitle: "Documentos",
       docs: [
-        "Ficha técnica do produto (PDF)",
-        "Certificado de análise do lote em curso",
-        "Condições gerais de venda para exportação",
+        "Contrato de referenciação (PDF)",
+        "Extrato de pagamentos do mês",
+        "Condições gerais para produtores",
       ],
       docsSoon: "Brevemente disponível",
     },
     status: {
-      pending: "A aguardar validação",
-      approved: "Conta validada",
-      rejected: "Recusada",
+      pending: "Candidatura em análise",
+      approved: "Casa referenciada",
+      rejected: "Não aceite",
     },
   },
 
   admin: {
     metaTitle: "Administração — Al Arifa",
     title: "Administração",
-    subtitle: "Contas profissionais, preços personalizados e acompanhamento de encomendas.",
+    subtitle: "Produtores referenciados, taxas de comissão e acompanhamento de encomendas.",
     login: {
       title: "Acesso de administrador",
       email: "E-mail",
@@ -384,41 +510,42 @@ const pt: Dictionary = {
       submit: "Entrar",
       error: "Acesso recusado.",
     },
-    tabs: { accounts: "Contas pro", orders: "Encomendas", pricing: "Preços" },
+    tabs: { accounts: "Produtores", orders: "Encomendas", pricing: "Comissões" },
     accounts: {
-      title: "Contas profissionais",
-      empty: "Nenhuma conta registada.",
-      company: "Empresa",
+      title: "Candidaturas e casas referenciadas",
+      empty: "Nenhuma candidatura registada.",
+      company: "Casa",
       contact: "Contacto",
       country: "País",
-      activity: "Atividade",
-      registered: "Registo em",
+      activity: "Família",
+      registered: "Candidatura em",
       status: "Estado",
       actions: "Ações",
-      approve: "Validar",
+      approve: "Referenciar",
       reject: "Recusar",
       pendingCount: "em espera",
     },
     pricing: {
-      title: "Preços por cliente",
-      note: "Defina um preço unitário de compra (s/ IVA) específico para cada conta validada. Deixe vazio para aplicar o preço público.",
-      client: "Cliente",
-      publicPrice: "Preço público s/ IVA",
-      customPrice: "Preço cliente s/ IVA",
-      discount: "Desconto",
+      title: "Taxas de comissão",
+      note: "Defina a parte da plataforma para cada casa referenciada. O restante é pago ao produtor no momento do pagamento. Deixe vazio para aplicar a taxa padrão.",
+      client: "Casa",
+      publicPrice: "Taxa padrão",
+      customPrice: "Taxa aplicada",
+      discount: "Parte do produtor",
       save: "Guardar",
-      saved: "Preços guardados",
-      placeholder: "Preço público",
+      saved: "Taxas guardadas",
+      placeholder: "Padrão",
     },
     orders: {
       title: "Encomendas",
       empty: "Nenhuma encomenda registada.",
       ref: "Ref.",
-      client: "Cliente",
+      client: "Casa",
       date: "Data",
       qty: "Qtd",
-      unit: "PU s/ IVA",
-      total: "Total s/ IVA",
+      unit: "Cobrado",
+      total: "Parte do produtor",
+      commission: "Comissão",
       status: "Estado",
       statuses: {
         pending: "Pendente",
@@ -439,9 +566,9 @@ const pt: Dictionary = {
   },
 
   footer: {
-    tagline: "Azeite virgem extra · Seleção Herança",
+    tagline: "O mercado dos produtores mediterrânicos",
     navTitle: "Navegação",
-    proTitle: "Profissionais",
+    proTitle: "Produtores",
     legalTitle: "Informações",
     contactTitle: "Contacto",
     newsletter: "Receber as notícias da colheita",
@@ -452,7 +579,7 @@ const pt: Dictionary = {
     legal: "Menções legais",
     privacy: "Privacidade",
     terms: "Condições de venda",
-    madeIn: "Origem Portugal · Expedição mundial",
+    madeIn: "Seis casas · Cinco países · Expedição mundial",
   },
 
   legal: {
@@ -472,6 +599,99 @@ const pt: Dictionary = {
     changeLanguage: "Mudar de idioma",
     whatsapp: "Contactar no WhatsApp",
     scrollTop: "Voltar ao topo",
+    openCart: "Abrir o carrinho",
+    itemsInCart: "artigos no carrinho",
+  },
+
+  catalogData: {
+    producers: {
+      "al-arifa": {
+        tagline: "Azeite virgem extra, Seleção Herança",
+        bio: "Três gerações na mesma colina do Alentejo. Colheita manual, prensagem em doze horas e a recusa obstinada dos rendimentos fáceis.",
+      },
+      kerkennah: {
+        tagline: "Azeites e azeitonas da variedade Chétoui",
+        bio: "Uma herdade familiar frente às ilhas Kerkennah, em modo biológico desde 1998. A Chétoui dá um azeite verde, ardente, muito marcado pelo amargor nobre.",
+      },
+      cedres: {
+        tagline: "Méis de alta montanha do Médio Atlas",
+        bio: "Colmeias transumantes conduzidas entre 1 400 e 2 000 metros, ao ritmo das florações. Extração a frio, sem pasteurização nem lotes.",
+      },
+      taliouine: {
+        tagline: "Açafrão e especiarias do planalto de Souktana",
+        bio: "Uma cooperativa de famílias produtoras de açafrão a 1 800 metros. As flores são colhidas antes do nascer do sol e mondadas no próprio dia.",
+      },
+      ronda: {
+        tagline: "Amêndoas Marcona da serra andaluza",
+        bio: "Amendoeiras em socalcos acima de Ronda, em sequeiro. A Marcona amadurece devagar e desenvolve uma polpa redonda, quase doce.",
+      },
+      trapani: {
+        tagline: "Sais marinhos das salinas da Sicília ocidental",
+        bio: "Os mesmos tanques de evaporação desde o século XIV, entre Trapani e Marsala. A flor de sal ainda é colhida com pá de madeira.",
+      },
+    },
+    products: {
+      "arifa-5l": {
+        tagline: "O sabor autêntico dos olivais de Portugal",
+        description:
+          "Prensado nas doze horas seguintes à colheita. Cor de ouro profundo, nariz de erva fresca e amêndoa verde, final apimentado que assina os grandes azeites.",
+      },
+      "arifa-500": {
+        tagline: "O formato de mesa da Seleção Herança",
+        description:
+          "O mesmo azeite da lata de cinco litros, em vidro escuro para a mesa. Acidez livre inferior a 0,3 %.",
+      },
+      "kerkennah-bio": {
+        tagline: "Chétoui biológico, primeira prensagem a frio",
+        description:
+          "Um azeite verde e franco, de amargor assumido e picante longo. Certificado biológico, colheita precoce em novembro.",
+      },
+      "kerkennah-olives": {
+        tagline: "Azeitonas partidas à moda marroquina",
+        description:
+          "Azeitonas verdes partidas, preparadas com limão em conserva, alho e pimento doce. Não pasteurizadas nem esterilizadas.",
+      },
+      "cedres-cedre": {
+        tagline: "Mel de melada de cedro do Atlas",
+        description:
+          "Mel escuro, denso, quase resinoso, com notas de madeira e alcaçuz. Uma colheita confidencial, algumas centenas de quilos por ano.",
+      },
+      "cedres-oranger": {
+        tagline: "Mel de flor de laranjeira do Souss",
+        description:
+          "Cristalização fina e loira, perfume floral imediato. Colhido em pomares de laranjeira amarga em plena floração de primavera.",
+      },
+      "taliouine-safran": {
+        tagline: "Filamentos de primeira categoria, colheita do dia",
+        description:
+          "Apenas os estigmas vermelhos, sem estilete amarelo. Elevado poder corante, aroma de feno, mel e couro.",
+      },
+      "taliouine-ras": {
+        tagline: "Vinte e sete especiarias reunidas à mão",
+        description:
+          "A mistura da cooperativa, moída a pedido. Sem corantes, sem realçadores, sem cargas.",
+      },
+      "ronda-marcona": {
+        tagline: "Amêndoas Marcona peladas e torradas",
+        description:
+          "Torradas a seco e depois salgadas com flor de sal. Polpa redonda e amanteigada, muito diferente das variedades californianas.",
+      },
+      "ronda-huile": {
+        tagline: "Óleo de amêndoa doce de primeira prensagem",
+        description:
+          "Prensado a frio a partir das amêndoas da herdade, sem refinação. Uso culinário, pastelaria e acabamento.",
+      },
+      "trapani-fleur": {
+        tagline: "Flor de sal colhida à mão",
+        description:
+          "A fina crosta cristalina retirada à superfície dos tanques, com pá de madeira. Estaladiça, nitidamente iodada, para juntar no fim da cozedura.",
+      },
+      "trapani-herbes": {
+        tagline: "Sal marinho com ervas da Sicília",
+        description:
+          "Sal marinho integral misturado com orégãos silvestres, alecrim e raspa de limão seca, todos colhidos na ilha.",
+      },
+    },
   },
 };
 

@@ -10,7 +10,10 @@ import { ButtonLink } from "../ui/Button";
 import { Rosette } from "../ui/Wordmark";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { asset } from "@/lib/asset";
-import { PRODUCT } from "@/lib/catalog";
+import { getProduct } from "@/lib/marketplace";
+
+/** Le bidon de la maison fondatrice, en rappel visuel. */
+const FOUNDING_PRODUCT = getProduct("arifa-5l");
 
 export function StoryContent() {
   const { t, href } = useLocale();
@@ -109,10 +112,10 @@ export function StoryContent() {
               <div aria-hidden className="glow-gold absolute inset-[-20%] opacity-45 blur-2xl" />
               <Reveal>
                 <Image
-                  src={asset(PRODUCT.image)}
+                  src={asset(FOUNDING_PRODUCT?.image ?? "/product/al-arifa-5l.webp")}
                   alt={t.meta.ogAlt}
-                  width={PRODUCT.imageWidth}
-                  height={PRODUCT.imageHeight}
+                  width={1000}
+                  height={1526}
                   sizes="(max-width: 640px) 60vw, 24vw"
                   className="relative z-10 h-auto w-full drop-shadow-[0_28px_50px_rgba(0,0,0,0.85)]"
                 />
@@ -121,16 +124,16 @@ export function StoryContent() {
 
             <div>
               <Reveal>
-                <h2 className="text-3xl sm:text-4xl">{t.product.variant}</h2>
+                <h2 className="text-3xl sm:text-4xl">{t.catalogData.producers["al-arifa"].tagline}</h2>
               </Reveal>
               <Reveal delay={0.08}>
                 <p className="mt-5 max-w-lg text-pretty leading-relaxed text-cream-mute">
-                  {t.product.description}
+                  {t.catalogData.products["arifa-5l"].description}
                 </p>
               </Reveal>
               <Reveal delay={0.16}>
                 <div className="mt-9">
-                  <ButtonLink href={href("/commande")} size="lg">
+                  <ButtonLink href={href("/produits")} size="lg">
                     {t.story.cta}
                     <ArrowRight
                       className="size-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"

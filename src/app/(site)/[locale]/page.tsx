@@ -1,8 +1,9 @@
 import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
-import { ProductShowcase } from "@/components/sections/ProductShowcase";
+import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
 import { Pillars } from "@/components/sections/Pillars";
-import { Terroir } from "@/components/sections/Terroir";
+import { ProducersStrip } from "@/components/sections/ProducersStrip";
+import { Origins } from "@/components/sections/Origins";
 import { Btob } from "@/components/sections/Btob";
 import { PaymentSection } from "@/components/sections/PaymentSection";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -19,9 +20,10 @@ export default function HomePage() {
       <JsonLd />
       <Hero />
       <Marquee />
-      <ProductShowcase />
+      <FeaturedProducts />
       <Pillars />
-      <Terroir />
+      <ProducersStrip />
+      <Origins />
       <Btob />
       <PaymentSection />
       <CtaBand />

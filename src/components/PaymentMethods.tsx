@@ -33,9 +33,9 @@ export function PaymentMethods({
   const { t } = useLocale();
 
   const methods: { id: PaymentMethodId; name: string; note: string }[] = [
-    { id: "card", ...t.order.payment.card },
-    { id: "transfer", ...t.order.payment.transfer },
-    { id: "crypto", ...t.order.payment.crypto },
+    { id: "card", ...t.checkout.payment.card },
+    { id: "transfer", ...t.checkout.payment.transfer },
+    { id: "crypto", ...t.checkout.payment.crypto },
   ];
 
   return (

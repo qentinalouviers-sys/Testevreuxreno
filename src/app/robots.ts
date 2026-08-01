@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/fr/pro", "/en/pro", "/pt/pro", "/ar/pro", "/zh/pro", "/fr/admin", "/en/admin", "/pt/admin", "/ar/admin", "/zh/admin"],
+      // Espaces privés et pages de tunnel : sans intérêt pour l'indexation.
+      disallow: ["*/pro", "*/admin", "*/panier", "*/commande"],
     },
     sitemap: `${SITE.url}/sitemap.xml`,
   };

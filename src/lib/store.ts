@@ -30,8 +30,8 @@ export type Account = {
   /** Empreinte du mot de passe — jamais le mot de passe en clair. */
   passwordHash: string;
   status: AccountStatus;
-  /** Prix unitaire HT négocié. null = grille dégressive standard. */
-  customPrice: number | null;
+  /** Taux de commission de la plateforme, en %. null = taux standard. */
+  commissionRate: number | null;
   createdAt: string;
   role: "pro" | "admin";
 };
@@ -41,9 +41,14 @@ export type Order = {
   ref: string;
   accountId: string;
   company: string;
+  /** Nombre d'articles de cette maison dans la commande. */
   quantity: number;
-  unitPrice: number;
-  total: number;
+  /** Montant encaissé auprès du client pour cette maison, port compris. */
+  gross: number;
+  /** Commission retenue par la plateforme. */
+  commission: number;
+  /** Part virée au producteur — c'est le montant du transfert Stripe. */
+  producerShare: number;
   status: OrderStatus;
   createdAt: string;
 };
@@ -97,7 +102,7 @@ const ADMIN_SEED: Account = {
   volume: "",
   passwordHash: hashPassword("arifa2024"),
   status: "approved",
-  customPrice: null,
+  commissionRate: null,
   createdAt: "2024-01-01T00:00:00.000Z",
   role: "admin",
 };
@@ -106,33 +111,33 @@ const ADMIN_SEED: Account = {
 const DEMO_ACCOUNTS: Account[] = [
   {
     id: "acc_demo_1",
-    company: "Maison Verdier — Épicerie fine",
-    vat: "FR40123456789",
-    contactName: "C. Verdier",
-    email: "achats@maison-verdier.fr",
-    phone: "+33 1 44 00 00 00",
-    country: "France",
-    activity: "Épicerie / Distribution",
-    volume: "60 bidons / mois",
+    company: "Miel des Cèdres",
+    vat: "MA-4471902",
+    contactName: "H. Benali",
+    email: "contact@mieldescedres.ma",
+    phone: "+212 5 35 00 00 00",
+    country: "Maroc",
+    activity: "Miels",
+    volume: "4 t / an",
     passwordHash: hashPassword("demo1234"),
     status: "approved",
-    customPrice: 54,
+    commissionRate: 26,
     createdAt: "2025-11-04T09:12:00.000Z",
     role: "pro",
   },
   {
     id: "acc_demo_2",
-    company: "Gulf Gourmet Trading LLC",
-    vat: "AE-100394827",
-    contactName: "S. Al Mansouri",
-    email: "import@gulfgourmet.ae",
-    phone: "+971 4 000 0000",
-    country: "Émirats arabes unis",
-    activity: "Importateur / Grossiste",
-    volume: "1 conteneur / trimestre",
+    company: "Almendras de Ronda",
+    vat: "ES-B92847110",
+    contactName: "I. Delgado",
+    email: "hola@almendrasderonda.es",
+    phone: "+34 952 00 00 00",
+    country: "Espagne",
+    activity: "Fruits secs",
+    volume: "18 t / an",
     passwordHash: hashPassword("demo1234"),
     status: "pending",
-    customPrice: null,
+    commissionRate: null,
     createdAt: "2026-01-19T15:40:00.000Z",
     role: "pro",
   },
@@ -146,10 +151,11 @@ function seed(): StoreData {
         id: "ord_demo_1",
         ref: "AA-2601-0148",
         accountId: "acc_demo_1",
-        company: "Maison Verdier — Épicerie fine",
-        quantity: 48,
-        unitPrice: 54,
-        total: 2592,
+        company: "Miel des Cèdres",
+        quantity: 12,
+        gross: 408,
+        commission: 106.08,
+        producerShare: 301.92,
         status: "shipped",
         createdAt: "2026-01-08T10:05:00.000Z",
       },
@@ -157,10 +163,11 @@ function seed(): StoreData {
         id: "ord_demo_2",
         ref: "AA-2602-0163",
         accountId: "acc_demo_1",
-        company: "Maison Verdier — Épicerie fine",
-        quantity: 144,
-        unitPrice: 54,
-        total: 7776,
+        company: "Miel des Cèdres",
+        quantity: 30,
+        gross: 1020,
+        commission: 265.2,
+        producerShare: 754.8,
         status: "confirmed",
         createdAt: "2026-02-02T08:30:00.000Z",
       },
@@ -223,7 +230,7 @@ export function getAccount(id: string): Account | undefined {
 
 export type RegisterInput = Omit<
   Account,
-  "id" | "passwordHash" | "status" | "customPrice" | "createdAt" | "role"
+  "id" | "passwordHash" | "status" | "commissionRate" | "createdAt" | "role"
 > & { password: string };
 
 export function register(input: RegisterInput): { ok: true; account: Account } | { ok: false; error: "exists" } {
@@ -244,7 +251,7 @@ export function register(input: RegisterInput): { ok: true; account: Account } |
     volume: input.volume.trim(),
     passwordHash: hashPassword(input.password),
     status: "pending",
-    customPrice: null,
+    commissionRate: null,
     createdAt: new Date().toISOString(),
     role: "pro",
   };
@@ -279,11 +286,12 @@ export function setAccountStatus(id: string, status: AccountStatus): void {
   write(data);
 }
 
-export function setCustomPrice(id: string, price: number | null): void {
+/** Fixe le taux de commission d'une maison. null rétablit le taux standard. */
+export function setCommissionRate(id: string, rate: number | null): void {
   const data = read();
   const account = data.accounts.find((a) => a.id === id);
   if (!account) return;
-  account.customPrice = price !== null && price > 0 ? price : null;
+  account.commissionRate = rate !== null && rate > 0 && rate < 100 ? rate : null;
   write(data);
 }
 
@@ -309,17 +317,20 @@ export function createOrder(input: {
   accountId: string;
   company: string;
   quantity: number;
-  unitPrice: number;
+  gross: number;
+  commissionRate: number;
 }): Order {
   const data = read();
+  const commission = Math.round(((input.gross * input.commissionRate) / 100) * 100) / 100;
   const order: Order = {
     id: uid("ord"),
     ref: nextRef(data.orders.length + 1),
     accountId: input.accountId,
     company: input.company,
     quantity: input.quantity,
-    unitPrice: input.unitPrice,
-    total: Math.round(input.quantity * input.unitPrice * 100) / 100,
+    gross: Math.round(input.gross * 100) / 100,
+    commission,
+    producerShare: Math.round((input.gross - commission) * 100) / 100,
     status: "pending",
     createdAt: new Date().toISOString(),
   };

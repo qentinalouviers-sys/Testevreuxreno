@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CheckoutContent } from "@/components/pages/CheckoutContent";
+import { SellContent } from "@/components/pages/SellContent";
 import { getDictionary } from "@/i18n";
 import { LOCALES, isLocale } from "@/i18n/config";
 
@@ -16,12 +16,12 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const t = getDictionary(locale);
   return {
-    title: t.checkout.metaTitle,
-    description: t.checkout.metaDescription,
-    robots: { index: false, follow: true },
+    title: t.sell.metaTitle,
+    description: t.sell.metaDescription,
+    alternates: { canonical: `/${locale}/vendre` },
   };
 }
 
-export default function CheckoutPage() {
-  return <CheckoutContent />;
+export default function SellPage() {
+  return <SellContent />;
 }

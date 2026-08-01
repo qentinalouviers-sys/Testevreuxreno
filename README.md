@@ -1,7 +1,11 @@
 # Al Arifa
 
-Site e-commerce international de la maison **Al Arifa** — huile d'olive vierge extra,
-Sélection Héritage, première pression à froid, origine Portugal.
+**Place de marché** de producteurs indépendants du bassin méditerranéen —
+huiles d'olive, miels, safran, sels, olives et fruits secs.
+
+Chaque maison vend **sous sa propre marque**, un panier peut contenir plusieurs
+producteurs, et le paiement est **scindé à la source** : 70 % au producteur,
+30 % à la plateforme, sans refacturation ni avance de trésorerie.
 
 Thème sombre, codes de la maison de parfum : noir laqué, or gravé, filets fins,
 mouvement discret. Mobile first, cinq langues, mise en avant du BtoB.
@@ -11,9 +15,10 @@ mouvement discret. Mobile first, cinq langues, mise en avant du BtoB.
 ## Sommaire
 
 - [Démarrage](#démarrage)
+- [Modèle de reversement](#modèle-de-reversement)
 - [Ce que contient le site](#ce-que-contient-le-site)
 - [Internationalisation](#internationalisation)
-- [Espace professionnel et administration](#espace-professionnel-et-administration)
+- [Espace producteur et administration](#espace-producteur-et-administration)
 - [Paiement](#paiement)
 - [Formulaire de contact](#formulaire-de-contact)
 - [Direction artistique](#direction-artistique)
@@ -46,16 +51,44 @@ Aucune dépendance de composants tierce : toute l'interface est écrite pour ce 
 
 ---
 
+## Modèle de reversement
+
+Le panier est regroupé par producteur et la répartition est calculée ligne par
+ligne (`src/lib/cart.ts`, `src/lib/marketplace.ts`) :
+
+- la commission ne porte **que sur la marchandise** — les frais de port sont
+  reversés en totalité au producteur qui expédie ;
+- le taux est réglable **par maison** depuis l'administration (30 % par défaut) ;
+- la répartition est affichée au client dans le panier et au tunnel de commande,
+  et au producteur dans son espace.
+
+Le jour où le paiement sera branché, la cible est **Stripe Connect en
+« separate charges and transfers »** : un seul `PaymentIntent` encaissé par la
+plateforme, puis un `transfer` par producteur reliés par un `transfer_group`.
+C'est le seul modèle Connect qui accepte un panier multi-vendeurs. La structure
+`CartSummary.groups` est déjà exactement la charge utile à envoyer au backend :
+un groupe = un virement.
+
+Sur une commande de 100 € de marchandise, le producteur reçoit 70 € nets et la
+plateforme 30 € bruts, dont il faut déduire les frais d'encaissement (~1,5 % +
+0,25 €) qu'elle porte sur sa part.
+
 ## Ce que contient le site
 
 | Page | Route | Contenu |
 | --- | --- | --- |
-| Accueil | `/[lang]` | Hero 3D, produit, piliers, terroir, section BtoB, moyens de paiement |
+| Accueil | `/[lang]` | Hero 3D, sélection, piliers, maisons, origines, section BtoB, paiements |
+| La sélection | `/[lang]/produits` | Catalogue filtrable par famille et par producteur |
+| Fiche produit | `/[lang]/produits/[slug]` | Détail, tarif public et pro, ajout au panier, rappel de la maison |
+| Nos producteurs | `/[lang]/producteurs` | Les six maisons référencées |
+| Page de marque | `/[lang]/producteurs/[slug]` | Vitrine d'une maison et ses produits |
+| Panier | `/[lang]/panier` | Groupé par producteur, avec la répartition du paiement |
+| Commande | `/[lang]/commande` | Récapitulatif, répartition, trois moyens de paiement |
+| Devenir producteur | `/[lang]/vendre` | Page d'acquisition : la règle 70/30, le parcours, la FAQ |
 | L'Histoire Al Arifa | `/[lang]/histoire` | Chronologie 1898 → aujourd'hui, valeurs, citation |
-| Commander | `/[lang]/commande` | Parcours particulier **et** professionnel, paliers dégressifs, paiement |
 | Contact | `/[lang]/contact` | Formulaire rapide + bouton WhatsApp + coordonnées |
-| Accès Pro | `/[lang]/pro` | Connexion, demande d'ouverture de compte, tableau de bord client |
-| Administration | `/[lang]/admin` | Validation des comptes, tarifs par client, suivi des commandes |
+| Espace producteur | `/[lang]/pro` | Candidature, reversements, produits, commandes, revenus |
+| Administration | `/[lang]/admin` | Validation des maisons, taux de commission, commandes |
 | Légal | `/[lang]/mentions-legales`, `/confidentialite`, `/cgv` | Gabarits à compléter |
 
 La racine `/` affiche un écran de choix de langue qui redirige automatiquement
@@ -98,31 +131,31 @@ identiques dans toutes les langues, seul le préfixe change.
 
 ---
 
-## Espace professionnel et administration
+## Espace producteur et administration
 
 Parcours complet et fonctionnel :
 
-1. **Inscription** d'un professionnel (`/[lang]/pro`, onglet « Créer un compte »).
-2. Le compte est créé **en attente** — la connexion est refusée avec un message
-   explicite tant qu'il n'est pas validé.
-3. **En administration**, le compte apparaît dans l'onglet « Comptes pro » et peut
-   être validé ou refusé.
-4. Toujours en administration, onglet « Tarifs » : saisie d'un **prix d'achat
-   unitaire spécifique à ce client** (laisser vide = grille dégressive standard).
-   La remise par rapport au prix public s'affiche en direct.
-5. Le client voit alors **sa** grille tarifaire dans son espace, simule un volume
-   et passe commande.
-6. La commande remonte dans l'onglet « Commandes » de l'administration, où son
-   statut se change (en attente / confirmée / expédiée / annulée).
+1. **Candidature** d'un producteur (`/[lang]/pro`, onglet « Candidater »).
+2. La maison est créée **en attente** — la connexion est refusée avec un message
+   explicite tant qu'elle n'est pas référencée.
+3. **En administration**, onglet « Producteurs » : la candidature peut être
+   référencée ou refusée.
+4. Onglet « Commissions » : réglage du **taux propre à cette maison**
+   (laisser vide = 30 % standard). La part producteur s'affiche en direct.
+5. La maison voit alors dans son espace ses revenus (encaissé, sa part, la
+   commission), ses produits publiés et l'état de son compte de reversement.
+6. Les commandes remontent dans l'onglet « Commandes » de l'administration, avec
+   le détail encaissé / commission / part producteur, et un statut modifiable.
 
 Comptes de démonstration :
 
 | Rôle | Identifiants |
 | --- | --- |
 | Administrateur | `admin@al-arifa.com` / `arifa2024` |
-| Client pro validé | `achats@maison-verdier.fr` / `demo1234` |
+| Producteur référencé | `contact@mieldescedres.ma` / `demo1234` |
+| Candidature en attente | `hola@almendrasderonda.es` / `demo1234` |
 
-> ⚠️ **Persistance de démonstration.** `src/lib/store.ts` stocke comptes, tarifs et
+> ⚠️ **Persistance de démonstration.** `src/lib/store.ts` stocke maisons, taux et
 > commandes dans le `localStorage` du navigateur, et hache les mots de passe avec
 > une fonction non cryptographique. Ce choix permet de faire tourner l'intégralité
 > du parcours sans backend, y compris sur un hébergement statique — mais il n'est
@@ -143,6 +176,11 @@ Aucun tunnel n'est branché derrière : la validation ouvre une pop-up
 « paiement en cours de développement » qui renvoie vers le formulaire de contact
 ou WhatsApp. Chaque moyen porte un badge « Bientôt ». C'est volontaire et
 assumé côté texte — rien ne laisse croire à un paiement effectif.
+
+Seule la carte permettra une répartition automatique. Le virement et la
+cryptomonnaie arrivent sur un compte unique : redistribuer aux producteurs y
+sera un geste manuel, donc une intermédiation. À trancher avant l'ouverture
+commerciale.
 
 ---
 
@@ -260,9 +298,13 @@ assets/                      # visuel source (non servi)
 
 1. **Remplacer le store de démonstration** par un vrai backend (voir l'avertissement
    plus haut) : base de données, sessions signées côté serveur, hachage bcrypt/argon2.
-2. **Brancher le paiement** : Stripe pour la carte, coordonnées bancaires pour le
-   virement, prestataire pour la cryptomonnaie. Retirer la pop-up « en cours de
+2. **Brancher Stripe Connect** : onboarding Express des producteurs, `PaymentIntent`
+   unique puis un `transfer` par groupe du panier. Retirer la pop-up « en cours de
    développement ».
+3. **Traiter les obligations de place de marché** : auto-facturation des commissions
+   (la commission est une prestation soumise à TVA, même sans refacturation de
+   marchandise) et déclaration DAC7 des revenus versés aux vendeurs. À valider avec
+   un conseil fiscal.
 3. **Compléter les pages légales** — les gabarits sont en place et signalent
    eux-mêmes qu'ils doivent être complétés (éditeur, hébergeur, SIREN, tribunal).
 4. **Renseigner les vraies coordonnées** dans `src/lib/site.ts` — l'e-mail, le

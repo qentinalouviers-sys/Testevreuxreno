@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useMemo, useState, type FormEvent } from "react";
-import { LogOut, Lock, UserPlus, FileText, Check, Package } from "lucide-react";
+import { LogOut, Lock, UserPlus, FileText, Check, Clock, Wallet } from "lucide-react";
 import { Container } from "../ui/Container";
 import { PageHero } from "../ui/PageHero";
 import { Eyebrow } from "../ui/SectionHeading";
@@ -14,14 +14,13 @@ import { useLocale } from "@/i18n/LocaleProvider";
 import { useSession, useStoreVersion } from "@/lib/useStore";
 import {
   clearSession,
-  createOrder,
   getAccount,
   listOrders,
   login,
   register,
   type Account,
 } from "@/lib/store";
-import { PRODUCT, unitPriceFor, discountPercent } from "@/lib/catalog";
+import { DEFAULT_COMMISSION_RATE, PRODUCERS, productsByProducer } from "@/lib/marketplace";
 import { cn } from "@/lib/cn";
 
 export function ProContent() {
@@ -308,8 +307,6 @@ const STATUS_STYLE: Record<string, string> = {
 function Dashboard({ account }: { account: Account }) {
   const { t, price, date } = useLocale();
   const version = useStoreVersion();
-  const [quantity, setQuantity] = useState(48);
-  const [placed, setPlaced] = useState<string | null>(null);
 
   const orders = useMemo(
     () => listOrders(account.id),
@@ -317,29 +314,27 @@ function Dashboard({ account }: { account: Account }) {
     [account.id, version],
   );
 
-  const unit = unitPriceFor(quantity, account.customPrice);
-  const total = unit * quantity;
+  const rate = account.commissionRate ?? DEFAULT_COMMISSION_RATE;
 
-  function placeOrder() {
-    const order = createOrder({
-      accountId: account.id,
-      company: account.company,
-      quantity,
-      unitPrice: unit,
-    });
-    setPlaced(order.ref);
-  }
+  // Les maisons de démonstration sont adossées au catalogue par leur nom.
+  const producer = PRODUCERS.find((p) => p.name === account.company);
+  const products = producer ? productsByProducer(producer.id) : [];
+  const payoutsActive = producer?.payouts === "active";
+
+  const revenue = useMemo(() => {
+    const billable = orders.filter((o) => o.status !== "cancelled");
+    return {
+      gross: billable.reduce((s, o) => s + o.gross, 0),
+      yours: billable.reduce((s, o) => s + o.producerShare, 0),
+      commission: billable.reduce((s, o) => s + o.commission, 0),
+    };
+  }, [orders]);
 
   return (
     <>
       <PageHero
         eyebrow={t.pro.eyebrow}
-        title={
-          <>
-            {t.pro.dashboard.welcome},{" "}
-            <span className="text-gold-gradient">{account.company}</span>
-          </>
-        }
+        title={<span className="text-gold-gradient">{account.company}</span>}
       >
         <div className="flex flex-wrap items-center justify-center gap-4">
           <span className="inline-flex items-center gap-2.5 border border-olive-500/45 px-4 py-2 text-[0.62rem] uppercase tracking-[0.18em] text-olive-300">
@@ -361,54 +356,94 @@ function Dashboard({ account }: { account: Account }) {
 
       <section className="pb-24 sm:pb-32">
         <Container size="wide">
+          {/* Compte de reversement — la promesse centrale de la plateforme. */}
+          <div
+            className={cn(
+              "mb-6 flex flex-wrap items-center justify-between gap-5 border p-6 sm:p-7",
+              payoutsActive
+                ? "border-olive-500/40 bg-olive-700/10"
+                : "border-gold-500/35 bg-gold-500/[0.06]",
+            )}
+          >
+            <div className="flex items-start gap-4">
+              <span
+                className={cn(
+                  "flex size-11 shrink-0 items-center justify-center border",
+                  payoutsActive ? "border-olive-500/50" : "border-gold-500/40",
+                )}
+              >
+                {payoutsActive ? (
+                  <Wallet className="size-5 text-olive-300" strokeWidth={1.25} />
+                ) : (
+                  <Clock className="size-5 text-gold-300" strokeWidth={1.25} />
+                )}
+              </span>
+              <div>
+                <p className="eyebrow">{t.pro.dashboard.payoutsTitle}</p>
+                <p className="mt-2 text-sm text-cream-dim">
+                  {payoutsActive
+                    ? t.pro.dashboard.payoutsActive
+                    : t.pro.dashboard.payoutsPending}
+                </p>
+              </div>
+            </div>
+            {!payoutsActive && (
+              <span className="border border-gold-500/30 px-3 py-1.5 text-[0.55rem] uppercase tracking-[0.16em] text-gold-400/85">
+                {t.pro.dashboard.payoutsSoon}
+              </span>
+            )}
+          </div>
+
           <div className="grid gap-6 lg:grid-cols-2">
-            {/* Grille tarifaire */}
+            {/* Revenus */}
             <div className={PANEL}>
-              <Eyebrow>{t.pro.dashboard.pricingTitle}</Eyebrow>
-              <p className="mt-4 text-sm leading-relaxed text-cream-mute">
-                {t.pro.dashboard.pricingNote}
-              </p>
+              <Eyebrow>{t.pro.dashboard.revenueTitle}</Eyebrow>
 
               <div className="mt-8 grid grid-cols-3 gap-px bg-gold-500/12">
-                <Metric label={t.pro.dashboard.publicPrice} value={price(PRODUCT.retailPrice)} />
-                <Metric label={t.pro.dashboard.yourPrice} value={price(unit)} accent />
-                <Metric label={t.pro.dashboard.discount} value={`−${discountPercent(unit)} %`} />
+                <Metric label={t.pro.dashboard.revenueGross} value={price(revenue.gross)} />
+                <Metric label={t.pro.dashboard.revenueYours} value={price(revenue.yours)} accent />
+                <Metric
+                  label={t.pro.dashboard.revenueCommission}
+                  value={price(revenue.commission)}
+                />
               </div>
 
-              {/* Nouvelle commande */}
-              <div className="mt-9 border-t border-gold-500/12 pt-8">
-                <p className="eyebrow">{t.pro.dashboard.newOrderTitle}</p>
+              <p className="mt-6 flex items-baseline justify-between gap-4 border-t border-gold-500/12 pt-6 text-sm">
+                <span className="text-cream-mute">{t.pro.dashboard.yourRate}</span>
+                <span className="font-display text-2xl text-gold-200">
+                  {100 - rate} % / {rate} %
+                </span>
+              </p>
 
-                <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                  <Input
-                    id="pro-qty"
-                    label={t.pro.dashboard.quantity}
-                    type="number"
-                    min={1}
-                    max={5000}
-                    value={quantity}
-                    onChange={(e) =>
-                      setQuantity(Math.max(1, Math.min(5000, Number(e.target.value) || 1)))
-                    }
-                  />
-                  <div>
-                    <p className="mb-2 text-[0.6rem] uppercase tracking-[0.2em] text-cream-mute">
-                      {t.pro.dashboard.estimate}
-                    </p>
-                    <p className="font-display text-3xl text-gold-200">{price(total)}</p>
-                  </div>
-                </div>
-
-                <Button size="lg" className="mt-7 w-full" onClick={placeOrder}>
-                  <Package className="size-3.5" strokeWidth={1.5} />
-                  {t.pro.dashboard.placeOrder}
-                </Button>
-
-                {placed && (
-                  <p className="mt-4 inline-flex items-center gap-2.5 text-sm text-olive-300">
-                    <Check className="size-3.5" strokeWidth={2} />
-                    {t.pro.dashboard.orderPlaced} — {placed}
-                  </p>
+              {/* Produits publiés */}
+              <div className="mt-8 border-t border-gold-500/12 pt-8">
+                <p className="eyebrow">{t.pro.dashboard.productsTitle}</p>
+                {products.length === 0 ? (
+                  <p className="mt-5 text-sm text-cream-mute">{t.pro.dashboard.productsEmpty}</p>
+                ) : (
+                  <ul className="mt-5 divide-y divide-gold-500/10">
+                    {products.map((product) => (
+                      <li
+                        key={product.id}
+                        className="flex items-center justify-between gap-4 py-3.5"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm text-cream">{product.name}</span>
+                          <span className="mt-0.5 block text-[0.66rem] uppercase tracking-[0.14em] text-cream-mute">
+                            {product.format}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-end">
+                          <span className="block font-display text-lg text-gold-200">
+                            {price(product.price)}
+                          </span>
+                          <span className="block text-[0.6rem] text-olive-300">
+                            {price((product.price * (100 - rate)) / 100)}
+                          </span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </div>
@@ -423,19 +458,26 @@ function Dashboard({ account }: { account: Account }) {
                 ) : (
                   <ul className="mt-8 divide-y divide-gold-500/12">
                     {orders.map((order) => (
-                      <li key={order.id} className="flex flex-wrap items-center justify-between gap-3 py-4">
+                      <li
+                        key={order.id}
+                        className="flex flex-wrap items-center justify-between gap-3 py-4"
+                      >
                         <div>
                           <p className="font-display text-lg text-cream" dir="ltr">
                             {order.ref}
                           </p>
                           <p className="mt-0.5 text-[0.68rem] text-cream-mute">
-                            {date(order.createdAt)} · {order.quantity} ×{" "}
-                            {price(order.unitPrice)}
+                            {date(order.createdAt)} · {order.quantity} {t.pro.dashboard.orderQty}
                           </p>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="font-display text-lg text-gold-200">
-                            {price(order.total)}
+                          <span className="text-end">
+                            <span className="block font-display text-lg text-olive-300">
+                              {price(order.producerShare)}
+                            </span>
+                            <span className="block text-[0.6rem] text-cream-mute">
+                              / {price(order.gross)}
+                            </span>
                           </span>
                           <span
                             className={cn(

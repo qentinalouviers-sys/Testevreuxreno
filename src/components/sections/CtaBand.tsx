@@ -11,8 +11,8 @@ export function CtaBand() {
   const { t, href } = useLocale();
 
   const paths = [
-    { icon: User, label: t.cta.particulier, to: href("/commande") },
-    { icon: Briefcase, label: t.cta.pro, to: href("/pro") },
+    { icon: User, label: t.cta.particulier, to: href("/produits") },
+    { icon: Briefcase, label: t.cta.pro, to: href("/vendre") },
   ];
 
   return (

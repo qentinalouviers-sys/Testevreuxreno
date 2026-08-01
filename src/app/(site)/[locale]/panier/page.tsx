@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CheckoutContent } from "@/components/pages/CheckoutContent";
+import { CartContent } from "@/components/pages/CartContent";
 import { getDictionary } from "@/i18n";
 import { LOCALES, isLocale } from "@/i18n/config";
 
@@ -14,14 +14,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const t = getDictionary(locale);
-  return {
-    title: t.checkout.metaTitle,
-    description: t.checkout.metaDescription,
-    robots: { index: false, follow: true },
-  };
+  return { title: getDictionary(locale).cart.metaTitle, robots: { index: false, follow: true } };
 }
 
-export default function CheckoutPage() {
-  return <CheckoutContent />;
+export default function CartPage() {
+  return <CartContent />;
 }

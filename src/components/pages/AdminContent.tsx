@@ -17,12 +17,12 @@ import {
   listOrders,
   login,
   setAccountStatus,
-  setCustomPrice,
+  setCommissionRate,
   setOrderStatus,
   type Account,
   type OrderStatus,
 } from "@/lib/store";
-import { PRODUCT, discountPercent } from "@/lib/catalog";
+import { DEFAULT_COMMISSION_RATE } from "@/lib/marketplace";
 import { cn } from "@/lib/cn";
 
 type Tab = "accounts" | "orders" | "pricing";
@@ -291,6 +291,7 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
             <Th>{t.admin.orders.date}</Th>
             <Th className="text-end">{t.admin.orders.qty}</Th>
             <Th className="text-end">{t.admin.orders.unit}</Th>
+            <Th className="text-end">{t.admin.orders.commission}</Th>
             <Th className="text-end">{t.admin.orders.total}</Th>
             <Th className="text-end">{t.admin.orders.status}</Th>
           </tr>
@@ -309,8 +310,9 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
               <Td>{order.company}</Td>
               <Td>{date(order.createdAt)}</Td>
               <Td className="text-end">{order.quantity}</Td>
-              <Td className="text-end">{price(order.unitPrice)}</Td>
-              <Td className="text-end text-cream">{price(order.total)}</Td>
+              <Td className="text-end">{price(order.gross)}</Td>
+              <Td className="text-end text-gold-200">{price(order.commission)}</Td>
+              <Td className="text-end text-olive-300">{price(order.producerShare)}</Td>
               <Td className="text-end">
                 <select
                   value={order.status}
@@ -340,7 +342,7 @@ function OrdersTable({ orders }: { orders: ReturnType<typeof listOrders> }) {
 /* ---------------------------- Tarifs ------------------------------ */
 
 function PricingTable({ accounts }: { accounts: Account[] }) {
-  const { t, price } = useLocale();
+  const { t } = useLocale();
   const approved = accounts.filter((a) => a.status === "approved");
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState(false);
@@ -348,14 +350,14 @@ function PricingTable({ accounts }: { accounts: Account[] }) {
   if (approved.length === 0) return <Empty>{t.admin.accounts.empty}</Empty>;
 
   const valueFor = (account: Account) =>
-    drafts[account.id] ?? (account.customPrice !== null ? String(account.customPrice) : "");
+    drafts[account.id] ?? (account.commissionRate !== null ? String(account.commissionRate) : "");
 
   function save() {
     for (const account of approved) {
       const raw = drafts[account.id];
       if (raw === undefined) continue;
       const parsed = raw.trim() === "" ? null : Number(raw);
-      setCustomPrice(account.id, parsed !== null && Number.isFinite(parsed) ? parsed : null);
+      setCommissionRate(account.id, parsed !== null && Number.isFinite(parsed) ? parsed : null);
     }
     setDrafts({});
     setSaved(true);
@@ -385,7 +387,10 @@ function PricingTable({ accounts }: { accounts: Account[] }) {
             {approved.map((account) => {
               const raw = valueFor(account);
               const parsed = Number(raw);
-              const effective = raw.trim() !== "" && Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+              const effective =
+                raw.trim() !== "" && Number.isFinite(parsed) && parsed > 0 && parsed < 100
+                  ? parsed
+                  : DEFAULT_COMMISSION_RATE;
               return (
                 <tr
                   key={account.id}
@@ -397,34 +402,31 @@ function PricingTable({ accounts }: { accounts: Account[] }) {
                       {account.email}
                     </span>
                   </Td>
-                  <Td className="text-end text-cream-mute">{price(PRODUCT.retailPrice)}</Td>
+                  <Td className="text-end text-cream-mute">{DEFAULT_COMMISSION_RATE} %</Td>
                   <Td className="text-end">
                     <div className="inline-flex items-center gap-2">
                       <input
                         type="number"
                         min={0}
-                        step="0.01"
-                        inputMode="decimal"
+                        max={99}
+                        step="1"
+                        inputMode="numeric"
                         value={raw}
                         placeholder={t.admin.pricing.placeholder}
                         aria-label={`${t.admin.pricing.customPrice} — ${account.company}`}
                         onChange={(e) =>
                           setDrafts((d) => ({ ...d, [account.id]: e.target.value }))
                         }
-                        className="w-28 border border-gold-500/25 bg-ink-950/70 px-3 py-2 text-end
+                        className="w-24 border border-gold-500/25 bg-ink-950/70 px-3 py-2 text-end
                                    text-cream placeholder:text-cream-mute/50
                                    focus:border-gold-400/70 focus:outline-none"
                         dir="ltr"
                       />
-                      <span className="text-cream-mute">€</span>
+                      <span className="text-cream-mute">%</span>
                     </div>
                   </Td>
                   <Td className="text-end">
-                    {effective ? (
-                      <span className="text-olive-300">−{discountPercent(effective)} %</span>
-                    ) : (
-                      <span className="text-cream-mute/60">—</span>
-                    )}
+                    <span className="font-display text-lg text-olive-300">{100 - effective} %</span>
                   </Td>
                 </tr>
               );

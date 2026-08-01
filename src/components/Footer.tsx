@@ -25,15 +25,16 @@ export function Footer() {
     {
       title: t.footer.navTitle,
       links: [
-        { label: t.nav.home, href: href("/") },
+        { label: t.nav.catalog, href: href("/produits") },
+        { label: t.nav.producers, href: href("/producteurs") },
         { label: t.nav.story, href: href("/histoire") },
-        { label: t.nav.order, href: href("/commande") },
         { label: t.nav.contact, href: href("/contact") },
       ],
     },
     {
       title: t.footer.proTitle,
       links: [
+        { label: t.nav.sell, href: href("/vendre") },
         { label: t.nav.pro, href: href("/pro") },
         { label: t.btob.ctaSecondary, href: href("/contact") },
         { label: t.nav.admin, href: href("/admin") },
